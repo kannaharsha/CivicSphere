@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User, ArrowRight, Globe, Menu, X, ChevronDown } from 'lucide-react';
 
@@ -201,24 +202,28 @@ export const LandingNavbar: React.FC = () => {
             </div>
 
             {/* Login Button */}
-            <a
-              href="#login"
+            <Link
+              to="/login"
               className="h-10 px-4 inline-flex items-center justify-center gap-1.5 text-sm font-semibold text-gray-700 bg-white border border-gray-200/80 rounded-full hover:bg-gray-50 shadow-sm transition-all whitespace-nowrap flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
             >
               <User className="w-4 h-4 text-gray-500 flex-shrink-0" />
               <span>Login</span>
-            </a>
+            </Link>
 
             {/* Sign Up Button (Rightmost element anchored to edge) */}
-            <motion.a
+            <motion.div
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              href="#signup"
-              className="h-10 px-5 inline-flex items-center justify-center gap-2 text-sm font-semibold text-white bg-gradient-to-r from-[#16A34A] to-[#2563EB] rounded-full shadow-md hover:shadow-lg hover:shadow-emerald-600/20 transition-all whitespace-nowrap flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+              className="flex-shrink-0"
             >
-              <span className="whitespace-nowrap">Sign Up</span>
-              <ArrowRight className="w-4 h-4 flex-shrink-0" />
-            </motion.a>
+              <Link
+                to="/signup"
+                className="h-10 px-5 inline-flex items-center justify-center gap-2 text-sm font-semibold text-white bg-gradient-to-r from-[#16A34A] to-[#2563EB] rounded-full shadow-md hover:shadow-lg hover:shadow-emerald-600/20 transition-all whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+              >
+                <span className="whitespace-nowrap">Sign Up</span>
+                <ArrowRight className="w-4 h-4 flex-shrink-0" />
+              </Link>
+            </motion.div>
           </div>
 
           {/* Mobile Hamburger Button */}
@@ -290,22 +295,22 @@ export const LandingNavbar: React.FC = () => {
 
               {/* Mobile Auth Buttons */}
               <div className="pt-3 border-t border-gray-100 flex flex-col gap-3">
-                <a
-                  href="#login"
+                <Link
+                  to="/login"
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full flex items-center justify-center gap-2 py-3 text-sm font-semibold text-gray-700 bg-white border border-gray-200 rounded-full shadow-sm hover:bg-gray-50"
                 >
                   <User className="w-4 h-4 text-gray-500" />
                   <span>Login</span>
-                </a>
-                <a
-                  href="#signup"
+                </Link>
+                <Link
+                  to="/signup"
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full flex items-center justify-center gap-2 py-3 text-sm font-semibold text-white bg-gradient-to-r from-[#16A34A] to-[#2563EB] rounded-full shadow-md"
                 >
                   <span>Sign Up</span>
                   <ArrowRight className="w-4 h-4" />
-                </a>
+                </Link>
               </div>
             </div>
           </motion.div>

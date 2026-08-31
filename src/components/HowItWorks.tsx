@@ -117,7 +117,7 @@ function EligibilityEngineCardIllustration() {
         animate={{ y: [-2, 2, -2] }}
         transition={{ duration: 1.5, repeat: Infinity }}
       >
-        Matching 500+ Rules...
+        Matching Govt Guidelines...
       </motion.div>
     </div>
   )
@@ -269,16 +269,42 @@ export default function HowItWorks() {
                 strokeDasharray="4 4"
                 className="opacity-40"
               />
-              <motion.circle
-                r="4"
-                fill="#22c55e"
-                animate={{
-                  cx: [500, 780],
-                  cy: [180, 180],
-                  opacity: [0, 1, 0]
-                }}
-                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-              />
+              {(() => {
+                const startX = 500;
+                const startY = 180;
+                const endX = 780;
+                const endY = 180;
+
+                if (startX == null || startY == null || endX == null || endY == null) {
+                  return null;
+                }
+
+                const safeCx = Number(startX);
+                const safeCy = Number(startY);
+                const safeEndCx = Number(endX);
+                const safeEndCy = Number(endY);
+
+                if (isNaN(safeCx) || isNaN(safeCy) || isNaN(safeEndCx) || isNaN(safeEndCy)) {
+                  console.warn("SVG Circle skipped due to invalid coordinates:", { safeCx, safeCy, safeEndCx, safeEndCy });
+                  return null;
+                }
+
+                return (
+                  <motion.circle
+                    cx={safeCx}
+                    cy={safeCy}
+                    r={4}
+                    fill="#22c55e"
+                    initial={{ cx: safeCx, cy: safeCy, opacity: 0 }}
+                    animate={{
+                      cx: [safeCx, safeEndCx],
+                      cy: [safeCy, safeEndCy],
+                      opacity: [0, 1, 0]
+                    }}
+                    transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                  />
+                );
+              })()}
             </svg>
           </div>
 
