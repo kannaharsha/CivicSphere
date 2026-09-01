@@ -13,6 +13,12 @@ export default defineConfig({
   },
   // Fix Cross-Origin-Opener-Policy for Firebase Google Sign-In popup
   server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+      },
+    },
     headers: {
       'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
       'Cross-Origin-Embedder-Policy': 'unsafe-none',

@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
+import axios from 'axios';
 import type { User as FirebaseUser } from 'firebase/auth';
 import {
   onAuthStateChanged,
@@ -7,6 +8,8 @@ import {
   signInWithPopup,
   signOut,
   sendPasswordResetEmail,
+  updateProfile,
+  sendEmailVerification,
 } from 'firebase/auth';
 import { toast } from 'react-hot-toast';
 import { auth, googleProvider } from './firebase';
@@ -18,10 +21,11 @@ interface AuthContextType {
   loading: boolean;
   isAuthenticated: boolean;
   login: (email: string, pass: string) => Promise<void>;
-  signup: (email: string, pass: string, details: Partial<CitizenProfile>) => Promise<void>;
+  signup: (email: string, pass: string, fullName: string) => Promise<void>;
   googleLogin: () => Promise<void>;
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
+  resendVerification: (userObj?: FirebaseUser) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -36,7 +40,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
       if (firebaseUser) {
-        // Build profile purely from Firebase user data — no backend needed
         setProfile({
           uid: firebaseUser.uid,
           fullName: firebaseUser.displayName || 'Citizen',
@@ -61,12 +64,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => unsubscribe();
   }, []);
 
-  // Email + Password Login
+  // Email + Password Login with Firebase lookup & PostgreSQL sync
   const login = async (email: string, pass: string) => {
     try {
-      await signInWithEmailAndPassword(auth, email, pass);
+      // 1. Call Backend Sync API (signInWithPassword + accounts:lookup + Postgres Insert/Update)
+      const syncRes = await axios.post('/api/auth/verify-sync', {
+        email: email.trim(),
+        password: pass,
+      });
+
+      if (!syncRes.data || !syncRes.data.verified) {
+        toast.error(syncRes.data?.message || 'Please verify your email before logging in.');
+        const err = new Error(syncRes.data?.message || 'Please verify your email before logging in.');
+        (err as any).code = 'auth/email-not-verified';
+        throw err;
+      }
+
+      // 2. Sign in locally with Firebase Auth SDK
+      await signInWithEmailAndPassword(auth, email.trim(), pass);
       toast.success('Logged in successfully!');
     } catch (err: any) {
+      const serverMsg = err.response?.data?.message;
+      if (serverMsg) {
+        toast.error(serverMsg);
+        throw new Error(serverMsg);
+      }
+      if (err.code === 'auth/email-not-verified') throw err;
       let msg = 'Login failed. Please check your credentials.';
       if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') msg = 'Incorrect email or password.';
       if (err.code === 'auth/user-not-found') msg = 'No account found. Please sign up first.';
@@ -77,33 +100,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Email + Password Signup
-  const signup = async (email: string, pass: string, details: Partial<CitizenProfile>) => {
+  // Email + Password Signup (Authentication-only flow)
+  const signup = async (email: string, pass: string, fullName: string) => {
     try {
       const cred = await createUserWithEmailAndPassword(auth, email, pass);
-      // Store extra signup details in profile state immediately
-      setProfile({
-        uid: cred.user.uid,
-        email: cred.user.email || email,
-        fullName: details.fullName || cred.user.displayName || 'Citizen',
-        phone: details.phone || '',
-        provider: 'email',
-        language: details.language || 'English',
-        occupation: details.occupation || '',
-        state: details.state || '',
-        district: details.district || '',
-        gender: details.gender || '',
-        dob: details.dob || null,
-        profileCompleted: false,
-      });
-      toast.success('Account created successfully!');
+      if (cred.user) {
+        await updateProfile(cred.user, { displayName: fullName });
+        await sendEmailVerification(cred.user);
+      }
+      toast.success('Account created successfully. Please verify your email before logging in.');
+      // Sign out user so unverified session is not kept active
+      await signOut(auth);
     } catch (err: any) {
       let msg = 'Signup failed. Please try again.';
-      if (err.code === 'auth/email-already-in-use') msg = 'This email is already registered. Please log in.';
-      if (err.code === 'auth/weak-password') msg = 'Password must be at least 6 characters.';
-      if (err.code === 'auth/invalid-email') msg = 'Invalid email address.';
+      if (err.code === 'auth/email-already-in-use') msg = 'This email address is already registered. Please sign in or use a different email.';
+      if (err.code === 'auth/weak-password') msg = 'Password is too weak. Please use a stronger password.';
+      if (err.code === 'auth/invalid-email') msg = 'Invalid email address format.';
+      if (err.code === 'auth/network-request-failed') msg = 'Network error occurred. Please check your internet connection.';
       toast.error(msg);
       throw err;
+    }
+  };
+
+  // Resend verification email helper
+  const resendVerification = async (targetUser?: FirebaseUser) => {
+    const u = targetUser || auth.currentUser;
+    if (u) {
+      await sendEmailVerification(u);
+      toast.success('Verification email sent! Please check your inbox.');
+    } else {
+      toast.error('No active session found to resend verification.');
     }
   };
 
@@ -155,6 +181,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       googleLogin,
       logout,
       resetPassword,
+      resendVerification,
     }}>
       {children}
     </AuthContext.Provider>

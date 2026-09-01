@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+import { toast } from 'react-hot-toast'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  User, Mail, Phone, Lock, Eye, EyeOff, ShieldCheck,
-  MapPin, Briefcase, Globe, CheckCircle2, Sparkles,
-  ChevronLeft, Bell, Database, Cpu, ArrowRight, Calendar, Landmark
+  User, Mail, Lock, Eye, EyeOff, ShieldCheck,
+  CheckCircle2, Sparkles, Database, Cpu, ArrowRight,
+  AlertCircle, MailCheck, RefreshCw
 } from 'lucide-react'
 import AuthNavbar from './AuthNavbar'
 import FloatingInput from './FloatingInput'
@@ -12,15 +14,6 @@ import GradientButton from './GradientButton'
 import AuthParticles from './AuthParticles'
 import { useTheme } from '../context/ThemeContext'
 import { useAuth } from '../firebase/useAuth'
-
-const STEPS = ['Basic Info', 'Citizen Profile', 'Preferences']
-
-const states = ['Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal']
-const occupations = ['Farmer', 'Student', 'Women Welfare', 'Senior Citizen', 'Job Seeker', 'Disabled Citizen', 'Entrepreneur', 'Other']
-const incomeRanges = ['Below ₹1 Lakh', '₹1–3 Lakh', '₹3–5 Lakh', '₹5–8 Lakh', '₹8–12 Lakh', 'Above ₹12 Lakh']
-const languagesList = ['English', 'తెలుగు', 'हिन्दी', 'Tamil', 'Kannada', 'Bengali']
-const familyCategories = ['General', 'OBC', 'SC', 'ST', 'EWS']
-const genders = ['Male', 'Female', 'Prefer not to say']
 
 const floatingBenefitChips = [
   { text: 'PM-KISAN Eligible', x: '5%', y: '10%' },
@@ -45,7 +38,7 @@ const onboardingScenarios = [
   },
   {
     citizen: "Looking for family healthcare coverage options in Delhi.",
-    ai: "I found 3 matching medical coverage options.",
+    ai: "I matched 3 medical coverage options.",
     schemes: ['Ayushman Bharat PM-JAY', 'Delhi CGHS Network Card', 'PM Suraksha Bima']
   },
   {
@@ -55,26 +48,40 @@ const onboardingScenarios = [
   }
 ]
 
-function getStrength(pw: string) {
-  let s = 0
-  if (pw.length >= 8) s++
-  if (/[A-Z]/.test(pw)) s++
-  if (/[0-9]/.test(pw)) s++
-  if (/[^A-Za-z0-9]/.test(pw)) s++
-  return s
+function getPasswordStrength(pw: string) {
+  let score = 0
+  if (pw.length >= 8) score++
+  if (/[A-Z]/.test(pw)) score++
+  if (/[a-z]/.test(pw)) score++
+  if (/[0-9]/.test(pw)) score++
+  if (/[^A-Za-z0-9]/.test(pw)) score++
+  return score
 }
-const strengthLabels = ['', 'Weak', 'Medium', 'Strong', 'Excellent']
-const strengthColors = ['', 'bg-red-500', 'bg-amber-500', 'bg-blue-500', 'bg-emerald-500']
+
+const strengthLabels = ['', 'Weak', 'Fair', 'Good', 'Strong', 'Excellent']
+const strengthColors = ['', 'bg-red-500', 'bg-orange-500', 'bg-amber-500', 'bg-blue-500', 'bg-emerald-500']
 
 export default function SignupPage() {
   const { theme } = useTheme()
   const { signup, googleLogin } = useAuth()
-  const [step, setStep] = useState(0)
   const [loading, setLoading] = useState(false)
   const [showPass, setShowPass] = useState(false)
   const [showConfirmPass, setShowConfirmPass] = useState(false)
   const [typedWelcome, setTypedWelcome] = useState('')
+  const [signupSuccess, setSignupSuccess] = useState(false)
+  const [successEmail, setSuccessEmail] = useState('')
+  const [formError, setFormError] = useState('')
   const navigate = useNavigate()
+
+  // Form States — ONLY Authentication Information
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  })
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
 
   // Onboarding chat timeline states
   const [scenarioIdx, setScenarioIdx] = useState(0)
@@ -88,17 +95,8 @@ export default function SignupPage() {
   const [schemesCount, setSchemesCount] = useState(0)
   const [languagesCount, setLanguagesCount] = useState(0)
 
-  // District list / Form States
-  const [form, setForm] = useState({
-    name: '', email: '', phone: '', password: '', confirmPassword: '',
-    state: '', district: '', occupation: '', age: '', gender: '', language: '', income: '', family: '',
-    dob: '', aadhaar: '', notifications: true, aiRec: true, terms: false,
-  })
-  const [errors, setErrors] = useState<Record<string, string>>({})
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
-
-  const welcomeFullText = "Let's build your Citizen Identity."
-  const strength = getStrength(form.password)
+  const welcomeFullText = "Join CivicSphere Authentication Portal"
+  const pwdScore = getPasswordStrength(form.password)
 
   // Title Welcome Typing
   useEffect(() => {
@@ -107,7 +105,7 @@ export default function SignupPage() {
       setTypedWelcome(welcomeFullText.slice(0, i + 1))
       i++
       if (i >= welcomeFullText.length) clearInterval(timer)
-    }, 55)
+    }, 50)
     return () => clearInterval(timer)
   }, [])
 
@@ -204,51 +202,102 @@ export default function SignupPage() {
     requestAnimationFrame(updateCounters)
   }, [])
 
-  const set = (k: string) => (v: string | boolean) => setForm(f => ({ ...f, [k]: v }))
+  const set = (k: keyof typeof form) => (v: string) => {
+    setForm(f => ({ ...f, [k]: v }))
+    // Clear error for that field as user types
+    if (errors[k]) {
+      setErrors(e => ({ ...e, [k]: '' }))
+    }
+    if (formError) setFormError('')
+  }
 
-  const validateStep = () => {
+  // Strict Client-Side Validation
+  const validateForm = () => {
     const e: Record<string, string> = {}
-    if (step === 0) {
-      if (form.name.trim().length < 2) e.name = 'Enter your full name'
-      if (!form.email.includes('@')) e.email = 'Enter a valid email'
-      if (form.phone.replace(/\D/g, '').length < 10) e.phone = 'Enter a valid 10-digit number'
-      if (form.password.length < 6) e.password = 'Password must be 6+ characters'
-      if (form.password !== form.confirmPassword) e.confirmPassword = 'Passwords do not match'
+
+    // Full Name Validation
+    const trimmedName = form.name.trim()
+    if (!trimmedName) {
+      e.name = 'Full Name is required.'
+    } else if (trimmedName.length < 3) {
+      e.name = 'Full Name must be at least 3 characters.'
+    } else if (!/^[A-Za-z\s]+$/.test(trimmedName)) {
+      e.name = 'Full Name can only contain alphabets and spaces.'
     }
-    if (step === 1) {
-      if (!form.state) e.state = 'Select your state'
-      if (!form.occupation) e.occupation = 'Select occupation'
+
+    // Email Validation
+    const trimmedEmail = form.email.trim()
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!trimmedEmail) {
+      e.email = 'Email Address is required.'
+    } else if (!emailRegex.test(trimmedEmail)) {
+      e.email = 'Please enter a valid email address.'
     }
-    if (step === 2) {
-      if (!form.terms) e.terms = 'Please accept the terms to continue'
+
+    // Password Validation
+    const pw = form.password
+    if (!pw) {
+      e.password = 'Password is required.'
+    } else if (pw.length < 8) {
+      e.password = 'Password must be at least 8 characters long.'
+    } else if (!/[A-Z]/.test(pw)) {
+      e.password = 'Password must contain at least one uppercase letter (A-Z).'
+    } else if (!/[a-z]/.test(pw)) {
+      e.password = 'Password must contain at least one lowercase letter (a-z).'
+    } else if (!/[0-9]/.test(pw)) {
+      e.password = 'Password must contain at least one number (0-9).'
+    } else if (!/[^A-Za-z0-9]/.test(pw)) {
+      e.password = 'Password must contain at least one special character (!@#$%^&*).'
     }
+
+    // Confirm Password Validation
+    if (!form.confirmPassword) {
+      e.confirmPassword = 'Please confirm your password.'
+    } else if (form.confirmPassword !== form.password) {
+      e.confirmPassword = 'Passwords do not match.'
+    }
+
     setErrors(e)
     return Object.keys(e).length === 0
   }
 
-  const nextStep = async () => {
-    if (!validateStep()) return
-    if (step < 2) setStep(s => s + 1)
-    else {
-      setLoading(true)
-      try {
-        await signup(form.email, form.password, {
-          fullName: form.name,
-          phone: form.phone,
-          state: form.state,
-          district: form.district,
-          occupation: form.occupation,
-          gender: form.gender,
-          language: form.language,
-          annualIncome: form.income ? parseInt(form.income.replace(/\D/g, '')) || 0 : 0,
-          dob: form.dob || null,
-        })
-        setTimeout(() => navigate('/dashboard'), 1500)
-      } catch (err) {
-        console.error(err)
-      } finally {
-        setLoading(false)
+  const handleSubmit = async (ev: React.FormEvent) => {
+    ev.preventDefault()
+    setFormError('')
+
+    if (!validateForm()) return
+
+    setLoading(true)
+    try {
+      const response = await axios.post('/api/auth/register', {
+        fullName: form.name.trim(),
+        email: form.email.trim(),
+        password: form.password,
+      })
+
+      if (response.data && response.data.success) {
+        setSuccessEmail(form.email.trim())
+        setSignupSuccess(true)
+      } else {
+        setFormError(response.data?.message || 'Failed to create account.')
       }
+    } catch (err: any) {
+      const status = err.response?.status
+      const msg = err.response?.data?.message || err.message || 'Failed to create account. Try again later.'
+
+      if (status === 409 || msg.toLowerCase().includes('already exists') || msg.toLowerCase().includes('already registered')) {
+        const redirectNotice = 'User already exists. Redirecting to login page...'
+        toast.error(redirectNotice)
+        setFormError(redirectNotice)
+        setTimeout(() => {
+          navigate('/login')
+        }, 1500)
+      } else {
+        toast.error(msg)
+        setFormError(msg)
+      }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -291,8 +340,9 @@ export default function SignupPage() {
       <div className="flex-1 flex items-center justify-center relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 pt-16 pb-4">
         <div className="w-full h-full lg:max-h-[calc(100vh-100px)] flex flex-col lg:flex-row gap-6 items-stretch justify-center">
           
-          {/* ==================== LEFT SIDE: HERO PREVIEW (45%) ==================== */}
-          <div className="lg:w-[45%] w-full flex flex-col justify-between p-5 rounded-[32px] bg-white/20 dark:bg-[#091225]/20 backdrop-blur-[20px] border border-blue-500/10 dark:border-white/5 relative overflow-hidden select-none">
+          {/* ==================== LEFT SIDE: HERO PREVIEW (42%) ==================== */}
+          <div className="lg:w-[42%] w-full flex flex-col justify-between p-5 rounded-[32px] bg-white/20 dark:bg-[#091225]/20 backdrop-blur-[20px] border border-blue-500/10 dark:border-white/5 relative overflow-hidden select-none">
+
             
             {/* Concentric rotating wave lines in background */}
             <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-25">
@@ -414,318 +464,213 @@ export default function SignupPage() {
 
           </div>
 
-          {/* ==================== RIGHT SIDE: SIGNUP CARD FORM (55%) ==================== */}
-          <div className="lg:w-[55%] w-full flex items-center justify-center z-10">
+          {/* ==================== RIGHT SIDE: AUTHENTICATION-FIRST SIGNUP CARD (58%) ==================== */}
+          <div className="lg:w-[58%] w-full flex items-center justify-center z-10">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.7 }}
-              className="w-full max-w-[450px] bg-white/82 dark:bg-[#0a0f23]/75 backdrop-blur-[24px] rounded-[32px] border border-slate-200 dark:border-emerald-500/15 p-6 shadow-xl relative select-none max-h-[calc(100vh-140px)] overflow-y-auto"
+              className="w-full max-w-[520px] bg-white/82 dark:bg-[#0a0f23]/75 backdrop-blur-[24px] rounded-[32px] border border-slate-200 dark:border-emerald-500/15 p-8 shadow-xl relative select-none max-h-[calc(100vh-120px)] overflow-y-auto"
             >
-              {/* Custom step bar */}
-              <div className="mb-4">
-                <div className="flex items-center justify-between">
-                  {STEPS.map((label, i) => (
-                    <div key={i} className="flex items-center gap-1.5 relative">
-                      <motion.div
-                        animate={{
-                          backgroundColor: i <= step ? '#00A86B' : 'transparent',
-                          borderColor: i <= step ? '#00A86B' : '#64748B',
-                          scale: i === step ? 1.05 : 1,
-                        }}
-                        className="w-5.5 h-5.5 rounded-full flex items-center justify-center text-[9.5px] font-bold border transition-colors text-slate-800 dark:text-white"
-                      >
-                        {i < step ? <CheckCircle2 className="w-3 h-3 text-white" /> : i + 1}
-                      </motion.div>
-                      <span className={`text-[9px] font-bold ${i === step ? 'text-[#00A86B] dark:text-[#00D084]' : 'text-slate-400'}`}>
-                        {label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              {/* Top gradient accent beam */}
+              <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-500 rounded-t-[32px]" />
 
-              {/* Title & Subtitle */}
-              <div className="mb-4">
-                <h2 className="text-xl sm:text-2xl font-black bg-gradient-to-r from-[#00A86B] to-[#2563EB] bg-clip-text text-transparent leading-tight font-heading mt-1">
-                  Create Your CivicSphere Account
-                </h2>
-                <p className="text-[#64748B] dark:text-[#CBD5E1] text-[10.5px] mt-1.5 leading-normal font-semibold">
-                  Create one secure AI-powered citizen profile to discover government schemes across Central, State, and District services.
-                </p>
-
-                {/* Blinking welcome message cursor */}
-                <div className="flex items-center gap-1 mt-2 min-h-[1.125rem]">
-                  <span className="text-emerald-600 dark:text-[#00D084] text-[11px] font-bold font-mono">
-                    {typedWelcome}
-                  </span>
-                  {typedWelcome.length < welcomeFullText.length && (
-                    <motion.span
-                      animate={{ opacity: [1, 0] }}
-                      transition={{ duration: 0.5, repeat: Infinity }}
-                      className="w-[2px] h-3.5 bg-emerald-500 dark:bg-[#00D084] inline-block"
-                    />
-                  )}
-                </div>
-              </div>
-
-              {/* Step Forms */}
               <AnimatePresence mode="wait">
-                {step === 0 && (
-                  <motion.div key="step0" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3.5">
-                    <FloatingInput id="su-name" label="Full Name" value={form.name} onChange={set('name')} icon={<User className="w-4 h-4 text-slate-400" />} error={errors.name} required />
-                    <FloatingInput id="su-email" label="Email Address" type="email" value={form.email} onChange={set('email')} icon={<Mail className="w-4 h-4 text-slate-400" />} error={errors.email} required autoComplete="email" />
-                    <FloatingInput id="su-phone" label="Phone Number" type="tel" value={form.phone} onChange={set('phone')} icon={<Phone className="w-4 h-4 text-slate-400" />} error={errors.phone} required />
-                    
-                    <FloatingInput
-                      id="su-password"
-                      label="Password"
-                      type={showPass ? 'text' : 'password'}
-                      value={form.password}
-                      onChange={set('password')}
-                      icon={<Lock className="w-4 h-4 text-slate-400" />}
-                      rightIcon={
-                        <button type="button" onClick={() => setShowPass(s => !s)} className="cursor-pointer text-slate-400">
-                          {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                        </button>
-                      }
-                      error={errors.password}
-                      required
-                      autoComplete="new-password"
-                    />
+                {signupSuccess ? (
+                  /* ================= EMAIL VERIFICATION SUCCESS VIEW ================= */
+                  <motion.div
+                    key="verification-success"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="py-4 text-center space-y-4"
+                  >
+                    <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/10">
+                      <MailCheck className="w-8 h-8" />
+                    </div>
 
-                    {form.password && (
-                      <div className="space-y-1">
-                        <div className="flex gap-1">
-                          {[...Array(4)].map((_, i) => (
-                            <motion.div
-                              key={i}
-                              animate={{ opacity: i < strength ? 1 : 0.25 }}
-                              className={`flex-1 h-1 rounded-full ${i < strength ? strengthColors[strength] : 'bg-slate-200 dark:bg-slate-700'}`}
-                            />
-                          ))}
-                        </div>
-                        <p className={`text-[10px] font-bold ${['', 'text-red-500', 'text-amber-500', 'text-blue-500', 'text-emerald-500'][strength]}`}>
-                          Strength: {strengthLabels[strength]}
-                        </p>
+                    <h2 className="text-xl font-black text-slate-900 dark:text-white font-heading">
+                      Verify Your Email
+                    </h2>
+
+                    <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-800 dark:text-emerald-300 text-xs font-bold leading-relaxed">
+                      Account created successfully. Please verify your email before logging in.
+                    </div>
+
+                    <p className="text-xs text-slate-600 dark:text-slate-350 leading-normal font-medium px-2">
+                      We have sent a verification link to <strong className="text-slate-900 dark:text-white">{successEmail}</strong>. 
+                      Click the link in the email to activate your CivicSphere account.
+                    </p>
+
+                    <div className="pt-2 space-y-3">
+                      <button
+                        onClick={() => navigate('/login')}
+                        className="w-full h-12 rounded-xl bg-gradient-to-r from-[#00A86B] to-[#2563EB] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 hover:opacity-95 transition-all cursor-pointer"
+                      >
+                        Proceed to Login Page
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+
+                      <p className="text-[11px] text-slate-400 font-semibold">
+                        Didn't receive the email? Check your spam folder or sign in to resend verification link.
+                      </p>
+                    </div>
+                  </motion.div>
+                ) : (
+                  /* ================= MINIMAL AUTHENTICATION SIGNUP FORM ================= */
+                  <motion.div key="signup-form" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                    {/* Title & Subtitle */}
+                    <div className="mb-5">
+                      <h2 className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-[#00A86B] to-[#2563EB] bg-clip-text text-transparent leading-tight font-heading mt-1">
+                        Create Your CivicSphere Account
+                      </h2>
+                      <p className="text-[#64748B] dark:text-[#CBD5E1] text-xs mt-1.5 leading-normal font-semibold">
+                        Simple authentication-first signup. Access official government schemes and services securely.
+                      </p>
+
+                      {/* Blinking welcome typing cursor */}
+                      <div className="flex items-center gap-1 mt-2 min-h-[1.25rem]">
+                        <span className="text-emerald-600 dark:text-[#00D084] text-xs font-bold font-mono">
+                          {typedWelcome}
+                        </span>
+                        {typedWelcome.length < welcomeFullText.length && (
+                          <motion.span
+                            animate={{ opacity: [1, 0] }}
+                            transition={{ duration: 0.5, repeat: Infinity }}
+                            className="w-[2px] h-3.5 bg-emerald-500 dark:bg-[#00D084] inline-block"
+                          />
+                        )}
                       </div>
+                    </div>
+
+                    {/* Server Error Alert Banner */}
+                    {formError && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs font-bold flex items-start gap-2"
+                      >
+                        <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                        <span>{formError}</span>
+                      </motion.div>
                     )}
 
-                    <FloatingInput
-                      id="su-confirm"
-                      label="Confirm Password"
-                      type={showConfirmPass ? 'text' : 'password'}
-                      value={form.confirmPassword}
-                      onChange={set('confirmPassword')}
-                      icon={<Lock className="w-4 h-4 text-slate-400" />}
-                      rightIcon={
-                        <button type="button" onClick={() => setShowConfirmPass(s => !s)} className="cursor-pointer text-slate-400">
-                          {showConfirmPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                        </button>
-                      }
-                      error={errors.confirmPassword}
-                      required
-                      autoComplete="new-password"
-                    />
-                  </motion.div>
-                )}
+                    {/* Authentication Fields ONLY */}
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                      {/* 1. Full Name */}
+                      <FloatingInput
+                        id="su-name"
+                        label="Full Name"
+                        value={form.name}
+                        onChange={set('name')}
+                        icon={<User className="w-4 h-4 text-slate-400" />}
+                        error={errors.name}
+                        required
+                        autoComplete="name"
+                      />
 
-                {step === 1 && (
-                  <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3">
-                    <SelectField id="su-state" label="State of India" value={form.state} onChange={set('state')} options={states} icon={<MapPin className="w-4 h-4 text-slate-400" />} error={errors.state} />
-                    <FloatingInput id="su-district" label="District" value={form.district} onChange={set('district')} icon={<MapPin className="w-4 h-4 text-slate-400" />} />
-                    
-                    <SelectField id="su-occ" label="Occupation" value={form.occupation} onChange={set('occupation')} options={occupations} icon={<Briefcase className="w-4 h-4 text-slate-400" />} error={errors.occupation} />
-                    
-                    {/* Citizen Profile chips selector */}
-                    <div className="space-y-1">
-                      <span className="block text-[10px] font-extrabold text-[#64748B] dark:text-[#CBD5E1] uppercase tracking-wider">Citizen Profile Type</span>
-                      <div className="flex flex-wrap gap-1.5 pt-1">
-                        {occupations.slice(0, 6).map((occ) => {
-                          const active = form.occupation === occ
-                          return (
+                      {/* 2. Email Address */}
+                      <FloatingInput
+                        id="su-email"
+                        label="Email Address"
+                        type="email"
+                        value={form.email}
+                        onChange={set('email')}
+                        icon={<Mail className="w-4 h-4 text-slate-400" />}
+                        error={errors.email}
+                        required
+                        autoComplete="email"
+                      />
+
+                      {/* 3. Password */}
+                      <div className="space-y-1.5">
+                        <FloatingInput
+                          id="su-password"
+                          label="Password"
+                          type={showPass ? 'text' : 'password'}
+                          value={form.password}
+                          onChange={set('password')}
+                          icon={<Lock className="w-4 h-4 text-slate-400" />}
+                          rightIcon={
                             <button
-                              key={occ}
                               type="button"
-                              onClick={() => set('occupation')(occ)}
-                              className={`px-3 py-1 rounded-full text-[10px] font-bold border transition-all duration-300 shadow-3xs cursor-pointer ${
-                                active
-                                  ? 'bg-[#00A86B] text-white border-[#00A86B] shadow-emerald-500/20'
-                                  : 'bg-white/80 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-350 hover:bg-slate-50'
-                              }`}
+                              onClick={() => setShowPass(s => !s)}
+                              className="cursor-pointer text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
                             >
-                              {occ}
+                              {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                             </button>
-                          )
-                        })}
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <FloatingInput id="su-age" label="Age" type="number" value={form.age} onChange={set('age')} icon={<Calendar className="w-4 h-4 text-slate-400" />} />
-                      <SelectField id="su-gender" label="Gender" value={form.gender} onChange={set('gender')} options={genders} />
-                    </div>
-                    
-                    <SelectField id="su-lang" label="Preferred Language" value={form.language} onChange={set('language')} options={languagesList} icon={<Globe className="w-4 h-4 text-slate-400" />} />
-                    
-                    <div className="grid grid-cols-2 gap-3">
-                      <SelectField id="su-income" label="Annual Income Range" value={form.income} onChange={set('income')} options={incomeRanges} />
-                      <SelectField id="su-family" label="Family Category" value={form.family} onChange={set('family')} options={familyCategories} />
-                    </div>
-
-                    <FloatingInput id="su-aadhaar" label="Aadhaar Number (Optional)" value={form.aadhaar} onChange={set('aadhaar')} icon={<Landmark className="w-4 h-4 text-slate-400" />} />
-                  </motion.div>
-                )}
-
-                {step === 2 && (
-                  <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-3.5">
-                    <PreferenceToggle
-                      id="pref-notif"
-                      icon={<Bell className="w-4 h-4 text-blue-500" />}
-                      label="Scheme Notifications"
-                      desc="Get alerts when new matching schemes launch"
-                      checked={form.notifications}
-                      onChange={v => set('notifications')(v)}
-                    />
-                    <PreferenceToggle
-                      id="pref-ai"
-                      icon={<Sparkles className="w-4 h-4 text-violet-500" />}
-                      label="AI Recommendations"
-                      desc="Let our AI suggest personalized government schemes"
-                      checked={form.aiRec}
-                      onChange={v => set('aiRec')(v)}
-                    />
-
-                    <label className={`flex items-start gap-2.5 p-3 rounded-xl border cursor-pointer transition-colors ${
-                      errors.terms
-                        ? 'border-red-400 bg-red-50 dark:bg-red-950/20'
-                        : 'border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/60'
-                    }`}>
-                      {/* Circular Custom Checkbox */}
-                      <div className="relative flex items-center mt-0.5 shrink-0">
-                        <input
-                          id="pref-terms"
-                          type="checkbox"
-                          checked={form.terms}
-                          onChange={e => set('terms')(e.target.checked)}
-                          className="sr-only"
+                          }
+                          error={errors.password}
+                          required
+                          autoComplete="new-password"
                         />
-                        <motion.div
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          className={`w-4 h-4 rounded-full border flex items-center justify-center transition-all ${
-                            form.terms
-                              ? 'bg-[#00A86B] border-[#00A86B]'
-                              : 'border-slate-350 dark:border-slate-700 bg-transparent'
-                          }`}
-                        >
-                          {form.terms && (
-                            <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                            </svg>
-                          )}
-                        </motion.div>
+
+                        {/* Real-time Password Strength Meter */}
+                        {form.password && (
+                          <div className="space-y-1 pt-1">
+                            <div className="flex gap-1">
+                              {[...Array(5)].map((_, i) => (
+                                <motion.div
+                                  key={i}
+                                  animate={{ opacity: i < pwdScore ? 1 : 0.2 }}
+                                  className={`flex-1 h-1 rounded-full ${i < pwdScore ? strengthColors[pwdScore] : 'bg-slate-200 dark:bg-slate-700'}`}
+                                />
+                              ))}
+                            </div>
+                            <div className="flex justify-between items-center text-[10px] font-bold">
+                              <span className={['', 'text-red-500', 'text-orange-500', 'text-amber-500', 'text-blue-500', 'text-emerald-500'][pwdScore]}>
+                                Password Strength: {strengthLabels[pwdScore]}
+                              </span>
+                              <span className="text-slate-400 text-[9px]">Min 8 chars (A-Z, a-z, 0-9, special)</span>
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      
-                      <span className="text-[11px] text-[#64748B] dark:text-[#CBD5E1] font-bold leading-tight">
-                        I agree to the Terms of Service & Privacy Policy. Data is processed per DPDP Act 2023 guidelines.
-                      </span>
-                    </label>
-                    {errors.terms && <p className="text-[10px] font-bold text-red-500 mt-1">{errors.terms}</p>}
+
+                      {/* 4. Confirm Password */}
+                      <FloatingInput
+                        id="su-confirm"
+                        label="Confirm Password"
+                        type={showConfirmPass ? 'text' : 'password'}
+                        value={form.confirmPassword}
+                        onChange={set('confirmPassword')}
+                        icon={<Lock className="w-4 h-4 text-slate-400" />}
+                        rightIcon={
+                          <button
+                            type="button"
+                            onClick={() => setShowConfirmPass(s => !s)}
+                            className="cursor-pointer text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                          >
+                            {showConfirmPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                        }
+                        error={errors.confirmPassword}
+                        required
+                        autoComplete="new-password"
+                      />
+
+                      {/* Submit Action */}
+                      <div className="pt-2">
+                        <GradientButton type="submit" loading={loading}>
+                          Create Account
+                        </GradientButton>
+                      </div>
+                    </form>
+
+                    {/* Footer Link to Login Page */}
+                    <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 text-center">
+                      <p className="text-xs text-[#64748B] dark:text-[#CBD5E1] font-bold flex items-center justify-center gap-1">
+                        Already have an account?{' '}
+                        <Link to="/login" className="bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent font-black inline-flex items-center gap-0.5 hover:opacity-90 group/sw relative">
+                          Sign In
+                          <ArrowRight className="w-3.5 h-3.5 text-blue-600 group-hover/sw:translate-x-1 transition-transform shrink-0" />
+                          <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-gradient-to-r from-emerald-600 to-blue-600 transition-all duration-300 group-hover/sw:w-full" />
+                        </Link>
+                      </p>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
-
-              {/* Navigation Actions */}
-              <div className={`flex gap-3 mt-5 ${step > 0 ? 'flex-row' : 'flex-col'}`}>
-                {step > 0 && (
-                  <button
-                    onClick={() => setStep(s => s - 1)}
-                    className="flex items-center justify-center gap-1.5 px-4 h-12 rounded-xl border border-slate-200 dark:border-slate-800 text-[#64748B] dark:text-[#CBD5E1] text-xs font-bold hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors cursor-pointer whitespace-nowrap"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                    Back
-                  </button>
-                )}
-                <GradientButton onClick={nextStep} loading={loading}>
-                  {step < 2 ? 'Continue' : 'Create My Account'}
-                </GradientButton>
-              </div>
-
-              {step === 0 && (
-                <>
-                  <div className="my-4 flex items-center gap-2.5">
-                    <div className="flex-1 h-px bg-slate-200 dark:bg-slate-800" />
-                    <span className="text-slate-400 dark:text-slate-550 text-[9px] font-bold uppercase tracking-widest shrink-0">OR</span>
-                    <div className="flex-1 h-px bg-slate-200 dark:bg-slate-800" />
-                  </div>
-
-                  {/* Google SSO */}
-                   <button 
-                    type="button"
-                    onClick={async () => {
-                      try {
-                        await googleLogin()
-                        navigate('/dashboard')
-                      } catch (e) {
-                        console.error(e)
-                      }
-                    }}
-                    className="w-full flex items-center justify-center gap-2.5 h-11 px-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:bg-slate-50 dark:hover:bg-slate-800/80 hover:shadow-md transition-all duration-300 cursor-pointer shadow-sm relative overflow-hidden group/google"
-                  >
-                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover/google:translate-x-[100%] transition-transform duration-1000" />
-                    <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
-                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
-                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
-                    </svg>
-                    <span className="text-xs font-bold text-slate-700 dark:text-slate-200">Sign up with Google</span>
-                  </button>
-                </>
-              )}
-
-              {/* Trust Badges */}
-              <div className="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex flex-col items-center gap-3">
-                <div className="flex justify-center gap-4">
-                  <div className="relative group/badge cursor-help">
-                    <span className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-850 flex items-center justify-center border border-slate-200/60 dark:border-slate-700 hover:border-emerald-500/40 hover:shadow-md transition-all duration-300">
-                      <ShieldCheck className="w-4.5 h-4.5 text-emerald-500" />
-                    </span>
-                    <span className="absolute bottom-10 left-1/2 -translate-x-1/2 scale-0 group-hover/badge:scale-100 bg-slate-900 text-white text-[9px] py-1.5 px-2.5 rounded shadow-lg transition-transform duration-200 whitespace-nowrap z-20">
-                      Government Verified
-                    </span>
-                  </div>
-
-                  <div className="relative group/badge cursor-help">
-                    <span className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-850 flex items-center justify-center border border-slate-200/60 dark:border-slate-700 hover:border-blue-500/40 hover:shadow-md transition-all duration-300">
-                      <Database className="w-4.5 h-4.5 text-blue-500" />
-                    </span>
-                    <span className="absolute bottom-10 left-1/2 -translate-x-1/2 scale-0 group-hover/badge:scale-100 bg-slate-900 text-white text-[9px] py-1.5 px-2.5 rounded shadow-lg transition-transform duration-200 whitespace-nowrap z-20">
-                      Firebase Ready
-                    </span>
-                  </div>
-
-                  <div className="relative group/badge cursor-help">
-                    <span className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-850 flex items-center justify-center border border-slate-200/60 dark:border-slate-700 hover:border-purple-500/40 hover:shadow-md transition-all duration-300">
-                      <Cpu className="w-4.5 h-4.5 text-purple-500" />
-                    </span>
-                    <span className="absolute bottom-10 left-1/2 -translate-x-1/2 scale-0 group-hover/badge:scale-100 bg-slate-900 text-white text-[9px] py-1.5 px-2.5 rounded shadow-lg transition-transform duration-200 whitespace-nowrap z-20">
-                      DPDP Secure & Compliant
-                    </span>
-                  </div>
-                </div>
-
-                {/* Account switcher */}
-                <p className="text-xs text-[#64748B] dark:text-[#CBD5E1] font-bold flex items-center gap-1 mt-1">
-                  Already have an account?{' '}
-                  <Link to="/login" className="bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent font-black inline-flex items-center gap-0.5 hover:opacity-90 group/sw relative">
-                    Sign In
-                    <ArrowRight className="w-3.5 h-3.5 text-blue-600 group-hover/sw:translate-x-1 transition-transform shrink-0" />
-                    <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-gradient-to-r from-emerald-600 to-blue-600 transition-all duration-300 group-hover/sw:w-full" />
-                  </Link>
-                </p>
-              </div>
 
             </motion.div>
           </div>
@@ -733,66 +678,5 @@ export default function SignupPage() {
         </div>
       </div>
     </div>
-  )
-}
-
-function SelectField({ id, label, value, onChange, options, icon, error }: {
-  id: string; label: string; value: string; onChange: (v: string) => void
-  options: string[]; icon?: React.ReactNode; error?: string
-}) {
-  return (
-    <div className="relative">
-      <div className="relative flex items-center">
-        {icon && (
-          <span className="absolute left-3.5 text-slate-400 dark:text-slate-500 z-10 pointer-events-none">
-            {icon}
-          </span>
-        )}
-        <select
-          id={id}
-          value={value}
-          onChange={e => onChange(e.target.value)}
-          className={`w-full h-12 ${icon ? 'pl-10' : 'pl-3'} pr-3 rounded-xl border text-xs font-bold bg-white/70 dark:bg-slate-900/60 text-slate-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-500/30 transition-all appearance-none cursor-pointer
-            ${error
-              ? 'border-red-400 focus:border-red-500'
-              : 'border-slate-200 dark:border-slate-800 focus:border-emerald-500 dark:focus:border-emerald-500'
-            }
-            ${!value ? 'text-slate-400 dark:text-slate-500' : ''}
-          `}
-        >
-          <option value="">{label}</option>
-          {options.map(o => <option key={o} value={o}>{o}</option>)}
-        </select>
-        <span className="absolute right-3.5 text-slate-400 pointer-events-none text-[10px]">▼</span>
-      </div>
-      {error && <p className="mt-1 text-[10px] font-bold text-red-500">{error}</p>}
-    </div>
-  )
-}
-
-function PreferenceToggle({ id, icon, label, desc, checked, onChange }: {
-  id: string; icon: React.ReactNode; label: string; desc: string; checked: boolean; onChange: (v: boolean) => void
-}) {
-  return (
-    <label htmlFor={id} className="flex items-center gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/60 cursor-pointer transition-colors select-none">
-      <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-900 flex items-center justify-center shrink-0 border border-slate-200/60 dark:border-slate-800">
-        {icon}
-      </div>
-      <div className="flex-1 min-w-0">
-        <div className="text-[12px] font-bold text-slate-900 dark:text-white">{label}</div>
-        <div className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight font-medium">{desc}</div>
-      </div>
-      <div
-        onClick={e => { e.preventDefault(); onChange(!checked) }}
-        className={`relative w-10 h-5.5 rounded-full transition-colors duration-200 shrink-0 ${checked ? 'bg-emerald-500' : 'bg-slate-200 dark:bg-slate-800'}`}
-      >
-        <motion.div
-          animate={{ x: checked ? 20 : 2 }}
-          transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-          className="absolute top-0.5 w-4.5 h-4.5 rounded-full bg-white shadow-sm"
-        />
-      </div>
-      <input id={id} type="checkbox" className="sr-only" checked={checked} onChange={e => onChange(e.target.checked)} />
-    </label>
   )
 }
