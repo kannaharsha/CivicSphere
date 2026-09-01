@@ -4,16 +4,14 @@ import { toast } from 'react-hot-toast'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  User, Mail, Lock, Eye, EyeOff, ShieldCheck,
-  CheckCircle2, Sparkles, Database, Cpu, ArrowRight,
-  AlertCircle, MailCheck, RefreshCw
+  User, Mail, Lock, Eye, EyeOff, Sparkles,
+  Cpu, ArrowRight, AlertCircle, MailCheck
 } from 'lucide-react'
 import AuthNavbar from './AuthNavbar'
 import FloatingInput from './FloatingInput'
 import GradientButton from './GradientButton'
 import AuthParticles from './AuthParticles'
 import { useTheme } from '../context/ThemeContext'
-import { useAuth } from '../firebase/useAuth'
 
 const floatingBenefitChips = [
   { text: 'PM-KISAN Eligible', x: '5%', y: '10%' },
@@ -63,7 +61,6 @@ const strengthColors = ['', 'bg-red-500', 'bg-orange-500', 'bg-amber-500', 'bg-b
 
 export default function SignupPage() {
   const { theme } = useTheme()
-  const { signup, googleLogin } = useAuth()
   const [loading, setLoading] = useState(false)
   const [showPass, setShowPass] = useState(false)
   const [showConfirmPass, setShowConfirmPass] = useState(false)
