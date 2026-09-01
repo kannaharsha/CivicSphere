@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   User, Mail, Phone, Lock, Eye, EyeOff, ShieldCheck,
   MapPin, Briefcase, Globe, CheckCircle2, Sparkles,
-  ChevronRight, ChevronLeft, Bell, Database, Cpu, ArrowRight, Calendar, Landmark
+  ChevronLeft, Bell, Database, Cpu, ArrowRight, Calendar, Landmark
 } from 'lucide-react'
 import AuthNavbar from './AuthNavbar'
 import FloatingInput from './FloatingInput'
@@ -70,7 +70,6 @@ export default function SignupPage() {
   const { theme } = useTheme()
   const { signup, googleLogin } = useAuth()
   const [step, setStep] = useState(0)
-  const [done, setDone] = useState(false)
   const [loading, setLoading] = useState(false)
   const [showPass, setShowPass] = useState(false)
   const [showConfirmPass, setShowConfirmPass] = useState(false)
@@ -114,7 +113,7 @@ export default function SignupPage() {
 
   // Auto conversation playback loop for left side AI window
   useEffect(() => {
-    let timer: NodeJS.Timeout
+    let timer: ReturnType<typeof setTimeout>
 
     const playScenario = (index: number) => {
       setScenarioIdx(index)
@@ -244,7 +243,6 @@ export default function SignupPage() {
           annualIncome: form.income ? parseInt(form.income.replace(/\D/g, '')) || 0 : 0,
           dob: form.dob || null,
         })
-        setDone(true)
         setTimeout(() => navigate('/dashboard'), 1500)
       } catch (err) {
         console.error(err)
@@ -358,7 +356,7 @@ export default function SignupPage() {
 
                   {revealedSchemesCount > 0 && (
                     <div className="self-start w-full space-y-1.5 mt-2">
-                      {onboardingScenarios[scenarioIdx].schemes.slice(0, revealedSchemesCount).map((sc, index) => (
+                      {onboardingScenarios[scenarioIdx].schemes.slice(0, revealedSchemesCount).map((sc) => (
                         <motion.div
                           key={sc}
                           initial={{ opacity: 0, x: -10 }}

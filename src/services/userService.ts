@@ -11,6 +11,7 @@ export interface CitizenProfile {
   district: string;
   gender: string;
   dob: string | null;
+  annualIncome?: number;
   avatarUrl?: string;
   profileCompleted: boolean;
 }

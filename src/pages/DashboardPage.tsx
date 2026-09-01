@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
   Home, BookOpen, CheckCircle, Cpu, FileText, Bell, User, Settings, LogOut,
-  Sun, Moon, Shield, ArrowRight
+  Sun, Moon, Shield
 } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
 import AuthParticles from '../authentication/AuthParticles'

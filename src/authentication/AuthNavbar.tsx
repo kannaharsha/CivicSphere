@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sun, Moon, Globe, ArrowLeft, ChevronDown } from 'lucide-react'
-import { useTheme } from '../context/ThemeContext'
+import { Globe, ArrowLeft, ChevronDown } from 'lucide-react'
 
 const languages = [
   { code: 'EN', label: 'English', flag: '🇬🇧' },
@@ -11,7 +10,6 @@ const languages = [
 ]
 
 export default function AuthNavbar() {
-  const { theme, toggleTheme } = useTheme()
   const [scrolled, setScrolled] = useState(false)
   const [selectedLang, setSelectedLang] = useState('EN')
   const [langDropdownOpen, setLangDropdownOpen] = useState(false)

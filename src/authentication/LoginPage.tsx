@@ -8,7 +8,6 @@ import AuthNavbar from './AuthNavbar'
 import FloatingInput from './FloatingInput'
 import GradientButton from './GradientButton'
 import AuthParticles from './AuthParticles'
-import { useTheme } from '../context/ThemeContext'
 import { useAuth } from '../firebase/useAuth'
 
 const floatingInfoCards = [
@@ -83,7 +82,6 @@ export default function LoginPage() {
   const [success, setSuccess] = useState(false)
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
   const [typedText, setTypedText] = useState('')
-  const [hoveredBadge, setHoveredBadge] = useState<string | null>(null)
   
   // Forgot Password modal state
   const [showResetModal, setShowResetModal] = useState(false)
@@ -129,7 +127,7 @@ export default function LoginPage() {
   }
 
   useEffect(() => {
-    let timer: NodeJS.Timeout
+    let timer: ReturnType<typeof setTimeout>
     
     const runChatLoop = (index: number) => {
       setScenarioIdx(index)
