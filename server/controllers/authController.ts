@@ -105,3 +105,125 @@ export async function verifySyncController(req: Request, res: Response): Promise
     });
   }
 }
+
+export async function googleSyncController(req: Request, res: Response): Promise<void> {
+  try {
+    const {
+      firebaseUid,
+      fullName,
+      email,
+      authProvider,
+      emailVerified,
+      photoUrl,
+      phoneNumber,
+    } = req.body || {};
+
+    if (!firebaseUid || typeof firebaseUid !== 'string') {
+      res.status(400).json({
+        success: false,
+        message: 'Firebase UID is required.',
+      });
+      return;
+    }
+
+    if (!email || typeof email !== 'string' || !email.includes('@')) {
+      res.status(400).json({
+        success: false,
+        message: 'Valid email address is required.',
+      });
+      return;
+    }
+
+    const { googleSyncUserService } = await import('../services/authService.js');
+    const result = await googleSyncUserService({
+      firebaseUid,
+      fullName: fullName || 'Google User',
+      email,
+      authProvider: authProvider || 'google.com',
+      emailVerified: emailVerified !== undefined ? Boolean(emailVerified) : true,
+      photoUrl: photoUrl || null,
+      phoneNumber: phoneNumber || null,
+    });
+
+    res.status(200).json(result);
+  } catch (err: any) {
+    if (err instanceof CustomError) {
+      res.status(err.statusCode).json({
+        success: false,
+        message: err.message,
+      });
+      return;
+    }
+
+    console.error('Unhandled Google Sync Error:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Google login synchronization failed.',
+    });
+  }
+}
+
+export async function getUserProfileController(req: Request, res: Response): Promise<void> {
+  try {
+    const firebaseUid = req.params.uid || req.body?.firebaseUid || (req.query?.firebaseUid as string);
+    const email = req.body?.email || (req.query?.email as string) || '';
+
+    if (!firebaseUid || typeof firebaseUid !== 'string') {
+      res.status(400).json({
+        success: false,
+        message: 'Firebase UID is required.',
+      });
+      return;
+    }
+
+    const { getUserProfileService } = await import('../services/authService.js');
+    const result = await getUserProfileService(firebaseUid, email);
+
+    res.status(200).json(result);
+  } catch (err: any) {
+    if (err instanceof CustomError) {
+      res.status(err.statusCode).json({
+        success: false,
+        message: err.message,
+      });
+      return;
+    }
+
+    console.error('Unhandled Get Profile Error:', err);
+    res.status(404).json({
+      success: false,
+      message: 'User profile not found.',
+    });
+  }
+}
+
+export async function resendVerificationController(req: Request, res: Response): Promise<void> {
+  try {
+    const { email, password } = req.body || {};
+    if (!email || typeof email !== 'string' || !email.includes('@')) {
+      res.status(400).json({
+        success: false,
+        message: 'Valid email address is required.',
+      });
+      return;
+    }
+
+    const { resendVerificationEmailService } = await import('../services/authService.js');
+    const result = await resendVerificationEmailService(email, password);
+
+    res.status(200).json(result);
+  } catch (err: any) {
+    if (err instanceof CustomError) {
+      res.status(err.statusCode).json({
+        success: false,
+        message: err.message,
+      });
+      return;
+    }
+
+    res.status(500).json({
+      success: false,
+      message: 'Failed to resend verification email.',
+    });
+  }
+}

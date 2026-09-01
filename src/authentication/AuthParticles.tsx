@@ -16,14 +16,15 @@ export default function AuthParticles({ dark }: { dark: boolean }) {
     resize()
     window.addEventListener('resize', resize)
 
-    const NODE_COUNT = 44
+    const NODE_COUNT = 52
     const nodes = Array.from({ length: NODE_COUNT }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      r: Math.random() * 1.8 + 0.6,
-      opacity: Math.random() * 0.5 + 0.2,
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: (Math.random() - 0.5) * 0.35,
+      r: Math.random() * 2 + 0.8,
+      opacity: Math.random() * 0.5 + 0.25,
+      color: Math.random() > 0.4 ? 'emerald' : 'blue'
     }))
 
     const draw = () => {
@@ -38,42 +39,50 @@ export default function AuthParticles({ dark }: { dark: boolean }) {
 
         ctx.beginPath()
         ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2)
-        ctx.fillStyle = dark
-          ? `rgba(52,211,153,${n.opacity})`
-          : `rgba(16,185,129,${n.opacity * 0.7})`
+        if (n.color === 'emerald') {
+          ctx.fillStyle = dark
+            ? `rgba(52,211,153,${n.opacity})`
+            : `rgba(16,185,129,${n.opacity * 0.75})`
+        } else {
+          ctx.fillStyle = dark
+            ? `rgba(96,165,250,${n.opacity * 0.9})`
+            : `rgba(37,99,235,${n.opacity * 0.65})`
+        }
         ctx.fill()
 
+        // Neural network connections between close nodes
         for (let j = i + 1; j < NODE_COUNT; j++) {
           const m = nodes[j]
           const dist = Math.hypot(n.x - m.x, n.y - m.y)
-          if (dist < 110) {
-            const alpha = (1 - dist / 110) * 0.18 * n.opacity
+          if (dist < 125) {
+            const alpha = (1 - dist / 125) * 0.22 * n.opacity
             ctx.beginPath()
             ctx.moveTo(n.x, n.y)
             ctx.lineTo(m.x, m.y)
             ctx.strokeStyle = dark
               ? `rgba(96,165,250,${alpha})`
-              : `rgba(59,130,246,${alpha})`
-            ctx.lineWidth = 0.6
+              : `rgba(37,99,235,${alpha * 0.85})`
+            ctx.lineWidth = 0.7
             ctx.stroke()
           }
         }
       }
+
       animId = requestAnimationFrame(draw)
     }
+
     draw()
 
     return () => {
-      cancelAnimationFrame(animId)
       window.removeEventListener('resize', resize)
+      cancelAnimationFrame(animId)
     }
   }, [dark])
 
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ opacity: 0.55 }}
+      className="absolute inset-0 w-full h-full pointer-events-none z-0"
     />
   )
 }

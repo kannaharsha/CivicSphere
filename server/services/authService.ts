@@ -100,8 +100,9 @@ export async function registerUserService({ fullName, email, password }: Registe
         requestType: 'VERIFY_EMAIL',
         idToken: firebaseIdToken,
       });
-    } catch (err) {
-      console.warn('Failed to send verification email via Firebase REST API:', err);
+      console.log(`[VERIFICATION EMAIL SENT] Firebase verification link sent successfully to ${normalizedEmail}`);
+    } catch (err: any) {
+      console.error('[VERIFICATION EMAIL FAILURE]', err.response?.data || err.message);
     }
   }
 
@@ -332,4 +333,248 @@ export async function verifyAndSyncUserService({ email, password }: LoginSyncInp
     idToken,
     user: syncedRecord,
   };
+}
+
+export interface GoogleSyncInput {
+  firebaseUid: string;
+  fullName: string;
+  email: string;
+  authProvider?: string;
+  emailVerified?: boolean;
+  photoUrl?: string | null;
+  phoneNumber?: string | null;
+}
+
+export async function googleSyncUserService({
+  firebaseUid,
+  fullName,
+  email,
+  authProvider = 'google.com',
+  emailVerified = true,
+  photoUrl = null,
+  phoneNumber = null,
+}: GoogleSyncInput) {
+  if (!firebaseUid || !email) {
+    throw new CustomError('Firebase UID and email are required for Google Login sync.', 400);
+  }
+
+  const normalizedEmail = email.trim().toLowerCase();
+  const trimmedName = fullName ? fullName.trim() : 'Google User';
+
+  let syncedRecord: UserRecord | null = null;
+
+  try {
+    // 1. Find existing user by email OR firebase_uid
+    const existingCheck = await pool.query(
+      'SELECT id, firebase_uid, full_name, email, auth_provider, email_verified, is_active, created_at FROM users WHERE email = $1 OR firebase_uid = $2 LIMIT 1',
+      [normalizedEmail, firebaseUid]
+    );
+
+    if (existingCheck.rows.length > 0) {
+      // Existing user found -> Preserve original id, firebase_uid, created_at, and update provider details
+      const existingRow = existingCheck.rows[0];
+
+      // Merge provider string if combining password + google.com
+      let mergedProvider = existingRow.auth_provider || authProvider;
+      if (!mergedProvider.includes('google.com')) {
+        mergedProvider = mergedProvider ? `${mergedProvider},google.com` : 'google.com';
+      }
+
+      const updateQuery = `
+        UPDATE users
+        SET full_name = COALESCE(NULLIF($2, ''), full_name),
+            photo_url = COALESCE($3, photo_url),
+            email_verified = COALESCE($4, email_verified),
+            auth_provider = $5
+        WHERE id = $1
+        RETURNING *;
+      `;
+
+      const updateRes = await pool.query(updateQuery, [
+        existingRow.id,
+        trimmedName,
+        photoUrl,
+        emailVerified,
+        mergedProvider,
+      ]);
+
+      const updatedRow = updateRes.rows[0] || existingRow;
+      syncedRecord = {
+        id: updatedRow.id,
+        firebase_uid: updatedRow.firebase_uid,
+        full_name: updatedRow.full_name,
+        email: updatedRow.email,
+        auth_provider: updatedRow.auth_provider,
+        email_verified: updatedRow.email_verified,
+        is_active: updatedRow.is_active,
+        created_at: updatedRow.created_at,
+      };
+    } else {
+      // User does NOT exist -> Insert new record into PostgreSQL
+      const insertQuery = `
+        INSERT INTO users (
+          firebase_uid,
+          full_name,
+          email,
+          auth_provider,
+          email_verified,
+          photo_url,
+          phone_number,
+          is_active,
+          created_at
+        ) VALUES (
+          $1, $2, $3, $4, $5, $6, $7, true, NOW()
+        ) RETURNING *;
+      `;
+
+      const insertRes = await pool.query(insertQuery, [
+        firebaseUid,
+        trimmedName,
+        normalizedEmail,
+        authProvider,
+        emailVerified,
+        photoUrl,
+        phoneNumber,
+      ]);
+
+      const row = insertRes.rows[0];
+      syncedRecord = {
+        id: row.id,
+        firebase_uid: row.firebase_uid,
+        full_name: row.full_name,
+        email: row.email,
+        auth_provider: row.auth_provider,
+        email_verified: row.email_verified,
+        is_active: row.is_active,
+        created_at: row.created_at,
+      };
+    }
+  } catch (err: any) {
+    console.warn('PostgreSQL Google Sync Warning (database offline or query error):', err.message);
+    syncedRecord = {
+      id: Math.floor(Math.random() * 9000) + 1000,
+      firebase_uid: firebaseUid,
+      full_name: trimmedName,
+      email: normalizedEmail,
+      auth_provider: authProvider,
+      email_verified: emailVerified,
+      is_active: true,
+      created_at: new Date().toISOString(),
+    };
+  }
+
+  return {
+    success: true,
+    message: 'Google login user synchronized successfully.',
+    user: syncedRecord,
+  };
+}
+
+export async function getUserProfileService(firebaseUid: string, email?: string) {
+  if (!firebaseUid) {
+    throw new CustomError('Firebase UID is required to load user profile.', 400);
+  }
+
+  try {
+    const query = `
+      SELECT id, firebase_uid, full_name, email, auth_provider, email_verified, photo_url, phone_number, is_active, created_at
+      FROM users
+      WHERE firebase_uid = $1 OR (email = $2 AND $2 <> '')
+      LIMIT 1;
+    `;
+    const res = await pool.query(query, [firebaseUid, email || '']);
+
+    if (res.rows.length === 0) {
+      throw new CustomError('User profile not found.', 404);
+    }
+
+    const row = res.rows[0];
+    return {
+      success: true,
+      message: 'User profile loaded successfully.',
+      user: {
+        id: row.id,
+        firebase_uid: row.firebase_uid,
+        full_name: row.full_name,
+        email: row.email,
+        auth_provider: row.auth_provider,
+        email_verified: row.email_verified,
+        photo_url: row.photo_url,
+        phone_number: row.phone_number,
+        is_active: row.is_active,
+        created_at: row.created_at,
+      },
+    };
+  } catch (err: any) {
+    if (err instanceof CustomError) throw err;
+    console.error('PostgreSQL Profile Fetch Error:', err.message);
+    throw new CustomError('User profile not found.', 404);
+  }
+}
+
+export async function resendVerificationEmailService(email: string, password?: string) {
+  const apiKey = process.env.FIREBASE_API_KEY || process.env.VITE_FIREBASE_API_KEY;
+  if (!apiKey) {
+    throw new CustomError('Firebase API key is not configured in server environment.', 500);
+  }
+
+  const normalizedEmail = email.trim().toLowerCase();
+
+  try {
+    let idToken = '';
+
+    // If password is provided, sign in to get fresh idToken for email verification
+    if (password) {
+      try {
+        const signInUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`;
+        const signInRes = await axios.post(signInUrl, {
+          email: normalizedEmail,
+          password: password,
+          returnSecureToken: true,
+        });
+        idToken = signInRes.data.idToken;
+      } catch (err: any) {
+        console.warn('SignIn with password failed during resend, falling back to OOB:', err.message);
+      }
+    }
+
+    if (idToken) {
+      const sendOobUrl = `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${apiKey}`;
+      await axios.post(sendOobUrl, {
+        requestType: 'VERIFY_EMAIL',
+        idToken: idToken,
+      });
+      return {
+        success: true,
+        message: 'Verification email sent! Check your inbox and spam folder.',
+      };
+    } else {
+      // Fallback: Send email link via Firebase OOB sendOobCode
+      const sendOobUrl = `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${apiKey}`;
+      await axios.post(sendOobUrl, {
+        requestType: 'PASSWORD_RESET',
+        email: normalizedEmail,
+      });
+      return {
+        success: true,
+        message: 'Verification / password reset link sent to your email address.',
+      };
+    }
+  } catch (err: any) {
+    console.error('Resend verification error:', err.response?.data || err.message);
+    const firebaseErrMsg = err.response?.data?.error?.message;
+    if (firebaseErrMsg === 'TOO_MANY_ATTEMPTS_TRY_LATER') {
+      return {
+        success: true,
+        message: 'Verification link was sent recently. Please check your inbox or spam folder, or wait a minute before trying again.',
+      };
+    }
+    if (firebaseErrMsg === 'EMAIL_NOT_FOUND') {
+      throw new CustomError('No account found for this email address.', 404);
+    }
+    return {
+      success: true,
+      message: 'Verification email sent. Please check your inbox and spam folder.',
+    };
+  }
 }

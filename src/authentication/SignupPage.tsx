@@ -5,7 +5,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   User, Mail, Lock, Eye, EyeOff, Sparkles,
-  Cpu, ArrowRight, AlertCircle, MailCheck
+  Cpu, ArrowRight, AlertCircle, MailCheck,
+  Building2, Shield, ShieldCheck, Database, CheckCircle
 } from 'lucide-react'
 import AuthNavbar from './AuthNavbar'
 import FloatingInput from './FloatingInput'
@@ -94,6 +95,7 @@ export default function SignupPage() {
 
   const welcomeFullText = "Join CivicSphere Authentication Portal"
   const pwdScore = getPasswordStrength(form.password)
+  const isDark = theme === 'dark'
 
   // Title Welcome Typing
   useEffect(() => {
@@ -102,7 +104,7 @@ export default function SignupPage() {
       setTypedWelcome(welcomeFullText.slice(0, i + 1))
       i++
       if (i >= welcomeFullText.length) clearInterval(timer)
-    }, 50)
+    }, 45)
     return () => clearInterval(timer)
   }, [])
 
@@ -120,17 +122,14 @@ export default function SignupPage() {
       const sc = onboardingScenarios[index]
       let charIdx = 0
 
-      // 1. Citizen Types Query
       const typeCitizen = () => {
         if (charIdx < sc.citizen.length) {
           setTypedCitizenText(sc.citizen.slice(0, charIdx + 1))
           charIdx++
-          timer = setTimeout(typeCitizen, 25)
+          timer = setTimeout(typeCitizen, 22)
         } else {
-          // 2. AI starts thinking
           timer = setTimeout(() => {
             setAiTyping(true)
-            // 3. AI types response
             timer = setTimeout(() => {
               setAiTyping(false)
               let aiCharIdx = 0
@@ -138,28 +137,26 @@ export default function SignupPage() {
                 if (aiCharIdx < sc.ai.length) {
                   setTypedAiResponse(sc.ai.slice(0, aiCharIdx + 1))
                   aiCharIdx++
-                  timer = setTimeout(typeAi, 20)
+                  timer = setTimeout(typeAi, 18)
                 } else {
-                  // 4. Reveal schemes sequentially
                   let sIdx = 0
                   const revealSchemes = () => {
                     if (sIdx < sc.schemes.length) {
                       sIdx++
                       setRevealedSchemesCount(sIdx)
-                      timer = setTimeout(revealSchemes, 500)
+                      timer = setTimeout(revealSchemes, 400)
                     } else {
-                      // 5. Wait and go to next scenario
                       timer = setTimeout(() => {
                         playScenario((index + 1) % onboardingScenarios.length)
-                      }, 5000)
+                      }, 4500)
                     }
                   }
-                  timer = setTimeout(revealSchemes, 500)
+                  timer = setTimeout(revealSchemes, 400)
                 }
               }
               typeAi()
-            }, 1200)
-          }, 600)
+            }, 1000)
+          }, 500)
         }
       }
 
@@ -172,9 +169,8 @@ export default function SignupPage() {
 
   // Parallax coordinates
   const handleMouseMove = (e: React.MouseEvent) => {
-    const { clientX, clientY } = e
-    const x = (clientX - window.innerWidth / 2) / 50
-    const y = (clientY - window.innerHeight / 2) / 50
+    const x = (e.clientX - window.innerWidth / 2) / 60
+    const y = (e.clientY - window.innerHeight / 2) / 60
     setMousePos({ x, y })
   }
 
@@ -201,7 +197,6 @@ export default function SignupPage() {
 
   const set = (k: keyof typeof form) => (v: string) => {
     setForm(f => ({ ...f, [k]: v }))
-    // Clear error for that field as user types
     if (errors[k]) {
       setErrors(e => ({ ...e, [k]: '' }))
     }
@@ -212,7 +207,6 @@ export default function SignupPage() {
   const validateForm = () => {
     const e: Record<string, string> = {}
 
-    // Full Name Validation
     const trimmedName = form.name.trim()
     if (!trimmedName) {
       e.name = 'Full Name is required.'
@@ -222,7 +216,6 @@ export default function SignupPage() {
       e.name = 'Full Name can only contain alphabets and spaces.'
     }
 
-    // Email Validation
     const trimmedEmail = form.email.trim()
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!trimmedEmail) {
@@ -231,23 +224,21 @@ export default function SignupPage() {
       e.email = 'Please enter a valid email address.'
     }
 
-    // Password Validation
     const pw = form.password
     if (!pw) {
       e.password = 'Password is required.'
     } else if (pw.length < 8) {
       e.password = 'Password must be at least 8 characters long.'
     } else if (!/[A-Z]/.test(pw)) {
-      e.password = 'Password must contain at least one uppercase letter (A-Z).'
+      e.password = 'Must contain at least one uppercase letter (A-Z).'
     } else if (!/[a-z]/.test(pw)) {
-      e.password = 'Password must contain at least one lowercase letter (a-z).'
+      e.password = 'Must contain at least one lowercase letter (a-z).'
     } else if (!/[0-9]/.test(pw)) {
-      e.password = 'Password must contain at least one number (0-9).'
+      e.password = 'Must contain at least one number (0-9).'
     } else if (!/[^A-Za-z0-9]/.test(pw)) {
-      e.password = 'Password must contain at least one special character (!@#$%^&*).'
+      e.password = 'Must contain at least one special character (!@#$%^&*).'
     }
 
-    // Confirm Password Validation
     if (!form.confirmPassword) {
       e.confirmPassword = 'Please confirm your password.'
     } else if (form.confirmPassword !== form.password) {
@@ -298,121 +289,171 @@ export default function SignupPage() {
     }
   }
 
+  const cardVariants = {
+    hidden: (d: number) => ({ opacity: 0, x: d * 35, scale: 0.96 }),
+    visible: { opacity: 1, x: 0, scale: 1, transition: { type: 'spring' as const, stiffness: 90, damping: 18 } }
+  }
+
+  const flowItemVariants = {
+    hidden: { opacity: 0, y: 15 },
+    visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.07 + 0.15, duration: 0.4, ease: 'easeOut' as const } })
+  }
+
   return (
     <div
       onMouseMove={handleMouseMove}
-      className={`min-h-screen flex flex-col justify-between overflow-hidden relative transition-colors duration-500 ${
-        theme === 'dark' ? 'bg-[#050816]' : 'bg-[#F8FAFC]'
-      }`}
+      className="min-h-screen flex flex-col justify-between overflow-x-hidden relative select-none"
+      style={{
+        background: isDark
+          ? 'linear-gradient(135deg, #030712 0%, #081026 40%, #051329 70%, #020614 100%)'
+          : 'linear-gradient(135deg, #E2E8F0 0%, #CBD5E1 25%, #E0F2FE 55%, #DCFCE7 80%, #E2E8F0 100%)',
+      }}
     >
       <AuthNavbar />
 
-      {/* Layered Global Background */}
+      {/* ========== RICH ATMOSPHERIC BACKGROUND ========== */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute inset-0 transition-opacity duration-700 bg-[radial-gradient(circle_at_center,rgba(255,255,255,1)_0%,rgba(167,243,208,0.12)_35%,rgba(191,219,254,0.12)_75%,rgba(248,252,255,1)_100%)] dark:bg-[radial-gradient(circle_at_center,rgba(10,15,35,0.3)_0%,rgba(5,8,22,1)_100%)]" />
-        
-        {/* Parallax Blobs */}
-        <div
-          style={{ transform: `translate(${mousePos.x * 0.4}px, ${mousePos.y * 0.4}px)` }}
-          className="absolute top-[8%] left-[10%] w-[450px] h-[450px] bg-emerald-500/10 dark:bg-emerald-500/5 rounded-full blur-[120px] transition-transform duration-300"
-        />
-        <div
-          style={{ transform: `translate(${-mousePos.x * 0.4}px, ${-mousePos.y * 0.4}px)` }}
-          className="absolute bottom-[8%] right-[10%] w-[480px] h-[480px] bg-blue-600/10 dark:bg-blue-600/5 rounded-full blur-[120px] transition-transform duration-300"
+        {/* Animated ambient mesh blobs */}
+        <div style={{ transform: `translate(${mousePos.x * 0.4}px, ${mousePos.y * 0.4}px)` }}
+          className="absolute -top-32 -left-32 w-[550px] h-[550px] rounded-full bg-emerald-400/20 dark:bg-emerald-500/10 blur-[130px] animate-blob" />
+        <div style={{ transform: `translate(${-mousePos.x * 0.4}px, ${-mousePos.y * 0.4}px)` }}
+          className="absolute top-[25%] -right-32 w-[500px] h-[500px] rounded-full bg-blue-400/20 dark:bg-blue-600/10 blur-[130px] animate-blob animation-delay-2000" />
+        <div style={{ transform: `translate(${mousePos.x * 0.2}px, ${mousePos.y * 0.2}px)` }}
+          className="absolute -bottom-32 left-[25%] w-[520px] h-[520px] rounded-full bg-indigo-400/15 dark:bg-purple-600/10 blur-[130px] animate-blob animation-delay-4000" />
+
+        {/* Blueprint grid */}
+        <div className="absolute inset-0 opacity-[0.035] dark:opacity-[0.02]"
+          style={{
+            backgroundImage: `linear-gradient(#0F172A 1px, transparent 1px), linear-gradient(90deg, #0F172A 1px, transparent 1px)`,
+            backgroundSize: '40px 40px',
+            maskImage: 'radial-gradient(ellipse at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 80%)',
+            WebkitMaskImage: 'radial-gradient(ellipse at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 80%)',
+          }}
         />
 
-        {/* Blueprint line grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(37,99,235,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(37,99,235,0.03)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:3.5rem_3.5rem]" />
-        
-        <motion.div
-          animate={{ y: ['-100%', '100%'] }}
-          transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
-          className="absolute left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#2563EB]/10 to-transparent"
-        />
+        {/* Ashoka Orbit Rings */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[720px] h-[720px] rounded-full border border-slate-900/[0.05] dark:border-white/[0.02] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[480px] rounded-full border border-dashed border-emerald-600/[0.1] dark:border-emerald-400/[0.04] animate-spin-slow pointer-events-none" />
 
-        <AuthParticles dark={theme === 'dark'} />
+        {!isDark && (
+          <>
+            <div className="absolute top-[16%] left-[7%] opacity-[0.08] text-slate-800 animate-float-slow pointer-events-none">
+              <Building2 className="w-20 h-20 stroke-[1]" />
+            </div>
+            <div className="absolute bottom-[16%] left-[44%] opacity-[0.07] text-slate-800 animate-float pointer-events-none">
+              <Shield className="w-24 h-24 stroke-[1]" />
+            </div>
+            <div className="absolute top-[12%] right-[38%] opacity-[0.08] text-emerald-800 animate-float-slow pointer-events-none">
+              <Sparkles className="w-16 h-16 stroke-[1]" />
+            </div>
+          </>
+        )}
+
+        <AuthParticles dark={isDark} />
       </div>
 
-      {/* Main Grid Layout Container */}
-      <div className="flex-1 flex items-center justify-center relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 pt-16 pb-4">
-        <div className="w-full h-full lg:max-h-[calc(100vh-100px)] flex flex-col lg:flex-row gap-6 items-stretch justify-center">
-          
-          {/* ==================== LEFT SIDE: HERO PREVIEW (42%) ==================== */}
-          <div className="lg:w-[42%] w-full flex flex-col justify-between p-5 rounded-[32px] bg-white/20 dark:bg-[#091225]/20 backdrop-blur-[20px] border border-blue-500/10 dark:border-white/5 relative overflow-hidden select-none">
+      {/* ========== MAIN CONTENT CONTAINER ========== */}
+      <div className="flex-1 flex items-center justify-center relative z-10 w-full max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-4">
+        <div className="w-full flex flex-col lg:flex-row gap-6 lg:gap-8 items-center justify-center">
 
-            
-            {/* Concentric rotating wave lines in background */}
-            <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-25">
-              <div className="w-[320px] h-[320px] border border-dashed border-[#2563EB]/15 dark:border-white/5 rounded-full animate-[spin_55s_linear_infinite]" />
-              <div className="w-[220px] h-[220px] border border-dotted border-emerald-500/15 dark:border-white/5 rounded-full absolute animate-[spin_35s_linear_infinite]" />
+          {/* ==================== LEFT SIDE: CIVICSPHERE AI SHOWCASE (50%) ==================== */}
+          <motion.div
+            custom={-1} variants={cardVariants} initial="hidden" animate="visible"
+            whileHover={{ y: -4, transition: { duration: 0.3 } }}
+            className={`lg:w-[50%] w-full flex flex-col justify-between p-5 sm:p-6 rounded-[28px] relative overflow-hidden transition-all duration-300 ${
+              isDark
+                ? 'bg-[#081224]/85 backdrop-blur-2xl border border-white/10 shadow-2xl shadow-black/40'
+                : 'bg-gradient-to-br from-[#F8FAFC]/95 via-[#F1F5F9]/95 to-[#ECFDF5]/95 backdrop-blur-2xl border border-slate-300/80 shadow-[0_20px_50px_-10px_rgba(15,23,42,0.14)] hover:shadow-[0_25px_60px_-10px_rgba(16,185,129,0.2)]'
+            }`}
+          >
+            {/* Soft inner greenish corner glow */}
+            {!isDark && (
+              <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px] pointer-events-none" />
+            )}
+
+            {/* Top border animated gradient highlight beam */}
+            <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-600 rounded-t-[28px] overflow-hidden z-20">
+              <motion.div animate={{ x: ['-100%', '100%'] }} transition={{ duration: 3.5, repeat: Infinity, ease: 'linear' }}
+                className="w-1/2 h-full bg-white/60 dark:bg-emerald-400/60 absolute top-0" />
             </div>
 
-            <div className="flex items-center justify-between z-10">
-              <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[10px] font-bold text-slate-600 dark:text-emerald-400 uppercase tracking-widest leading-none">
+            <div className="flex items-center justify-between z-10 relative">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
+                <span className={`text-[11px] font-black uppercase tracking-widest font-heading ${isDark ? 'text-emerald-400' : 'text-slate-900'}`}>
                   CivicSphere AI Onboarding
                 </span>
               </div>
-              <span className="text-[8px] font-extrabold text-slate-500 bg-slate-200/50 dark:bg-slate-800/80 px-2 py-0.5 rounded uppercase tracking-wider">
+              <span className={`text-[9.5px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider ${
+                isDark ? 'text-emerald-300 bg-emerald-500/10 border border-emerald-500/25' : 'text-emerald-900 bg-emerald-500/20 border border-emerald-500/35 shadow-xs'
+              }`}>
                 Digital Welfare Preview
               </span>
             </div>
 
-            {/* AI Assistant Chatbot Display Panel */}
-            <div className="relative my-auto flex items-center justify-center min-h-[310px] w-full z-10">
+            {/* AI Assistant Chat Panel */}
+            <div className="relative flex items-center justify-center w-full z-10 py-4 my-auto">
               <motion.div
                 style={{ x: mousePos.x * 0.3, y: mousePos.y * 0.3 }}
-                className="w-full max-w-[370px] bg-white/80 dark:bg-slate-950/90 backdrop-blur-2xl border border-[#2563EB]/15 dark:border-white/10 rounded-[28px] p-4 shadow-xl shadow-[#2563EB]/5 relative"
+                className={`w-full max-w-[380px] rounded-[24px] p-4 sm:p-5 relative overflow-hidden transition-all duration-300 ${
+                  isDark
+                    ? 'bg-[#091329]/90 backdrop-blur-2xl border border-white/10 shadow-2xl'
+                    : 'bg-gradient-to-b from-white to-[#F0FDF4] backdrop-blur-2xl border border-emerald-200/90 shadow-lg shadow-emerald-500/5'
+                }`}
               >
-                {/* Chatbot Header */}
-                <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-200/80 dark:border-slate-800/85">
+                {/* Chat Header */}
+                <div className={`flex items-center justify-between pb-3 mb-2.5 border-b ${isDark ? 'border-slate-800' : 'border-emerald-200/80'}`}>
                   <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-                    <span className="text-[10px] font-bold text-slate-800 dark:text-slate-100 uppercase tracking-wider">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
+                    <span className={`text-[11px] font-black uppercase tracking-wider font-heading ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
                       CivicSphere AI Engine
                     </span>
                   </div>
-                  <div className="flex items-center gap-1 text-slate-400">
-                    <span className="text-[8px] font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/25">
-                      Govt Verified
-                    </span>
-                  </div>
+                  <span className={`text-[8.5px] font-extrabold px-2 py-0.5 rounded border ${
+                    isDark ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/25' : 'text-emerald-800 bg-emerald-100/90 border border-emerald-300'
+                  }`}>Govt Verified</span>
                 </div>
 
                 {/* Animated Chat Viewport */}
-                <div className="space-y-3 min-h-[190px] flex flex-col justify-end">
+                <div className="space-y-2.5 min-h-[175px] flex flex-col justify-end">
                   {typedCitizenText && (
-                    <div className="self-end max-w-[85%] bg-blue-600 dark:bg-[#2563EB] text-white text-[11px] font-bold px-3 py-2.5 rounded-2xl rounded-tr-none shadow-sm">
+                    <div className="self-end max-w-[85%] bg-gradient-to-r from-emerald-600 to-blue-600 text-white text-[11px] font-bold px-3.5 py-2 rounded-2xl rounded-tr-none shadow-md">
                       {typedCitizenText}
                     </div>
                   )}
 
                   {aiTyping && (
-                    <div className="self-start flex items-center gap-1.5 bg-slate-50 dark:bg-slate-900 text-[10px] px-3 py-2 rounded-2xl rounded-tl-none border border-slate-200/60 dark:border-slate-800 text-slate-500 font-bold">
-                      <Cpu className="w-3.5 h-3.5 animate-spin text-emerald-500" />
+                    <div className={`self-start flex items-center gap-2 text-[11px] px-3.5 py-2 rounded-2xl rounded-tl-none border font-bold ${
+                      isDark ? 'bg-slate-900/90 border-slate-800 text-emerald-400' : 'bg-slate-100 border border-slate-300 text-slate-800'
+                    }`}>
+                      <Cpu className="w-4 h-4 animate-spin text-emerald-500" />
                       <span>AI is searching...</span>
                     </div>
                   )}
 
                   {typedAiResponse && (
-                    <div className="self-start max-w-[85%] bg-emerald-550/10 dark:bg-emerald-500/10 border border-emerald-500/20 text-[#00A86B] dark:text-emerald-400 text-[11px] font-bold px-3 py-2.5 rounded-2xl rounded-tl-none">
+                    <div className={`self-start max-w-[85%] text-[11px] font-bold px-3.5 py-2 rounded-2xl rounded-tl-none border ${
+                      isDark ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-emerald-50 border border-emerald-200 text-emerald-900'
+                    }`}>
                       {typedAiResponse}
                     </div>
                   )}
 
                   {revealedSchemesCount > 0 && (
-                    <div className="self-start w-full space-y-1.5 mt-2">
+                    <div className="self-start w-full space-y-1.5 mt-1">
                       {onboardingScenarios[scenarioIdx].schemes.slice(0, revealedSchemesCount).map((sc) => (
                         <motion.div
                           key={sc}
                           initial={{ opacity: 0, x: -10 }}
                           animate={{ opacity: 1, x: 0 }}
-                          className="flex items-center justify-between p-2 rounded-xl bg-slate-50/90 dark:bg-slate-900/90 border border-emerald-500/10 shadow-sm"
+                          whileHover={{ scale: 1.02 }}
+                          className={`flex items-center justify-between p-2 rounded-xl border text-xs cursor-pointer ${
+                            isDark ? 'bg-slate-900/80 border-slate-800 text-white' : 'bg-white hover:bg-emerald-50/60 border-slate-200/90 text-slate-900 shadow-xs'
+                          }`}
                         >
-                          <span className="text-[10.5px] font-extrabold text-slate-900 dark:text-white leading-none">{sc}</span>
-                          <span className="text-[8px] font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded whitespace-nowrap">
-                            ✔ Matched
+                          <span className="text-[11px] font-extrabold">{sc}</span>
+                          <span className="text-[9px] font-bold text-emerald-700 bg-emerald-100/80 dark:bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-400/30">
+                            Matched
                           </span>
                         </motion.div>
                       ))}
@@ -426,168 +467,204 @@ export default function SignupPage() {
                 <motion.div
                   key={idx}
                   style={{
-                    left: chip.x,
-                    top: chip.y,
-                    x: mousePos.x * (1.1 + idx * 0.08),
-                    y: mousePos.y * (1.1 + idx * 0.08),
+                    left: chip.x, top: chip.y,
+                    x: mousePos.x * (1.1 + idx * 0.08), y: mousePos.y * (1.1 + idx * 0.08)
                   }}
                   animate={{ y: [0, -6, 0] }}
-                  transition={{ duration: 4 + idx * 0.3, repeat: Infinity, ease: 'easeInOut', delay: idx * 0.15 }}
-                  className="absolute z-0 hidden lg:inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/95 dark:bg-slate-950/95 border border-slate-200 dark:border-slate-800 shadow-md text-[9px] font-bold text-slate-850 dark:text-emerald-400"
+                  transition={{ duration: 4.2 + idx * 0.4, repeat: Infinity, ease: 'easeInOut', delay: idx * 0.15 }}
+                  className={`absolute hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[9.5px] font-extrabold cursor-pointer backdrop-blur-md transition-all ${
+                    isDark
+                      ? 'bg-[#071123]/95 border border-white/12 text-emerald-400 shadow-none'
+                      : 'bg-white border border-slate-300/80 text-slate-900 shadow-md shadow-slate-300/50'
+                  }`}
                 >
-                  <Sparkles className="w-3 h-3 text-emerald-500" />
+                  <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
                   {chip.text}
                 </motion.div>
               ))}
             </div>
 
             {/* Bottom Real-time AI Trust Statistics */}
-            <div className="border-t border-slate-200/80 dark:border-slate-800/80 pt-3 flex items-center justify-between text-center gap-2 z-10">
+            <div className={`border-t pt-3 flex items-center justify-between text-center gap-2 z-10 relative ${
+              isDark ? 'border-slate-800' : 'border-slate-300/80'
+            }`}>
               <div className="flex-1">
-                <span className="block text-sm font-black text-[#00A86B] dark:text-emerald-400">{accuracy}%</span>
-                <span className="block text-[8px] text-slate-550 dark:text-slate-400 font-extrabold uppercase tracking-wider">Match Accuracy</span>
+                <span className="block text-base font-black text-emerald-600 dark:text-emerald-400">{accuracy}%</span>
+                <span className="block text-[8.5px] text-slate-600 dark:text-slate-400 font-extrabold uppercase tracking-wider">Match Accuracy</span>
               </div>
-              <div className="h-6 w-px bg-slate-200 dark:bg-slate-800" />
+              <div className="h-6 w-px bg-slate-300 dark:bg-slate-800" />
               <div className="flex-1">
-                <span className="block text-sm font-black text-[#2563EB] dark:text-blue-400">{schemesCount}+</span>
-                <span className="block text-[8px] text-slate-550 dark:text-slate-400 font-extrabold uppercase tracking-wider">Welfare Schemes</span>
+                <span className="block text-base font-black text-blue-600 dark:text-blue-400">{schemesCount}+</span>
+                <span className="block text-[8.5px] text-slate-600 dark:text-slate-400 font-extrabold uppercase tracking-wider">Welfare Schemes</span>
               </div>
-              <div className="h-6 w-px bg-slate-200 dark:bg-slate-800" />
+              <div className="h-6 w-px bg-slate-300 dark:bg-slate-800" />
               <div className="flex-1">
-                <span className="block text-sm font-black text-purple-600 dark:text-purple-400">{languagesCount} Langs</span>
-                <span className="block text-[8px] text-slate-550 dark:text-slate-400 font-extrabold uppercase tracking-wider">Indexed</span>
+                <span className="block text-base font-black text-purple-600 dark:text-purple-400">{languagesCount} Langs</span>
+                <span className="block text-[8.5px] text-slate-600 dark:text-slate-400 font-extrabold uppercase tracking-wider">Supported</span>
               </div>
             </div>
 
-          </div>
+          </motion.div>
 
-          {/* ==================== RIGHT SIDE: AUTHENTICATION-FIRST SIGNUP CARD (58%) ==================== */}
-          <div className="lg:w-[58%] w-full flex items-center justify-center z-10">
+          {/* ==================== RIGHT SIDE: AUTHENTICATION SIGNUP CARD (50%) ==================== */}
+          <div className="lg:w-[50%] w-full flex items-center justify-center z-10">
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.7 }}
-              className="w-full max-w-[520px] bg-white/82 dark:bg-[#0a0f23]/75 backdrop-blur-[24px] rounded-[32px] border border-slate-200 dark:border-emerald-500/15 p-8 shadow-xl relative select-none max-h-[calc(100vh-120px)] overflow-y-auto"
+              custom={1} variants={cardVariants} initial="hidden" animate="visible"
+              whileHover={{ y: -4, transition: { duration: 0.3 } }}
+              className={`w-full max-w-[460px] p-5 sm:p-6 rounded-[28px] relative select-none transition-all duration-300 ${
+                isDark
+                  ? 'bg-[#081224]/85 backdrop-blur-2xl border border-white/10 shadow-2xl shadow-black/40'
+                  : 'bg-gradient-to-br from-[#F8FAFC]/95 via-[#F1F5F9]/95 to-[#ECFDF5]/95 backdrop-blur-2xl border border-slate-300/80 shadow-[0_20px_50px_-10px_rgba(15,23,42,0.14)] hover:shadow-[0_25px_60px_-10px_rgba(37,99,235,0.2)]'
+              }`}
             >
-              {/* Top gradient accent beam */}
-              <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-500 rounded-t-[32px]" />
+              {/* Soft inner greenish corner glow */}
+              {!isDark && (
+                <div className="absolute -top-20 -right-20 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px] pointer-events-none" />
+              )}
+
+              {/* Top border animated gradient highlight beam */}
+              <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-600 rounded-t-[28px] overflow-hidden z-20">
+                <motion.div animate={{ x: ['-100%', '100%'] }} transition={{ duration: 3.5, repeat: Infinity, ease: 'linear' }}
+                  className="w-1/2 h-full bg-white/60 dark:bg-emerald-400/60 absolute top-0" />
+              </div>
 
               <AnimatePresence mode="wait">
                 {signupSuccess ? (
                   /* ================= EMAIL VERIFICATION SUCCESS VIEW ================= */
                   <motion.div
                     key="verification-success"
-                    initial={{ opacity: 0, scale: 0.9 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}
-                    className="py-4 text-center space-y-4"
+                    className="py-4 text-center space-y-3.5"
                   >
-                    <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/10">
-                      <MailCheck className="w-8 h-8" />
+                    <div className="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/10">
+                      <MailCheck className="w-7 h-7" />
                     </div>
 
                     <h2 className="text-xl font-black text-slate-900 dark:text-white font-heading">
                       Verify Your Email
                     </h2>
 
-                    <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-800 dark:text-emerald-300 text-xs font-bold leading-relaxed">
+                    <div className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-800 dark:text-emerald-300 text-xs font-bold leading-relaxed">
                       Account created successfully. Please verify your email before logging in.
                     </div>
 
-                    <p className="text-xs text-slate-600 dark:text-slate-350 leading-normal font-medium px-2">
+                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-normal font-medium px-2">
                       We have sent a verification link to <strong className="text-slate-900 dark:text-white">{successEmail}</strong>. 
                       Click the link in the email to activate your CivicSphere account.
                     </p>
 
-                    <div className="pt-2 space-y-3">
+                    <div className="pt-2 space-y-2.5">
                       <button
                         onClick={() => navigate('/login')}
-                        className="w-full h-12 rounded-xl bg-gradient-to-r from-[#00A86B] to-[#2563EB] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 hover:opacity-95 transition-all cursor-pointer"
+                        className="w-full h-11 rounded-xl bg-gradient-to-r from-emerald-600 to-blue-600 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 hover:opacity-95 transition-all cursor-pointer"
                       >
                         Proceed to Login Page
                         <ArrowRight className="w-4 h-4" />
                       </button>
 
-                      <p className="text-[11px] text-slate-400 font-semibold">
-                        Didn't receive the email? Check your spam folder or sign in to resend verification link.
-                      </p>
+                      <div className="pt-1">
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            try {
+                              toast.loading('Resending verification email...', { id: 'resend-toast' });
+                              await axios.post('/api/auth/resend-verification', {
+                                email: successEmail,
+                                password: form.password,
+                              });
+                              toast.success('Verification email resent! Check your inbox.', { id: 'resend-toast' });
+                            } catch (e: any) {
+                              toast.error(e.response?.data?.message || 'Failed to resend verification link.', { id: 'resend-toast' });
+                            }
+                          }}
+                          className="text-xs font-extrabold text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer"
+                        >
+                          Didn't receive the email? Resend verification link
+                        </button>
+                      </div>
                     </div>
                   </motion.div>
                 ) : (
-                  /* ================= MINIMAL AUTHENTICATION SIGNUP FORM ================= */
+                  /* ================= AUTHENTICATION SIGNUP FORM ================= */
                   <motion.div key="signup-form" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                     {/* Title & Subtitle */}
-                    <div className="mb-5">
-                      <h2 className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-[#00A86B] to-[#2563EB] bg-clip-text text-transparent leading-tight font-heading mt-1">
-                        Create Your CivicSphere Account
+                    <motion.div custom={0} variants={flowItemVariants} initial="hidden" animate="visible" className="mb-3.5">
+                      <h2 className="text-xl sm:text-2xl font-black bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-600 bg-clip-text text-transparent leading-tight font-heading">
+                        Create Account
                       </h2>
-                      <p className="text-[#64748B] dark:text-[#CBD5E1] text-xs mt-1.5 leading-normal font-semibold">
-                        Simple authentication-first signup. Access official government schemes and services securely.
+                      <p className="text-slate-700 dark:text-slate-300 text-xs mt-1 font-bold">
+                        Simple authentication to access government schemes.
                       </p>
 
                       {/* Blinking welcome typing cursor */}
-                      <div className="flex items-center gap-1 mt-2 min-h-[1.25rem]">
-                        <span className="text-emerald-600 dark:text-[#00D084] text-xs font-bold font-mono">
+                      <div className="flex items-center gap-1 mt-1 min-h-[1.1rem]">
+                        <span className="text-emerald-700 dark:text-emerald-400 text-[11px] font-bold font-mono">
                           {typedWelcome}
                         </span>
                         {typedWelcome.length < welcomeFullText.length && (
                           <motion.span
                             animate={{ opacity: [1, 0] }}
                             transition={{ duration: 0.5, repeat: Infinity }}
-                            className="w-[2px] h-3.5 bg-emerald-500 dark:bg-[#00D084] inline-block"
+                            className="w-[2px] h-3 bg-emerald-500 inline-block"
                           />
                         )}
                       </div>
-                    </div>
+                    </motion.div>
 
                     {/* Server Error Alert Banner */}
                     {formError && (
                       <motion.div
-                        initial={{ opacity: 0, y: -8 }}
+                        initial={{ opacity: 0, y: -6 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs font-bold flex items-start gap-2"
+                        className="mb-3 p-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs font-bold flex items-start gap-2"
                       >
                         <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                         <span>{formError}</span>
                       </motion.div>
                     )}
 
-                    {/* Authentication Fields ONLY */}
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Form Fields - STRICTLY NO INNER SCROLLBAR */}
+                    <form onSubmit={handleSubmit} className="space-y-3">
                       {/* 1. Full Name */}
-                      <FloatingInput
-                        id="su-name"
-                        label="Full Name"
-                        value={form.name}
-                        onChange={set('name')}
-                        icon={<User className="w-4 h-4 text-slate-400" />}
-                        error={errors.name}
-                        required
-                        autoComplete="name"
-                      />
+                      <motion.div custom={1} variants={flowItemVariants} initial="hidden" animate="visible">
+                        <FloatingInput
+                          id="su-name"
+                          label="Full Name"
+                          value={form.name}
+                          onChange={set('name')}
+                          icon={<User className="w-4 h-4" />}
+                          error={errors.name}
+                          required
+                          autoComplete="name"
+                        />
+                      </motion.div>
 
                       {/* 2. Email Address */}
-                      <FloatingInput
-                        id="su-email"
-                        label="Email Address"
-                        type="email"
-                        value={form.email}
-                        onChange={set('email')}
-                        icon={<Mail className="w-4 h-4 text-slate-400" />}
-                        error={errors.email}
-                        required
-                        autoComplete="email"
-                      />
+                      <motion.div custom={2} variants={flowItemVariants} initial="hidden" animate="visible">
+                        <FloatingInput
+                          id="su-email"
+                          label="Email Address"
+                          type="email"
+                          value={form.email}
+                          onChange={set('email')}
+                          icon={<Mail className="w-4 h-4" />}
+                          error={errors.email}
+                          required
+                          autoComplete="email"
+                        />
+                      </motion.div>
 
                       {/* 3. Password */}
-                      <div className="space-y-1.5">
+                      <motion.div custom={3} variants={flowItemVariants} initial="hidden" animate="visible" className="space-y-1">
                         <FloatingInput
                           id="su-password"
                           label="Password"
                           type={showPass ? 'text' : 'password'}
                           value={form.password}
                           onChange={set('password')}
-                          icon={<Lock className="w-4 h-4 text-slate-400" />}
+                          icon={<Lock className="w-4 h-4" />}
                           rightIcon={
                             <button
                               type="button"
@@ -602,9 +679,9 @@ export default function SignupPage() {
                           autoComplete="new-password"
                         />
 
-                        {/* Real-time Password Strength Meter */}
+                        {/* Password Strength Indicator */}
                         {form.password && (
-                          <div className="space-y-1 pt-1">
+                          <div className="space-y-0.5 pt-0.5">
                             <div className="flex gap-1">
                               {[...Array(5)].map((_, i) => (
                                 <motion.div
@@ -614,57 +691,63 @@ export default function SignupPage() {
                                 />
                               ))}
                             </div>
-                            <div className="flex justify-between items-center text-[10px] font-bold">
+                            <div className="flex justify-between items-center text-[9.5px] font-bold">
                               <span className={['', 'text-red-500', 'text-orange-500', 'text-amber-500', 'text-blue-500', 'text-emerald-500'][pwdScore]}>
                                 Password Strength: {strengthLabels[pwdScore]}
                               </span>
-                              <span className="text-slate-400 text-[9px]">Min 8 chars (A-Z, a-z, 0-9, special)</span>
+                              <span className="text-slate-400 text-[8.5px]">Min 8 chars</span>
                             </div>
                           </div>
                         )}
-                      </div>
+                      </motion.div>
 
                       {/* 4. Confirm Password */}
-                      <FloatingInput
-                        id="su-confirm"
-                        label="Confirm Password"
-                        type={showConfirmPass ? 'text' : 'password'}
-                        value={form.confirmPassword}
-                        onChange={set('confirmPassword')}
-                        icon={<Lock className="w-4 h-4 text-slate-400" />}
-                        rightIcon={
-                          <button
-                            type="button"
-                            onClick={() => setShowConfirmPass(s => !s)}
-                            className="cursor-pointer text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
-                          >
-                            {showConfirmPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                          </button>
-                        }
-                        error={errors.confirmPassword}
-                        required
-                        autoComplete="new-password"
-                      />
+                      <motion.div custom={4} variants={flowItemVariants} initial="hidden" animate="visible">
+                        <FloatingInput
+                          id="su-confirm"
+                          label="Confirm Password"
+                          type={showConfirmPass ? 'text' : 'password'}
+                          value={form.confirmPassword}
+                          onChange={set('confirmPassword')}
+                          icon={<Lock className="w-4 h-4" />}
+                          rightIcon={
+                            <button
+                              type="button"
+                              onClick={() => setShowConfirmPass(s => !s)}
+                              className="cursor-pointer text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                            >
+                              {showConfirmPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                            </button>
+                          }
+                          error={errors.confirmPassword}
+                          required
+                          autoComplete="new-password"
+                        />
+                      </motion.div>
 
-                      {/* Submit Action */}
-                      <div className="pt-2">
+                      {/* Submit CTA */}
+                      <motion.div custom={5} variants={flowItemVariants} initial="hidden" animate="visible" className="pt-1.5">
                         <GradientButton type="submit" loading={loading}>
                           Create Account
                         </GradientButton>
-                      </div>
+                      </motion.div>
                     </form>
 
-                    {/* Footer Link to Login Page */}
-                    <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 text-center">
-                      <p className="text-xs text-[#64748B] dark:text-[#CBD5E1] font-bold flex items-center justify-center gap-1">
+                    {/* Security Badges & Footer Switch Link */}
+                    <motion.div custom={6} variants={flowItemVariants} initial="hidden" animate="visible" className="mt-3.5 pt-2.5 border-t border-slate-300/80 dark:border-slate-800 flex flex-col items-center gap-2 text-center">
+                      <div className="flex items-center gap-4 text-[10px] font-extrabold text-slate-700 dark:text-slate-400">
+                        <span className="flex items-center gap-1"><ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Govt Verified</span>
+                        <span className="flex items-center gap-1"><Database className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> Firebase Auth</span>
+                        <span className="flex items-center gap-1"><CheckCircle className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" /> DPDP Compliant</span>
+                      </div>
+                      <p className="text-xs text-slate-800 dark:text-slate-300 font-bold flex items-center justify-center gap-1 mt-0.5">
                         Already have an account?{' '}
-                        <Link to="/login" className="bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent font-black inline-flex items-center gap-0.5 hover:opacity-90 group/sw relative">
+                        <Link to="/login" className="text-emerald-700 dark:text-emerald-400 font-black inline-flex items-center gap-0.5 hover:underline">
                           Sign In
-                          <ArrowRight className="w-3.5 h-3.5 text-blue-600 group-hover/sw:translate-x-1 transition-transform shrink-0" />
-                          <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-gradient-to-r from-emerald-600 to-blue-600 transition-all duration-300 group-hover/sw:w-full" />
+                          <ArrowRight className="w-3.5 h-3.5" />
                         </Link>
                       </p>
-                    </div>
+                    </motion.div>
                   </motion.div>
                 )}
               </AnimatePresence>

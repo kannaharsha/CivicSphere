@@ -25,24 +25,24 @@ export default function GradientButton({
       type={type}
       onClick={onClick}
       whileHover={{ 
-        scale: loading || success ? 1 : 1.015,
-        y: loading || success ? 0 : -2,
-        boxShadow: loading || success ? 'none' : '0 10px 20px -8px rgba(0, 168, 107, 0.4)'
+        scale: loading || success ? 1 : 1.02,
+        y: loading || success ? 0 : -2.5,
+        boxShadow: loading || success ? 'none' : '0 14px 30px -6px rgba(16, 185, 129, 0.45)'
       }}
-      whileTap={{ scale: loading || success ? 1 : 0.985 }}
-      className={`relative overflow-hidden flex items-center justify-center gap-2 h-13 rounded-full text-xs font-bold tracking-wide transition-all duration-300 cursor-pointer group/btn ${
+      whileTap={{ scale: loading || success ? 1 : 0.975 }}
+      className={`relative overflow-hidden flex items-center justify-center gap-2 h-11 sm:h-12 rounded-xl text-xs sm:text-sm font-black tracking-wide transition-all duration-300 cursor-pointer group/btn ${
         fullWidth ? 'w-full' : 'px-6'
       } ${
         variant === 'primary'
           ? success
             ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white'
-            : 'bg-gradient-to-r from-emerald-600 via-teal-650 to-blue-600 text-white border border-emerald-500/20'
-          : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700'
+            : 'bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-600 hover:brightness-105 text-white shadow-md shadow-emerald-500/25 border border-white/20'
+          : 'bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700'
       } disabled:opacity-70 disabled:cursor-not-allowed`}
       disabled={loading || success}
     >
-      {/* Light shimmer line moving across */}
-      <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-150%] group-hover/btn:animate-[shimmer_1.2s_infinite]" />
+      {/* Light shimmer trail line moving across */}
+      <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent translate-x-[-150%] group-hover/btn:animate-[shimmer_1.2s_infinite]" />
 
       <AnimatePresence mode="wait">
         {loading ? (
@@ -56,10 +56,10 @@ export default function GradientButton({
             <span>Success!</span>
           </motion.span>
         ) : (
-          <motion.span key="content" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-1.5 justify-center">
+          <motion.span key="content" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2 justify-center">
             {children}
             {variant === 'primary' && (
-              <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-x-1" />
+              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1.5" />
             )}
           </motion.span>
         )}

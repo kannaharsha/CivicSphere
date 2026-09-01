@@ -7,14 +7,21 @@ dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
 const { Pool } = pg;
 
-// Use discrete parameters to avoid URL encoding issues with special characters in password
-export const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || '5432', 10),
-  database: process.env.DB_NAME || 'civicsphere_db',
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || 'Harsha@9106',
-});
+const poolConfig: pg.PoolConfig = process.env.DATABASE_URL
+  ? {
+      connectionString: process.env.DATABASE_URL,
+      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+    }
+  : {
+      host: process.env.DB_HOST || 'localhost',
+      port: parseInt(process.env.DB_PORT || '5432', 10),
+      database: process.env.DB_NAME || 'civicsphere_db',
+      user: process.env.DB_USER || 'postgres',
+      password: process.env.DB_PASSWORD || 'Harshatej9106',
+      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+    };
+
+export const pool = new Pool(poolConfig);
 
 export async function initDb() {
   const createTableQuery = `

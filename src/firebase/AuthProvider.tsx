@@ -10,6 +10,8 @@ import {
   sendPasswordResetEmail,
   updateProfile,
   sendEmailVerification,
+  GoogleAuthProvider,
+  linkWithCredential,
 } from 'firebase/auth';
 import { toast } from 'react-hot-toast';
 import { auth, googleProvider } from './firebase';
@@ -35,30 +37,72 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [profile, setProfile] = useState<CitizenProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Listen to Firebase Auth state — build profile directly from Firebase user
+  // Listen to Firebase Auth state — fetch & load PostgreSQL profile for authenticated existing user
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
       if (firebaseUser) {
-        setProfile({
-          uid: firebaseUser.uid,
-          fullName: firebaseUser.displayName || 'Citizen',
-          email: firebaseUser.email || '',
-          phone: firebaseUser.phoneNumber || '',
-          provider: firebaseUser.providerData[0]?.providerId || 'email',
-          language: 'English',
-          occupation: '',
-          state: '',
-          district: '',
-          gender: '',
-          dob: null,
-          avatarUrl: firebaseUser.photoURL || '',
-          profileCompleted: false,
-        });
+        axios.get(`/api/auth/profile/${firebaseUser.uid}?email=${encodeURIComponent(firebaseUser.email || '')}`)
+          .then(res => {
+            if (res.data && res.data.user) {
+              const u = res.data.user;
+              setProfile({
+                uid: u.firebase_uid,
+                fullName: u.full_name || firebaseUser.displayName || 'Citizen',
+                email: u.email || firebaseUser.email || '',
+                phone: u.phone_number || firebaseUser.phoneNumber || '',
+                provider: u.auth_provider || firebaseUser.providerData[0]?.providerId || 'email',
+                language: 'English',
+                occupation: '',
+                state: '',
+                district: '',
+                gender: '',
+                dob: null,
+                avatarUrl: u.photo_url || firebaseUser.photoURL || '',
+                profileCompleted: false,
+              });
+            } else {
+              setProfile({
+                uid: firebaseUser.uid,
+                fullName: firebaseUser.displayName || 'Citizen',
+                email: firebaseUser.email || '',
+                phone: firebaseUser.phoneNumber || '',
+                provider: firebaseUser.providerData[0]?.providerId || 'email',
+                language: 'English',
+                occupation: '',
+                state: '',
+                district: '',
+                gender: '',
+                dob: null,
+                avatarUrl: firebaseUser.photoURL || '',
+                profileCompleted: false,
+              });
+            }
+          })
+          .catch(() => {
+            setProfile({
+              uid: firebaseUser.uid,
+              fullName: firebaseUser.displayName || 'Citizen',
+              email: firebaseUser.email || '',
+              phone: firebaseUser.phoneNumber || '',
+              provider: firebaseUser.providerData[0]?.providerId || 'email',
+              language: 'English',
+              occupation: '',
+              state: '',
+              district: '',
+              gender: '',
+              dob: null,
+              avatarUrl: firebaseUser.photoURL || '',
+              profileCompleted: false,
+            });
+          })
+          .finally(() => {
+            setLoading(false);
+          });
       } else {
         setProfile(null);
+        setLoading(false);
       }
-      setLoading(false);
     });
 
     return () => unsubscribe();
@@ -133,13 +177,44 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Google Sign In
+  // Google Sign In with PostgreSQL sync and provider linking
   const googleLogin = async () => {
     try {
-      await signInWithPopup(auth, googleProvider);
+      let u: FirebaseUser | null = null;
+      try {
+        const res = await signInWithPopup(auth, googleProvider);
+        u = res.user;
+      } catch (err: any) {
+        if (err.code === 'auth/account-exists-with-different-credential') {
+          const credential = GoogleAuthProvider.credentialFromError(err);
+          if (auth.currentUser && credential) {
+            const linkRes = await linkWithCredential(auth.currentUser, credential);
+            u = linkRes.user;
+          } else {
+            toast.error('An account already exists with this email address. Please log in with your password first.');
+            throw err;
+          }
+        } else {
+          throw err;
+        }
+      }
+
+      if (u) {
+        const providers = u.providerData.map(p => p.providerId).join(',') || 'google.com';
+        await axios.post('/api/auth/google-sync', {
+          firebaseUid: u.uid,
+          fullName: u.displayName || 'Google User',
+          email: u.email || '',
+          authProvider: providers,
+          emailVerified: u.emailVerified,
+          photoUrl: u.photoURL || null,
+          phoneNumber: u.phoneNumber || null,
+        });
+      }
+
       toast.success('Signed in with Google!');
     } catch (err: any) {
-      if (err.code !== 'auth/popup-closed-by-user') {
+      if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/account-exists-with-different-credential') {
         toast.error('Google Sign-In failed. Please try again.');
       }
       throw err;
