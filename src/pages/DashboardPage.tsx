@@ -1,13 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Home, BookOpen, CheckCircle, Cpu, FileText, Bell, User, Settings, LogOut,
-  Sun, Moon, Shield, Search, ArrowRight, Sparkles, Filter, Check, Clock,
-  ExternalLink, Upload, Lock, AlertTriangle, ChevronRight, Award, RefreshCw,
-  Globe, MessageSquare, Send, FileCheck, Layers, Landmark, HeartHandshake, Zap,
-  PanelLeftClose, PanelLeftOpen, Mic, ChevronDown, BarChart3, PieChart, TrendingUp, ShieldCheck,
-  Briefcase, MapPin, UserCheck
+  Sun, Moon, Sparkles, Clock, PanelLeftClose, PanelLeftOpen, Mic,
+  ChevronDown, Briefcase, MapPin, Globe, UserCheck
 } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
 import AuthParticles from '../authentication/AuthParticles'
@@ -25,70 +22,6 @@ const navItems = [
   { label: 'Settings', icon: Settings, id: 'settings' }
 ]
 
-// Mock Scheme Data with Prompt Sector Colors
-const sampleSchemes = [
-  {
-    id: 'pm-kisan',
-    title: 'PM Kisan Samman Nidhi',
-    sector: 'Agriculture',
-    amount: '₹6,000 / year',
-    matchScore: 98,
-    badge: 'Green Verified',
-    description: 'Financial assistance of ₹6,000 per year in three equal installments directly to landholding farmer families.',
-    eligibility: ['Small & Marginal Farmers', 'Valid Aadhaar Linked Bank Account', 'Land Ownership Record'],
-    deadline: 'Open Year-Round',
-    sectorColor: '#00B87C', // Emerald
-    sectorBg: 'bg-[#DDFBF2] text-[#0F766E]',
-    aiReason: 'Matched via 100% Land Records & Aadhaar verification index.',
-    icon: Landmark
-  },
-  {
-    id: 'ayushman-bharat',
-    title: 'Ayushman Bharat (PM-JAY)',
-    sector: 'Healthcare',
-    amount: '₹5,000,000 Health Cover',
-    matchScore: 99,
-    badge: 'Gold Priority',
-    description: 'Health insurance coverage up to ₹5 Lakh per family per year for secondary and tertiary care hospitalization.',
-    eligibility: ['Low Income Households', 'SECC Registered Citizens', 'No Existing Commercial Insurance'],
-    deadline: 'Active Coverage',
-    sectorColor: '#D97757', // Terracotta
-    sectorBg: 'bg-[#FBE4E8] text-[#D97757]',
-    aiReason: 'SECC Household data confirms instant 99.4% eligibility match.',
-    icon: HeartHandshake
-  },
-  {
-    id: 'pm-awas',
-    title: 'Pradhan Mantri Awas Yojana (PMAY)',
-    sector: 'Housing',
-    amount: '₹2.67 Lakh Interest Subsidy',
-    matchScore: 94,
-    badge: 'Navy AI Recommended',
-    description: 'Credit-linked interest subsidy for first-time home buyers in urban and rural areas under EWS/LIG categories.',
-    eligibility: ['Annual Income < ₹6 Lakh', 'First-time Home Owner', 'Valid Resident Certificate'],
-    deadline: '31st Dec 2026',
-    sectorColor: '#0F766E', // Deep Forest Green
-    sectorBg: 'bg-[#E6F4F1] text-[#0F766E]',
-    aiReason: 'EWS category verified via State Resident Certificate registry.',
-    icon: Home
-  },
-  {
-    id: 'merit-scholarship',
-    title: 'National Merit-cum-Means Scholarship',
-    sector: 'Education',
-    amount: '₹12,000 / year',
-    matchScore: 91,
-    badge: 'Terracotta Limited Time',
-    description: 'Financial support for meritorious students of economically weaker sections to arrest dropouts at class VIII.',
-    eligibility: ['Class 8+ Students', 'Family Income < ₹3.5 Lakh', 'Minimum 55% in Class 7'],
-    deadline: '15th Oct 2026',
-    sectorColor: '#17324D', // Navy Blue
-    sectorBg: 'bg-[#E3EBF3] text-[#17324D]',
-    aiReason: 'Academic record match exceeds required 55% threshold.',
-    icon: Award
-  }
-]
-
 export default function DashboardPage() {
   const { theme, toggleTheme } = useTheme()
   const { profile, logout } = useAuth()
@@ -98,48 +31,10 @@ export default function DashboardPage() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
   const [activeTab, setActiveTab] = useState('home')
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedSector, setSelectedSector] = useState('All')
   const [selectedLanguage, setSelectedLanguage] = useState('English')
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
-  const [selectedScheme, setSelectedScheme] = useState<typeof sampleSchemes[0] | null>(null)
-  const [expandedAiWidget, setExpandedAiWidget] = useState<string | null>('pm-kisan')
-  const [isRefreshing, setIsRefreshing] = useState(false)
-
-  // Eligibility Verification Engine state
-  const [eligibilityForm, setEligibilityForm] = useState({
-    state: 'Telangana',
-    incomeTier: 'Under ₹1.5 Lakhs'
-  })
-  const [eligibilityResult, setEligibilityResult] = useState<number | null>(null)
-
-  // AI Assistant Chat state
-  const [chatMessages, setChatMessages] = useState<Array<{ sender: 'user' | 'ai'; text: string }>>([
-    { sender: 'ai', text: 'Hello! I am your CivicSphere AI Assistant. Ask me anything about PM Kisan, Ayushman Bharat, or education scholarships.' }
-  ])
-  const [chatInput, setChatInput] = useState('')
-
-  const handleSendMessage = () => {
-    if (!chatInput.trim()) return
-    const userText = chatInput.trim()
-    setChatMessages(prev => [...prev, { sender: 'user', text: userText }])
-    setChatInput('')
-    setTimeout(() => {
-      setChatMessages(prev => [
-        ...prev,
-        {
-          sender: 'ai',
-          text: `Based on your citizen profile and query about "${userText}", you are eligible for 100% financial assistance under verified welfare initiatives.`
-        }
-      ])
-    }, 600)
-  }
 
   // Real-time clock state
   const [currentTime, setCurrentTime] = useState(new Date())
-
-  // Typing greeting effect
-  const fullGreetingText = "Welcome to your Citizen Intelligence Portal"
-  const [typedGreeting, setTypedGreeting] = useState("")
 
   // Auto scroll main container to top smoothly on section redirect/tab change
   useEffect(() => {
@@ -149,49 +44,14 @@ export default function DashboardPage() {
   }, [activeTab])
 
   useEffect(() => {
-    let i = 0
-    const interval = setInterval(() => {
-      if (i < fullGreetingText.length) {
-        setTypedGreeting(fullGreetingText.substring(0, i + 1))
-        i++
-      } else {
-        clearInterval(interval)
-      }
-    }, 45)
-    return () => clearInterval(interval)
-  }, [])
-
-  useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000)
     return () => clearInterval(timer)
   }, [])
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const { clientX, clientY } = e
-    const x = (clientX - window.innerWidth / 2) / 60
-    const y = (clientY - window.innerHeight / 2) / 60
-    setMousePos({ x, y })
-  }
-
-  const handleRefreshFeeds = () => {
-    setIsRefreshing(true)
-    setTimeout(() => setIsRefreshing(false), 800)
-  }
-
-  // Filter schemes
-  const filteredSchemes = sampleSchemes.filter(s => {
-    const matchesSearch = s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.sector.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesSector = selectedSector === 'All' || s.sector === selectedSector
-    return matchesSearch && matchesSector
-  })
 
   const isDark = theme === 'dark'
 
   return (
     <div
-      onMouseMove={handleMouseMove}
       className={`min-h-screen flex flex-col h-screen overflow-hidden relative transition-colors duration-500 font-sans ${isDark ? 'bg-[#08131F] text-white' : 'bg-[#FAF7F2] text-[#17324D]'
         }`}
     >
@@ -767,71 +627,6 @@ export default function DashboardPage() {
           <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-[#D4A537] rounded-full border-2 border-white animate-ping" />
         </button>
       </div>
-
-      {/* ==================== SCHEME DETAILS MODAL ==================== */}
-      <AnimatePresence>
-        {selectedScheme && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className={`w-full max-w-lg p-6 rounded-[32px] border space-y-4 shadow-2xl relative ${isDark ? 'bg-[#08131F] border-slate-800 text-white' : 'bg-white border border-[#F3E8D2] text-[#17324D]'
-                }`}
-            >
-              <div className="flex items-start justify-between">
-                <div>
-                  <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: selectedScheme.sectorColor }}>{selectedScheme.sector}</span>
-                  <h3 className="text-xl font-black text-[#17324D] dark:text-white">{selectedScheme.title}</h3>
-                </div>
-                <button
-                  onClick={() => setSelectedScheme(null)}
-                  className="p-1 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-xs font-black"
-                >
-                  ✕
-                </button>
-              </div>
-
-              <p className="text-xs text-[#17324D] dark:text-slate-200 font-black">{selectedScheme.description}</p>
-
-              <div className="p-4 rounded-2xl bg-[#DDFBF2] border border-[#00B87C]/30 space-y-1">
-                <span className="text-[10px] text-[#0F766E] font-black uppercase">Benefit Amount</span>
-                <div className="text-lg font-black text-[#17324D]">{selectedScheme.amount}</div>
-              </div>
-
-              <div>
-                <h4 className="text-xs font-black mb-2 text-[#17324D] dark:text-white">Eligibility Criteria:</h4>
-                <ul className="space-y-1.5 text-xs text-[#17324D] dark:text-slate-200 font-black">
-                  {selectedScheme.eligibility.map((req, i) => (
-                    <li key={i} className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-[#00B87C] shrink-0" />
-                      <span>{req}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="pt-4 flex gap-3">
-                <button
-                  onClick={() => {
-                    alert(`Application initialized for ${selectedScheme.title}. Your details have been submitted for government verification!`)
-                    setSelectedScheme(null)
-                  }}
-                  className="flex-1 h-11 bg-gradient-to-r from-[#00B87C] to-[#0F766E] text-white font-black rounded-2xl text-xs shadow-md cursor-pointer"
-                >
-                  Apply Online Now
-                </button>
-                <button
-                  onClick={() => setSelectedScheme(null)}
-                  className="px-5 h-11 border border-[#F3E8D2] dark:border-slate-800 text-xs font-black rounded-2xl cursor-pointer text-[#17324D] dark:text-white"
-                >
-                  Close
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
 
     </div>
   )
