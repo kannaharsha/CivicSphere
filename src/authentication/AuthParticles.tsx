@@ -16,17 +16,15 @@ export default function AuthParticles({ dark }: { dark: boolean }) {
     resize()
     window.addEventListener('resize', resize)
 
-    const NODE_COUNT = 60
+    const NODE_COUNT = 70
     const nodes = Array.from({ length: NODE_COUNT }, () => {
-      const rand = Math.random()
       return {
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
+        vx: (Math.random() - 0.5) * 0.45,
+        vy: (Math.random() - 0.5) * 0.45,
         r: Math.random() * 2.2 + 0.8,
-        opacity: Math.random() * 0.55 + 0.25,
-        color: rand > 0.65 ? 'emerald' : rand > 0.35 ? 'cyan' : 'blue'
+        opacity: Math.random() * 0.55 + 0.25
       }
     })
 
@@ -40,20 +38,25 @@ export default function AuthParticles({ dark }: { dark: boolean }) {
         if (n.x < 0 || n.x > canvas.width) n.vx *= -1
         if (n.y < 0 || n.y > canvas.height) n.vy *= -1
 
+        // Subtle glow halo behind node
+        ctx.beginPath()
+        ctx.arc(n.x, n.y, n.r * 2.5, 0, Math.PI * 2)
+        if (dark) {
+          ctx.fillStyle = `rgba(34,211,238,${n.opacity * 0.15})`
+        } else {
+          // LIGHT THEME: BLACK PARTICLE HALO
+          ctx.fillStyle = `rgba(0,0,0,${n.opacity * 0.22})`
+        }
+        ctx.fill()
+
+        // Inner solid node
         ctx.beginPath()
         ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2)
-        if (n.color === 'emerald') {
-          ctx.fillStyle = dark
-            ? `rgba(52,211,153,${n.opacity})`
-            : `rgba(16,185,129,${n.opacity * 0.75})`
-        } else if (n.color === 'cyan') {
-          ctx.fillStyle = dark
-            ? `rgba(34,211,238,${n.opacity})`
-            : `rgba(6,182,212,${n.opacity * 0.75})`
+        if (dark) {
+          ctx.fillStyle = `rgba(34,211,238,${n.opacity * 0.95})`
         } else {
-          ctx.fillStyle = dark
-            ? `rgba(96,165,250,${n.opacity * 0.9})`
-            : `rgba(37,99,235,${n.opacity * 0.65})`
+          // LIGHT THEME: PURE BLACK SOLID NODE (#000000)
+          ctx.fillStyle = `rgba(0,0,0,${n.opacity * 0.90})`
         }
         ctx.fill()
 
@@ -61,15 +64,15 @@ export default function AuthParticles({ dark }: { dark: boolean }) {
         for (let j = i + 1; j < NODE_COUNT; j++) {
           const m = nodes[j]
           const dist = Math.hypot(n.x - m.x, n.y - m.y)
-          if (dist < 130) {
-            const alpha = (1 - dist / 130) * 0.25 * n.opacity
+          if (dist < 140) {
+            const alpha = (1 - dist / 140) * 0.4 * n.opacity
             ctx.beginPath()
             ctx.moveTo(n.x, n.y)
             ctx.lineTo(m.x, m.y)
             ctx.strokeStyle = dark
               ? `rgba(34,211,238,${alpha})`
-              : `rgba(16,185,129,${alpha * 0.85})`
-            ctx.lineWidth = 0.75
+              : `rgba(0,0,0,${alpha * 1.8})` // LIGHT THEME: PURE BLACK CONNECTING NETWORK LINES
+            ctx.lineWidth = 1.15
             ctx.stroke()
           }
         }
@@ -93,4 +96,3 @@ export default function AuthParticles({ dark }: { dark: boolean }) {
     />
   )
 }
-

@@ -376,13 +376,67 @@ h6 {
 /* =========================================
    Background Mesh
    ========================================= */
-.bg-mesh {
+/* =========================================
+   Glassmorphism & Earth-Tone Theme Cards
+   ========================================= */
+.glass-card-light, .frosted-glass-cream {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid #F3E8D2;
+  box-shadow: 0 12px 36px -6px rgba(23, 50, 77, 0.06), 0 4px 16px -2px rgba(0, 184, 124, 0.04);
+}
+
+.glass-card-dark, .frosted-glass-dark {
+  background: rgba(15, 23, 42, 0.70);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 36px -6px rgba(0, 0, 0, 0.5);
+}
+
+/* =========================================
+   Background Mesh Variants — Strict Midnight Blue #08131F & Warm Cream #F9F7F2
+   ========================================= */
+.bg-mesh-light, .bg-mesh-civic-light {
+  background-color: #F9F7F2;
   background-image:
-    radial-gradient(at 40% 20%, rgba(22, 163, 74, 0.08) 0px, transparent 50%),
-    radial-gradient(at 80% 0%, rgba(37, 99, 235, 0.06) 0px, transparent 50%),
-    radial-gradient(at 0% 50%, rgba(245, 158, 11, 0.04) 0px, transparent 50%),
-    radial-gradient(at 80% 50%, rgba(22, 163, 74, 0.05) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(37, 99, 235, 0.07) 0px, transparent 50%);
+    radial-gradient(at 10% 10%, rgba(221, 251, 242, 0.75) 0px, transparent 55%),
+    radial-gradient(at 90% 15%, rgba(243, 232, 210, 0.65) 0px, transparent 50%),
+    radial-gradient(at 50% 45%, rgba(217, 119, 87, 0.08) 0px, transparent 55%),
+    radial-gradient(at 15% 85%, rgba(23, 50, 77, 0.06) 0px, transparent 50%),
+    radial-gradient(at 85% 90%, rgba(0, 184, 124, 0.12) 0px, transparent 50%);
+}
+
+.bg-mesh-dark, .bg-mesh-civic-dark {
+  background-color: #08131F;
+  background-image:
+    radial-gradient(at 15% 15%, rgba(0, 184, 124, 0.14) 0px, transparent 55%),
+    radial-gradient(at 85% 20%, rgba(15, 118, 110, 0.16) 0px, transparent 50%),
+    radial-gradient(at 50% 80%, rgba(212, 165, 55, 0.08) 0px, transparent 50%);
+}
+
+/* Sidebar Menu Hover Transformations */
+.nav-pill-hover {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-pill-hover:hover {
+  transform: translateY(-4px);
+  background-color: #DDFBF2;
+  color: #0F766E;
+  box-shadow: 0 0 20px rgba(0, 184, 124, 0.25);
+}
+.nav-pill-hover:hover svg {
+  transform: rotate(6deg) scale(1.1);
+  color: #00B87C;
+}
+
+.hover-glow-emerald:hover {
+  box-shadow: 0 0 25px rgba(0, 184, 124, 0.35);
+}
+
+.hover-glow-gold:hover {
+  box-shadow: 0 0 25px rgba(212, 165, 55, 0.35);
 }
 
 @keyframes scan-beam {
@@ -421,4 +475,26 @@ h6 {
 .animate-border-flow {
   background-size: 200% 200%;
   animation: border-glow-flow 5s ease infinite;
+}
+
+/* Light Beam shine animation for buttons and cards */
+.relative-shine {
+  position: relative;
+  overflow: hidden;
+}
+.relative-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.25) 50%,
+    transparent 70%
+  );
+  transform: rotate(30deg);
+  animation: light-beam 6s infinite;
 }
