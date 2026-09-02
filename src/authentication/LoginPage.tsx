@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Mail, Lock, Eye, EyeOff, Cpu, Sparkles, ArrowRight,
-  Shield, CheckCircle2, TrendingUp, Bell, Check, LockKeyhole, ShieldCheck
+  Eye, EyeOff, Cpu, Sparkles, TrendingUp, Check, ShieldCheck
 } from 'lucide-react'
 import AuthNavbar from './AuthNavbar'
 import AuthParticles from './AuthParticles'
@@ -66,15 +65,10 @@ export default function LoginPage() {
       y: 0,
       transition: {
         duration: 0.5,
-        ease: [0.22, 1, 0.36, 1],
+        ease: [0.22, 1, 0.36, 1] as const,
         staggerChildren: 0.08,
       },
     },
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
   }
 
   return (

@@ -4,12 +4,11 @@ import { toast } from 'react-hot-toast'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Eye, EyeOff, Cpu, TrendingUp, Check, MailCheck, ArrowRight,
-  ShieldCheck, LockKeyhole, Sparkles
+  Eye, EyeOff, Cpu, TrendingUp, MailCheck, ArrowRight,
+  ShieldCheck, Sparkles
 } from 'lucide-react'
 import AuthNavbar from './AuthNavbar'
 import AuthParticles from './AuthParticles'
-import { useAuth } from '../firebase/useAuth'
 import { useTheme } from '../context/ThemeContext'
 
 function getPasswordStrength(pw: string) {
@@ -26,9 +25,7 @@ const strengthColors = ['', 'bg-red-500', 'bg-orange-500', 'bg-amber-500', 'bg-b
 
 export default function SignupPage() {
   const { theme } = useTheme()
-  const { googleLogin } = useAuth()
   const [loading, setLoading] = useState(false)
-  const [googleLoading, setGoogleLoading] = useState(false)
   const [showPass, setShowPass] = useState(false)
   const [showConfirmPass, setShowConfirmPass] = useState(false)
   const [signupSuccess, setSignupSuccess] = useState(false)
@@ -111,7 +108,7 @@ export default function SignupPage() {
       y: 0,
       transition: {
         duration: 0.5,
-        ease: [0.22, 1, 0.36, 1],
+        ease: [0.22, 1, 0.36, 1] as const,
         staggerChildren: 0.08,
       },
     },

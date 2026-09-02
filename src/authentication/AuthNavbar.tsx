@@ -31,6 +31,8 @@ export default function AuthNavbar() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? 'shadow-lg' : ''
+      } ${
         isDark
           ? 'bg-[#09090B]/90 backdrop-blur-xl border-b border-slate-800/80 shadow-md shadow-black/20'
           : 'bg-white/85 backdrop-blur-xl border-b border-slate-200/80 shadow-xs'
