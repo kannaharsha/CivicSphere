@@ -198,9 +198,39 @@ h6 {
   }
 }
 
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+@keyframes border-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes light-beam {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
 /* =========================================
    Utility Classes
    ========================================= */
+.animate-shake {
+  animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+.animate-border-flow {
+  background-size: 300% 300%;
+  animation: border-flow 6s ease infinite;
+}
+
+.animate-light-beam {
+  animation: light-beam 3.5s linear infinite;
+}
+
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
@@ -353,4 +383,42 @@ h6 {
     radial-gradient(at 0% 50%, rgba(245, 158, 11, 0.04) 0px, transparent 50%),
     radial-gradient(at 80% 50%, rgba(22, 163, 74, 0.05) 0px, transparent 50%),
     radial-gradient(at 0% 100%, rgba(37, 99, 235, 0.07) 0px, transparent 50%);
+}
+
+@keyframes scan-beam {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+.animate-scan {
+  animation: scan-beam 4s ease-in-out infinite;
+}
+
+@keyframes border-glow-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-border-flow {
+  background-size: 200% 200%;
+  animation: border-glow-flow 5s ease infinite;
 }
