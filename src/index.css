@@ -349,9 +349,17 @@ h6 {
    Focus States (Accessibility)
    ========================================= */
 :focus-visible {
-  outline: 2px solid #16A34A;
-  outline-offset: 2px;
-  border-radius: 4px;
+  outline: none;
+}
+
+input:focus,
+input:focus-visible,
+select:focus,
+select:focus-visible,
+textarea:focus,
+textarea:focus-visible,
+button:focus-visible {
+  outline: none !important;
 }
 
 /* =========================================
@@ -395,6 +403,35 @@ h6 {
   box-shadow: 0 12px 36px -6px rgba(0, 0, 0, 0.5);
 }
 
+/* Premium Frosted Glassmorphism Cards with True Transparency */
+.glass-profile-card-light {
+  background: rgba(255, 252, 243, 0.45) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border: 1px solid rgba(212, 165, 55, 0.35) !important;
+  box-shadow: 0 10px 30px -5px rgba(212, 165, 55, 0.12) !important;
+}
+
+.glass-profile-card-light:hover {
+  background: rgba(255, 252, 243, 0.65) !important;
+  border-color: rgba(245, 158, 11, 0.65) !important;
+  box-shadow: 0 12px 35px -5px rgba(245, 158, 11, 0.18) !important;
+}
+
+.glass-profile-card-dark {
+  background: rgba(8, 19, 31, 0.55) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border: 1px solid rgba(0, 184, 124, 0.35) !important;
+  box-shadow: 0 10px 30px -5px rgba(0, 184, 124, 0.15) !important;
+}
+
+.glass-profile-card-dark:hover {
+  background: rgba(8, 19, 31, 0.70) !important;
+  border-color: rgba(0, 184, 124, 0.75) !important;
+  box-shadow: 0 12px 35px -5px rgba(0, 184, 124, 0.25) !important;
+}
+
 /* =========================================
    Background Mesh Variants — Strict Midnight Blue #08131F & Warm Cream #F9F7F2
    ========================================= */
@@ -411,9 +448,9 @@ h6 {
 .bg-mesh-dark, .bg-mesh-civic-dark {
   background-color: #08131F;
   background-image:
-    radial-gradient(at 15% 15%, rgba(0, 184, 124, 0.14) 0px, transparent 55%),
-    radial-gradient(at 85% 20%, rgba(15, 118, 110, 0.16) 0px, transparent 50%),
-    radial-gradient(at 50% 80%, rgba(212, 165, 55, 0.08) 0px, transparent 50%);
+    radial-gradient(at 15% 15%, rgba(0, 184, 124, 0.18) 0px, transparent 55%),
+    radial-gradient(at 85% 20%, rgba(15, 118, 110, 0.20) 0px, transparent 50%),
+    radial-gradient(at 50% 80%, rgba(0, 184, 124, 0.14) 0px, transparent 50%);
 }
 
 /* Sidebar Menu Hover Transformations */

@@ -4,6 +4,7 @@ import {
   Bot, FileText, ShieldCheck, Globe, Bell, CheckCircle,
   LayoutDashboard, Sparkles, ArrowRight, Layers, Cpu, Building2, Shield
 } from 'lucide-react'
+import { fetchAgricultureSchemeCount } from '../services/schemeService'
 
 // Feature Cards (Requirement 5)
 const featureCards = [
@@ -78,7 +79,7 @@ const featureCards = [
 // Statistics Data
 const statisticsData = [
   {
-    value: '0',
+    value: '500+',
     label: 'Government Schemes',
     sublabel: 'Schemes Available',
     icon: <FileText className="w-4 h-4 text-emerald-600" />,
@@ -114,6 +115,11 @@ const fadeUp = {
 
 export default function HeroSection() {
   const [activeCardIndex, setActiveCardIndex] = useState(0)
+  const [schemesCount, setSchemesCount] = useState<number | null>(null)
+
+  useEffect(() => {
+    fetchAgricultureSchemeCount().then(count => setSchemesCount(count))
+  }, [])
 
   // Vertical card loop animation cycle (Requirement 4)
   useEffect(() => {
@@ -136,26 +142,26 @@ export default function HeroSection() {
       id="home"
       className="relative min-h-[90vh] lg:min-h-screen flex items-center overflow-hidden pt-24 pb-16 transition-colors duration-500"
       style={{
-        background: 'linear-gradient(135deg, #FAFBFD 0%, #F0F6FF 40%, #ECFDF5 75%, #FFFDF9 100%)',
+        background: 'linear-gradient(135deg, #FAFDFB 0%, #F4FBF7 35%, #ECFDF5 70%, #FAFDFB 100%)',
       }}
       aria-label="CivicSphere Hero"
     >
       {/* ==================== Layered Background Visual Elements (Requirements 1, 2 & 8) ==================== */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
         
-        {/* Layer 2: Animated Gradient Blobs (Requirement 1 - Layer 2) */}
-        <div className="absolute top-[-5%] left-[-5%] w-[550px] h-[550px] rounded-full bg-emerald-400/10 animate-blob filter blur-3xl" />
-        <div className="absolute top-[20%] right-[-5%] w-[500px] h-[500px] rounded-full bg-blue-400/12 animate-blob animation-delay-2000 filter blur-3xl" />
-        <div className="absolute bottom-[-10%] left-[25%] w-[480px] h-[480px] rounded-full bg-amber-400/08 animate-blob animation-delay-4000 filter blur-3xl" />
+        {/* Layer 2: Animated Gradient Blobs */}
+        <div className="absolute top-[-5%] left-[-5%] w-[600px] h-[600px] rounded-full bg-[#10B981]/15 animate-blob filter blur-3xl" />
+        <div className="absolute top-[20%] right-[-5%] w-[550px] h-[550px] rounded-full bg-[#2563EB]/10 animate-blob animation-delay-2000 filter blur-3xl" />
+        <div className="absolute bottom-[-10%] left-[25%] w-[500px] h-[500px] rounded-full bg-[#059669]/12 animate-blob animation-delay-4000 filter blur-3xl" />
 
-        {/* Layer 3: Government Grid Texture with edge fade (Requirement 1 - Layer 3) */}
+        {/* Layer 3: Emerald Blueprint Grid Texture with edge fade */}
         <div
-          className="absolute inset-0 opacity-[0.03]"
+          className="absolute inset-0 opacity-[0.045]"
           style={{
-            backgroundImage: `linear-gradient(#0F172A 1px, transparent 1px), linear-gradient(90deg, #0F172A 1px, transparent 1px)`,
-            backgroundSize: '40px 40px',
-            maskImage: 'radial-gradient(ellipse at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 80%)',
-            WebkitMaskImage: 'radial-gradient(ellipse at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 80%)',
+            backgroundImage: `linear-gradient(#059669 1px, transparent 1px), linear-gradient(90deg, #059669 1px, transparent 1px)`,
+            backgroundSize: '48px 48px',
+            maskImage: 'radial-gradient(ellipse at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%)',
+            WebkitMaskImage: 'radial-gradient(ellipse at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%)',
           }}
         />
 
@@ -307,7 +313,11 @@ export default function HeroSection() {
                     <div className="p-1.5 rounded-xl bg-slate-50 border border-slate-100">
                       {stat.icon}
                     </div>
-                    <div className="font-heading text-lg font-black text-slate-900">{stat.value}</div>
+                    <div className="font-heading text-lg font-black text-slate-900">
+                      {stat.label === 'Government Schemes'
+                        ? (schemesCount !== null ? (schemesCount > 500 ? '500+' : schemesCount) : '500+')
+                        : stat.value}
+                    </div>
                   </div>
                   <div className="text-xs font-bold text-slate-800 leading-tight">{stat.label}</div>
                   <div className="text-[10px] text-slate-500 font-medium truncate mt-0.5">{stat.sublabel}</div>

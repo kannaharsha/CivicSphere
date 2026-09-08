@@ -142,20 +142,21 @@ export default function Testimonials() {
     <section
       id="testimonials"
       ref={ref}
-      className="relative pt-1 pb-8 md:pt-2 md:pb-10 bg-slate-50/80 overflow-hidden flex flex-col justify-center"
+      className="relative pt-12 pb-12 bg-gradient-to-b from-[#FAFDFB] via-[#F4FBF7] to-[#FAFDFB] overflow-hidden flex flex-col justify-center"
       aria-label="Citizen testimonials"
     >
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <motion.div
-          className="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-emerald-200/15 rounded-full blur-[110px]"
-          animate={{ x: [0, 30, -20, 0], y: [0, -20, 20, 0] }}
-          transition={{ duration: 24, repeat: Infinity, ease: 'easeInOut' }}
-        />
+        {/* Soft Mint & Emerald Ambient Radial Glows */}
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[#10B981]/12 rounded-full filter blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-[550px] h-[550px] bg-[#059669]/10 rounded-full filter blur-3xl" />
 
-        <motion.div
-          className="absolute bottom-1/4 right-1/4 w-[420px] h-[420px] bg-sky-200/15 rounded-full blur-[110px]"
-          animate={{ x: [0, -20, 30, 0], y: [0, 20, -20, 0] }}
-          transition={{ duration: 26, repeat: Infinity, ease: 'easeInOut' }}
+        {/* Emerald Blueprint Grid Texture */}
+        <div
+          className="absolute inset-0 opacity-[0.045]"
+          style={{
+            backgroundImage: 'linear-gradient(#059669 1px, transparent 1px), linear-gradient(90deg, #059669 1px, transparent 1px)',
+            backgroundSize: '48px 48px',
+          }}
         />
 
         <div className="absolute inset-0 flex items-center justify-center opacity-[0.03]">

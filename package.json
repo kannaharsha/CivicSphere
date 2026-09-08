@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently -k -n \"CLIENT,SERVER\" -c \"cyan,emerald\" \"vite\" \"tsx server/index.ts\"",
+    "dev": "concurrently -k -n \"CLIENT,SERVER\" -c \"cyan,emerald\" \"vite\" \"tsx watch server/index.ts\"",
     "dev:client": "vite",
-    "dev:server": "tsx server/index.ts",
-    "server": "tsx server/index.ts",
+    "dev:server": "tsx watch server/index.ts",
+    "server": "tsx watch server/index.ts",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",

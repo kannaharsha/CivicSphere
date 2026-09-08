@@ -87,20 +87,22 @@ export default function ComparisonSection() {
     <section
       id="comparison"
       ref={ref}
-      className="relative pt-1 pb-8 md:pt-2 md:pb-10 bg-slate-50/80 overflow-hidden flex flex-col justify-center"
-      aria-label="Why use CivicSphere"
+      className="relative pt-12 pb-12 bg-gradient-to-b from-[#FAFDFB] via-[#F4FBF7] to-[#FAFDFB] overflow-hidden flex flex-col justify-center"
+      aria-label="CivicSphere vs Traditional Scheme Discovery"
     >
+      {/* 9. SUBTLE BACKGROUND MOTION GRAPHICS */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <motion.div
-          className="absolute top-1/3 -left-1/12 w-[380px] h-[380px] bg-red-200/20 rounded-full blur-[110px]"
-          animate={{ x: [0, 25, 0], y: [0, -15, 0] }}
-          transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
-        />
+        {/* Soft Mint & Emerald Ambient Radial Glows */}
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[#10B981]/12 rounded-full filter blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-[550px] h-[550px] bg-[#059669]/10 rounded-full filter blur-3xl" />
 
-        <motion.div
-          className="absolute bottom-1/4 -right-1/12 w-[400px] h-[400px] bg-emerald-200/25 rounded-full blur-[110px]"
-          animate={{ x: [0, -25, 0], y: [0, 25, 0] }}
-          transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
+        {/* Emerald Blueprint Grid Texture */}
+        <div
+          className="absolute inset-0 opacity-[0.045]"
+          style={{
+            backgroundImage: 'linear-gradient(#059669 1px, transparent 1px), linear-gradient(90deg, #059669 1px, transparent 1px)',
+            backgroundSize: '48px 48px',
+          }}
         />
       </div>
 

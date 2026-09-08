@@ -120,14 +120,22 @@ export default function LanguageSection() {
     <section
       id="languages"
       ref={ref}
-      className="relative pt-1 pb-8 md:pt-2 md:pb-10 bg-slate-50/80 overflow-hidden flex flex-col justify-center"
+      className="relative pt-12 pb-12 bg-gradient-to-b from-[#FAFDFB] via-[#F4FBF7] to-[#FAFDFB] overflow-hidden flex flex-col justify-center"
       aria-label="Multilingual support"
     >
       {/* BACKGROUND MESH & SCRIPT OVERLAYS */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Emerald Blueprint Grid Overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.045]"
+          style={{
+            backgroundImage: 'linear-gradient(#059669 1px, transparent 1px), linear-gradient(90deg, #059669 1px, transparent 1px)',
+            backgroundSize: '48px 48px',
+          }}
+        />
         {/* Radial Mesh */}
         <motion.div
-          className="absolute top-1/4 left-1/6 w-[350px] h-[350px] bg-emerald-300/12 rounded-full blur-[100px]"
+          className="absolute top-1/4 left-1/6 w-[450px] h-[450px] bg-[#10B981]/12 rounded-full blur-[100px]"
           animate={{ x: [0, 30, -20, 0], y: [0, -20, 20, 0] }}
           transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
         />

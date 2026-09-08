@@ -152,11 +152,19 @@ export default function AISection() {
     <section
       id="civic-assist"
       ref={ref}
-      className="relative pt-1 pb-10 md:pt-2 md:pb-12 bg-slate-50/80 overflow-hidden min-h-[680px] flex flex-col justify-center"
+      className="relative pt-12 pb-12 bg-gradient-to-b from-[#FAFDFB] via-[#F4FBF7] to-[#FAFDFB] overflow-hidden min-h-[680px] flex flex-col justify-center"
       aria-label="CivicSphere Assistant"
     >
-      {/* 1. LAYER 1: ANIMATED GRADIENT MESH (3 MORPHING RADIAL BLOBS) */}
+      {/* 1. LAYER 1: ANIMATED GRADIENT MESH */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Emerald Blueprint Grid Overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.045]"
+          style={{
+            backgroundImage: 'linear-gradient(#059669 1px, transparent 1px), linear-gradient(90deg, #059669 1px, transparent 1px)',
+            backgroundSize: '48px 48px',
+          }}
+        />
         {/* Emerald Blob */}
         <motion.div
           className="absolute top-1/4 left-1/5 w-[420px] h-[420px] bg-emerald-300/15 rounded-full blur-[120px]"

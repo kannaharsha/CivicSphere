@@ -207,20 +207,22 @@ export default function HowItWorks() {
     <section
       id="how-it-works"
       ref={ref}
-      className="relative pt-2 pb-3 md:pt-4 md:pb-4 bg-gradient-to-b from-slate-50 via-emerald-50/20 to-slate-50 overflow-hidden min-h-[640px] flex flex-col justify-center"
+      className="relative pt-12 pb-12 bg-gradient-to-b from-[#FAFDFB] via-[#F4FBF7] to-[#FAFDFB] overflow-hidden min-h-[640px] flex flex-col justify-center"
       aria-label="How CivicSphere works"
     >
       {/* 9. SUBTLE BACKGROUND MOTION */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-emerald-100/40 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-100/40 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[#10B981]/12 rounded-full filter blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-[550px] h-[550px] bg-[#059669]/10 rounded-full filter blur-3xl" />
 
-        <svg className="w-full h-full opacity-15" xmlns="http://www.w3.org/2000/svg">
-          <pattern id="workflow-prod-grid" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
-            <circle cx="2" cy="2" r="1" fill="#475569" />
-          </pattern>
-          <rect width="100%" height="100%" fill="url(#workflow-prod-grid)" />
-        </svg>
+        {/* Emerald Blueprint Grid Texture */}
+        <div
+          className="absolute inset-0 opacity-[0.045]"
+          style={{
+            backgroundImage: 'linear-gradient(#059669 1px, transparent 1px), linear-gradient(90deg, #059669 1px, transparent 1px)',
+            backgroundSize: '48px 48px',
+          }}
+        />
 
         {/* Ashoka Chakra Outline Graphic */}
         <div className="absolute inset-0 flex items-center justify-center opacity-[0.025]">

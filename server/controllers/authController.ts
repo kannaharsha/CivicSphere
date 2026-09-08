@@ -227,3 +227,99 @@ export async function resendVerificationController(req: Request, res: Response):
     });
   }
 }
+
+export async function getCitizenProfileController(req: Request, res: Response): Promise<void> {
+  try {
+    const firebaseUid = req.params.uid || req.body?.firebaseUid || (req.query?.firebaseUid as string);
+    const email = req.body?.email || (req.query?.email as string) || '';
+
+    if (!firebaseUid || typeof firebaseUid !== 'string') {
+      res.status(400).json({
+        success: false,
+        message: 'Firebase UID is required.',
+      });
+      return;
+    }
+
+    const { getCitizenProfileByUidService } = await import('../services/authService.js');
+    const result = await getCitizenProfileByUidService(firebaseUid, email);
+
+    res.status(200).json(result);
+  } catch (err: any) {
+    if (err instanceof CustomError) {
+      res.status(err.statusCode).json({
+        success: false,
+        message: err.message,
+      });
+      return;
+    }
+
+    console.error('Unhandled Get Citizen Profile Error:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve citizen profile.',
+    });
+  }
+}
+
+export async function saveCitizenProfileController(req: Request, res: Response): Promise<void> {
+  try {
+    const data = req.body || {};
+    const firebase_uid = data.firebase_uid || data.firebaseUid || data.uid || req.params.uid;
+    const email = data.email || data.userEmail;
+
+    if (!firebase_uid || !email) {
+      res.status(400).json({
+        success: false,
+        message: 'Firebase UID and Email are required.',
+      });
+      return;
+    }
+
+    const payload = {
+      profile_id: data.profile_id || data.profileId || data.citizen_id || data.citizenId,
+      firebase_uid,
+      email: String(email).trim().toLowerCase(),
+      full_name: data.full_name || data.fullName || 'Citizen',
+      date_of_birth: data.date_of_birth || data.dateOfBirth || null,
+      age: data.age !== undefined && data.age !== null ? Number(data.age) : null,
+      gender: data.gender || null,
+      marital_status: data.marital_status || data.maritalStatus || null,
+      caste_category: data.caste_category || data.casteCategory || null,
+      occupation: data.occupation || null,
+      employment_status: data.employment_status || data.employmentStatus || null,
+      education_qualification: data.education_qualification || data.educationQualification || null,
+      annual_family_income: data.annual_family_income || data.annualFamilyIncome || null,
+      state: data.state || null,
+      district: data.district || null,
+      mandal: data.mandal || null,
+      village_city: data.village_city || data.villageCity || null,
+      residence_type: data.residence_type || data.residenceType || null,
+      pincode: data.pincode || null,
+      disability_percentage: data.disability_percentage || data.disabilityPercentage || 0,
+      preferred_language: data.preferred_language || data.preferredLanguage || 'English',
+      profile_photo_url: data.profile_photo_url || data.profilePhotoUrl || null,
+    };
+
+    const { saveCitizenProfileService } = await import('../services/authService.js');
+    const result = await saveCitizenProfileService(payload);
+
+    res.status(200).json(result);
+  } catch (err: any) {
+    if (err instanceof CustomError) {
+      res.status(err.statusCode).json({
+        success: false,
+        message: err.message,
+      });
+      return;
+    }
+
+    console.error('Unhandled Save Citizen Profile Error:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to save citizen profile.',
+    });
+  }
+}
+
+

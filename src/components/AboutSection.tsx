@@ -140,30 +140,32 @@ export default function AboutSection() {
     <section
       id="about"
       ref={sectionRef}
-      className="relative pt-8 pb-8 overflow-hidden bg-gradient-to-b from-slate-50/70 via-white to-slate-50/50"
+      className="relative pt-12 pb-12 overflow-hidden bg-gradient-to-b from-[#FAFDFB] via-[#F4FBF7] to-[#FAFDFB]"
       aria-label="About CivicSphere"
     >
       {/* Seamless Transition Overlay */}
-      <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-white/95 via-slate-50/30 to-transparent pointer-events-none z-10" />
+      <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-white/90 via-slate-50/20 to-transparent pointer-events-none z-10" />
 
-      {/* Layered Premium Background (Requirement 9) */}
+      {/* Layered Premium Light + Greenish Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        {/* Layer 2: Gradient Blobs */}
-        <div className="absolute top-[8%] left-[-3%] w-[600px] h-[600px] rounded-full bg-emerald-400/10 filter blur-3xl" />
-        <div className="absolute top-[42%] right-[-3%] w-[600px] h-[600px] rounded-full bg-blue-400/10 filter blur-3xl" />
-        <div className="absolute bottom-[5%] left-[25%] w-[500px] h-[500px] rounded-full bg-amber-400/08 filter blur-3xl" />
+        {/* Layer 2: Soft Mint & Emerald Ambient Radial Blobs */}
+        <div className="absolute top-[5%] left-[-5%] w-[650px] h-[650px] rounded-full bg-[#10B981]/12 filter blur-3xl animate-pulse" />
+        <div className="absolute top-[40%] right-[-5%] w-[600px] h-[600px] rounded-full bg-[#059669]/10 filter blur-3xl" />
+        <div className="absolute bottom-[5%] left-[20%] w-[550px] h-[550px] rounded-full bg-[#2563EB]/08 filter blur-3xl" />
 
-        {/* Layer 3: Grid Texture */}
+        {/* Layer 3: Emerald Blueprint Grid Texture */}
         <div
-          className="absolute inset-0 opacity-[0.035]"
+          className="absolute inset-0 opacity-[0.045]"
           style={{
-            backgroundImage: 'linear-gradient(#0F172A 1px, transparent 1px), linear-gradient(90deg, #0F172A 1px, transparent 1px)',
-            backgroundSize: '40px 40px',
+            backgroundImage: 'linear-gradient(#059669 1px, transparent 1px), linear-gradient(90deg, #059669 1px, transparent 1px)',
+            backgroundSize: '48px 48px',
+            maskImage: 'radial-gradient(ellipse at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0.1) 90%)',
+            WebkitMaskImage: 'radial-gradient(ellipse at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0.1) 90%)',
           }}
         />
 
-        {/* Layer 5: India Map Contour Vector */}
-        <svg className="absolute inset-0 w-full h-full opacity-[0.035] stroke-slate-800" fill="none">
+        {/* Layer 5: AI Network Motion Graphics */}
+        <svg className="absolute inset-0 w-full h-full opacity-[0.05] stroke-[#059669]" fill="none">
           <path d="M-100,180 Q400,80 900,350 T1800,180" strokeWidth="1.5" />
           <path d="M-100,480 Q500,280 1100,580 T1900,380" strokeWidth="1.5" />
         </svg>

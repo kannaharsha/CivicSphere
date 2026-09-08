@@ -5,6 +5,8 @@ import {
   googleSyncController,
   getUserProfileController,
   resendVerificationController,
+  getCitizenProfileController,
+  saveCitizenProfileController,
 } from '../controllers/authController.js';
 
 const router = Router();
@@ -24,7 +26,17 @@ router.post('/google', googleSyncController);
 router.get('/profile/:uid', getUserProfileController);
 router.post('/profile', getUserProfileController);
 
+// GET & POST /api/auth/citizen-profile
+router.get('/citizen-profile/:uid', getCitizenProfileController);
+router.get('/citizen-profile', getCitizenProfileController);
+router.post('/citizen-profile/save', saveCitizenProfileController);
+router.post('/citizen-profile/:uid', saveCitizenProfileController);
+router.post('/citizen-profile', saveCitizenProfileController);
+router.put('/citizen-profile', saveCitizenProfileController);
+
 // POST /api/auth/resend-verification
 router.post('/resend-verification', resendVerificationController);
+
+
 
 export default router;

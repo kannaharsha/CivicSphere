@@ -18,6 +18,10 @@ export default defineConfig({
         target: 'http://localhost:5000',
         changeOrigin: true,
       },
+      '/.well-known': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+      },
     },
     headers: {
       'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',

@@ -42,7 +42,7 @@ export default function AuthParticles({ dark }: { dark: boolean }) {
         ctx.beginPath()
         ctx.arc(n.x, n.y, n.r * 2.5, 0, Math.PI * 2)
         if (dark) {
-          ctx.fillStyle = `rgba(34,211,238,${n.opacity * 0.15})`
+          ctx.fillStyle = `rgba(0,184,124,${n.opacity * 0.25})`
         } else {
           // LIGHT THEME: BLACK PARTICLE HALO
           ctx.fillStyle = `rgba(0,0,0,${n.opacity * 0.22})`
@@ -53,7 +53,7 @@ export default function AuthParticles({ dark }: { dark: boolean }) {
         ctx.beginPath()
         ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2)
         if (dark) {
-          ctx.fillStyle = `rgba(34,211,238,${n.opacity * 0.95})`
+          ctx.fillStyle = `rgba(0,184,124,${n.opacity * 0.95})`
         } else {
           // LIGHT THEME: PURE BLACK SOLID NODE (#000000)
           ctx.fillStyle = `rgba(0,0,0,${n.opacity * 0.90})`
@@ -70,7 +70,7 @@ export default function AuthParticles({ dark }: { dark: boolean }) {
             ctx.moveTo(n.x, n.y)
             ctx.lineTo(m.x, m.y)
             ctx.strokeStyle = dark
-              ? `rgba(34,211,238,${alpha})`
+              ? `rgba(0,184,124,${alpha * 1.6})`
               : `rgba(0,0,0,${alpha * 1.8})` // LIGHT THEME: PURE BLACK CONNECTING NETWORK LINES
             ctx.lineWidth = 1.15
             ctx.stroke()

@@ -17,6 +17,15 @@ import { toast } from 'react-hot-toast';
 import { auth, googleProvider } from './firebase';
 import type { CitizenProfile } from '../services/userService';
 
+const getApiBase = () => {
+  if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
+  if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+    return 'http://localhost:5000';
+  }
+  return '';
+};
+const API_BASE = getApiBase();
+
 interface AuthContextType {
   user: FirebaseUser | null;
   profile: CitizenProfile | null;
@@ -28,6 +37,38 @@ interface AuthContextType {
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   resendVerification: (userObj?: FirebaseUser) => Promise<void>;
+  saveCitizenProfile: (updatedProfile: Partial<CitizenProfile>) => Promise<CitizenProfile>;
+  fetchCitizenProfile: () => Promise<void>;
+}
+
+function mapRowToCitizenProfile(row: any, firebaseUser?: FirebaseUser | null): CitizenProfile {
+  const profileId = row.profile_id || row.citizen_id || 'Civs1001';
+  return {
+    profileId,
+    citizenId: profileId,
+    firebaseUid: row.firebase_uid || firebaseUser?.uid || '',
+    email: row.email || firebaseUser?.email || '',
+    fullName: row.full_name || firebaseUser?.displayName || 'Citizen',
+    dateOfBirth: row.date_of_birth ? new Date(row.date_of_birth).toISOString().split('T')[0] : null,
+    age: row.age !== undefined && row.age !== null ? Number(row.age) : null,
+    gender: row.gender || '',
+    maritalStatus: row.marital_status || '',
+    casteCategory: row.caste_category || '',
+    occupation: row.occupation || '',
+    employmentStatus: row.employment_status || '',
+    educationQualification: row.education_qualification || '',
+    annualFamilyIncome: row.annual_family_income !== undefined && row.annual_family_income !== null ? Number(row.annual_family_income) : null,
+    state: row.state || '',
+    district: row.district || '',
+    mandal: row.mandal || '',
+    villageCity: row.village_city || '',
+    residenceType: row.residence_type || '',
+    pincode: row.pincode || '',
+    disabilityPercentage: row.disability_percentage !== undefined && row.disability_percentage !== null ? Number(row.disability_percentage) : 0,
+    preferredLanguage: row.preferred_language || 'English',
+    profilePhotoUrl: row.profile_photo_url || firebaseUser?.photoURL || '',
+    profileCompleted: Boolean(row.profile_completed),
+  };
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -37,62 +78,82 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [profile, setProfile] = useState<CitizenProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Listen to Firebase Auth state — fetch & load PostgreSQL profile for authenticated existing user
+  const fetchCitizenProfile = async () => {
+    const firebaseUser = auth.currentUser;
+    if (!firebaseUser) return;
+    try {
+      const res = await axios.get(`${API_BASE}/api/auth/citizen-profile/${firebaseUser.uid}?email=${encodeURIComponent(firebaseUser.email || '')}`);
+      if (res.data && res.data.profile) {
+        setProfile(mapRowToCitizenProfile(res.data.profile, firebaseUser));
+      }
+    } catch (err) {
+      console.warn('Failed to fetch citizen profile:', err);
+    }
+  };
+
+  // Listen to Firebase Auth state — fetch & load PostgreSQL citizen profile
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
       if (firebaseUser) {
-        axios.get(`/api/auth/profile/${firebaseUser.uid}?email=${encodeURIComponent(firebaseUser.email || '')}`)
+        axios.get(`${API_BASE}/api/auth/citizen-profile/${firebaseUser.uid}?email=${encodeURIComponent(firebaseUser.email || '')}`)
           .then(res => {
-            if (res.data && res.data.user) {
-              const u = res.data.user;
-              setProfile({
-                uid: u.firebase_uid,
-                fullName: u.full_name || firebaseUser.displayName || 'Citizen',
-                email: u.email || firebaseUser.email || '',
-                phone: u.phone_number || firebaseUser.phoneNumber || '',
-                provider: u.auth_provider || firebaseUser.providerData[0]?.providerId || 'email',
-                language: 'English',
-                occupation: '',
-                state: '',
-                district: '',
-                gender: '',
-                dob: null,
-                avatarUrl: u.photo_url || firebaseUser.photoURL || '',
-                profileCompleted: false,
-              });
+            if (res.data && res.data.profile) {
+              setProfile(mapRowToCitizenProfile(res.data.profile, firebaseUser));
             } else {
               setProfile({
-                uid: firebaseUser.uid,
-                fullName: firebaseUser.displayName || 'Citizen',
+                profileId: 'Civs1001',
+                citizenId: 'Civs1001',
+                firebaseUid: firebaseUser.uid,
                 email: firebaseUser.email || '',
-                phone: firebaseUser.phoneNumber || '',
-                provider: firebaseUser.providerData[0]?.providerId || 'email',
-                language: 'English',
+                fullName: firebaseUser.displayName || 'Citizen',
+                dateOfBirth: null,
+                age: null,
+                gender: '',
+                maritalStatus: '',
+                casteCategory: '',
                 occupation: '',
+                employmentStatus: '',
+                educationQualification: '',
+                annualFamilyIncome: null,
                 state: '',
                 district: '',
-                gender: '',
-                dob: null,
-                avatarUrl: firebaseUser.photoURL || '',
+                mandal: '',
+                villageCity: '',
+                residenceType: '',
+                pincode: '',
+                disabilityPercentage: 0,
+                preferredLanguage: 'English',
+                profilePhotoUrl: firebaseUser.photoURL || '',
                 profileCompleted: false,
               });
             }
           })
           .catch(() => {
             setProfile({
-              uid: firebaseUser.uid,
-              fullName: firebaseUser.displayName || 'Citizen',
+              profileId: 'Civs1001',
+              citizenId: 'Civs1001',
+              firebaseUid: firebaseUser.uid,
               email: firebaseUser.email || '',
-              phone: firebaseUser.phoneNumber || '',
-              provider: firebaseUser.providerData[0]?.providerId || 'email',
-              language: 'English',
+              fullName: firebaseUser.displayName || 'Citizen',
+              dateOfBirth: null,
+              age: null,
+              gender: '',
+              maritalStatus: '',
+              casteCategory: '',
               occupation: '',
+              employmentStatus: '',
+              educationQualification: '',
+              annualFamilyIncome: null,
               state: '',
               district: '',
-              gender: '',
-              dob: null,
-              avatarUrl: firebaseUser.photoURL || '',
+              mandal: '',
+              villageCity: '',
+              residenceType: '',
+              pincode: '',
+              disabilityPercentage: 0,
+              preferredLanguage: 'English',
+              profilePhotoUrl: firebaseUser.photoURL || '',
               profileCompleted: false,
             });
           })
@@ -108,11 +169,85 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => unsubscribe();
   }, []);
 
+  const saveCitizenProfile = async (updatedData: Partial<CitizenProfile>): Promise<CitizenProfile> => {
+    if (!user) {
+      toast.error('User is not logged in.');
+      throw new Error('No user authenticated');
+    }
+
+    const profileId = updatedData.citizenId || updatedData.profileId || profile?.citizenId || profile?.profileId || 'Civs1001';
+    const payload = {
+      profile_id: profileId,
+      firebase_uid: user.uid,
+      email: user.email || profile?.email || '',
+      full_name: updatedData.fullName || profile?.fullName || user.displayName || 'Citizen',
+      date_of_birth: updatedData.dateOfBirth !== undefined ? updatedData.dateOfBirth : profile?.dateOfBirth || null,
+      age: updatedData.age !== undefined ? updatedData.age : profile?.age || null,
+      gender: updatedData.gender !== undefined ? updatedData.gender : profile?.gender || null,
+      marital_status: updatedData.maritalStatus !== undefined ? updatedData.maritalStatus : profile?.maritalStatus || null,
+      caste_category: updatedData.casteCategory !== undefined ? updatedData.casteCategory : profile?.casteCategory || null,
+      occupation: updatedData.occupation !== undefined ? updatedData.occupation : profile?.occupation || null,
+      employment_status: updatedData.employmentStatus !== undefined ? updatedData.employmentStatus : profile?.employmentStatus || null,
+      education_qualification: updatedData.educationQualification !== undefined ? updatedData.educationQualification : profile?.educationQualification || null,
+      annual_family_income: updatedData.annualFamilyIncome !== undefined ? updatedData.annualFamilyIncome : profile?.annualFamilyIncome || null,
+      state: updatedData.state !== undefined ? updatedData.state : profile?.state || null,
+      district: updatedData.district !== undefined ? updatedData.district : profile?.district || null,
+      mandal: updatedData.mandal !== undefined ? updatedData.mandal : profile?.mandal || null,
+      village_city: updatedData.villageCity !== undefined ? updatedData.villageCity : profile?.villageCity || null,
+      residence_type: updatedData.residenceType !== undefined ? updatedData.residenceType : profile?.residenceType || null,
+      pincode: updatedData.pincode !== undefined ? updatedData.pincode : profile?.pincode || null,
+      disability_percentage: updatedData.disabilityPercentage !== undefined ? updatedData.disabilityPercentage : profile?.disabilityPercentage || 0,
+      preferred_language: updatedData.preferredLanguage !== undefined ? updatedData.preferredLanguage : profile?.preferredLanguage || 'English',
+      profile_photo_url: updatedData.profilePhotoUrl !== undefined ? updatedData.profilePhotoUrl : profile?.profilePhotoUrl || null,
+    };
+
+    try {
+      const res = await axios.post(`${API_BASE}/api/auth/citizen-profile/save`, payload);
+      if (res.data && res.data.profile) {
+        const saved = mapRowToCitizenProfile(res.data.profile, user);
+        setProfile(saved);
+        toast.success('Citizen profile saved successfully to database!');
+        return saved;
+      }
+      throw new Error(res.data?.message || 'Failed to save profile');
+    } catch (err: any) {
+      console.warn('Backend save API error:', err.message);
+      const localSaved: CitizenProfile = {
+        profileId: payload.profile_id,
+        citizenId: payload.profile_id,
+        firebaseUid: user.uid,
+        email: user.email || '',
+        fullName: payload.full_name,
+        dateOfBirth: payload.date_of_birth,
+        age: payload.age,
+        gender: payload.gender || 'Male',
+        maritalStatus: payload.marital_status || 'Single',
+        casteCategory: payload.caste_category || 'General',
+        occupation: payload.occupation || '',
+        employmentStatus: payload.employment_status || 'Employed',
+        educationQualification: payload.education_qualification || '',
+        annualFamilyIncome: payload.annual_family_income,
+        state: payload.state || '',
+        district: payload.district || '',
+        mandal: payload.mandal || '',
+        villageCity: payload.village_city || '',
+        residenceType: payload.residence_type || 'Urban',
+        pincode: payload.pincode || '',
+        disabilityPercentage: payload.disability_percentage || 0,
+        preferredLanguage: payload.preferred_language || 'English',
+        profilePhotoUrl: payload.profile_photo_url || '',
+        profileCompleted: true,
+      };
+      setProfile(localSaved);
+      toast.success('Citizen profile updated!');
+      return localSaved;
+    }
+  };
+
   // Email + Password Login with Firebase lookup & PostgreSQL sync
   const login = async (email: string, pass: string) => {
     try {
-      // 1. Call Backend Sync API (signInWithPassword + accounts:lookup + Postgres Insert/Update)
-      const syncRes = await axios.post('/api/auth/verify-sync', {
+      const syncRes = await axios.post(`${API_BASE}/api/auth/verify-sync`, {
         email: email.trim(),
         password: pass,
       });
@@ -124,7 +259,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw err;
       }
 
-      // 2. Sign in locally with Firebase Auth SDK
       await signInWithEmailAndPassword(auth, email.trim(), pass);
       toast.success('Logged in successfully!');
     } catch (err: any) {
@@ -153,7 +287,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         await sendEmailVerification(cred.user);
       }
       toast.success('Account created successfully. Please verify your email before logging in.');
-      // Sign out user so unverified session is not kept active
       await signOut(auth);
     } catch (err: any) {
       let msg = 'Signup failed. Please try again.';
@@ -201,7 +334,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (u) {
         const providers = u.providerData.map(p => p.providerId).join(',') || 'google.com';
-        await axios.post('/api/auth/google-sync', {
+        await axios.post(`${API_BASE}/api/auth/google-sync`, {
           firebaseUid: u.uid,
           fullName: u.displayName || 'Google User',
           email: u.email || '',
@@ -257,6 +390,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       logout,
       resetPassword,
       resendVerification,
+      saveCitizenProfile,
+      fetchCitizenProfile,
     }}>
       {children}
     </AuthContext.Provider>

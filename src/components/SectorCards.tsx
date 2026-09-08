@@ -1,9 +1,10 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
 import {
   Sprout, GraduationCap, HeartPulse, Briefcase, Users,
   ArrowRight, Sparkles
 } from 'lucide-react'
+import { fetchAgricultureSchemeCount } from '../services/schemeService'
 
 // Sector definitions with mandatory dynamic scheme count (0 Schemes Available)
 const sectors = [
@@ -144,27 +145,32 @@ const fadeUp = {
 export default function SectorCards() {
   const sectionRef = useRef<HTMLElement>(null)
   const inView = useInView(sectionRef, { once: true, margin: '-80px' })
+  const [agriCount, setAgriCount] = useState<number | null>(null)
+
+  useEffect(() => {
+    fetchAgricultureSchemeCount().then(c => setAgriCount(c))
+  }, [])
 
   return (
     <section
       id="sectors"
       ref={sectionRef}
-      className="relative pt-4 pb-4 md:pb-6 overflow-hidden bg-gradient-to-b from-slate-50/60 via-white to-slate-50/60"
+      className="relative pt-12 pb-12 overflow-hidden bg-gradient-to-b from-[#FAFDFB] via-[#F4FBF7] to-[#FAFDFB]"
       aria-label="Government Service Sectors"
     >
-      {/* Requirement 1: Living Background (Multi-Layer Animated Canvas) */}
+      {/* Living Background */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
-        {/* Layer 1: Dynamic Canvas Radial Glows */}
-        <div className="absolute top-[5%] left-[-5%] w-[600px] h-[600px] rounded-full bg-emerald-400/10 filter blur-3xl animate-pulse" />
-        <div className="absolute top-[35%] right-[-5%] w-[600px] h-[600px] rounded-full bg-blue-400/10 filter blur-3xl" />
-        <div className="absolute bottom-[5%] left-[30%] w-[500px] h-[500px] rounded-full bg-purple-400/08 filter blur-3xl" />
+        {/* Layer 1: Dynamic Mint & Emerald Radial Glows */}
+        <div className="absolute top-[5%] left-[-5%] w-[650px] h-[650px] rounded-full bg-[#10B981]/12 filter blur-3xl animate-pulse" />
+        <div className="absolute top-[35%] right-[-5%] w-[600px] h-[600px] rounded-full bg-[#059669]/10 filter blur-3xl" />
+        <div className="absolute bottom-[5%] left-[30%] w-[550px] h-[550px] rounded-full bg-[#2563EB]/08 filter blur-3xl" />
 
-        {/* Layer 2: AI Digital Grid */}
+        {/* Layer 2: Emerald Blueprint Grid Texture */}
         <div
-          className="absolute inset-0 opacity-[0.035]"
+          className="absolute inset-0 opacity-[0.045]"
           style={{
-            backgroundImage: 'linear-gradient(#0F172A 1px, transparent 1px), linear-gradient(90deg, #0F172A 1px, transparent 1px)',
-            backgroundSize: '36px 36px',
+            backgroundImage: 'linear-gradient(#059669 1px, transparent 1px), linear-gradient(90deg, #059669 1px, transparent 1px)',
+            backgroundSize: '48px 48px',
           }}
         />
 
@@ -218,7 +224,7 @@ export default function SectorCards() {
 
           {/* Subtitle */}
           <p className="font-heading text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
-            CivicSphere brings Central, State, and District Government welfare schemes together across India's most important public service sectors.
+            CivicSphere brings 500+ Central, State, and District Government welfare schemes together across India's most important public service sectors.
           </p>
         </motion.div>
 
@@ -277,7 +283,11 @@ export default function SectorCards() {
                         {/* Requirement 11: Dynamic Scheme Count Logic (0 Schemes Available) */}
                         <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60 mt-0.5">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                          <span>{s.count > 0 ? `${s.count} Schemes Available` : '0 Schemes Available'}</span>
+                          <span>
+                            {s.id === 'agriculture'
+                              ? (agriCount !== null ? (agriCount > 500 ? '500+ Schemes Available' : `${agriCount} Schemes Available`) : 'Loading...')
+                              : (s.count > 500 ? '500+ Schemes Available' : (s.count > 0 ? `${s.count} Schemes Available` : '0 Schemes Available'))}
+                          </span>
                         </span>
                       </div>
                     </div>

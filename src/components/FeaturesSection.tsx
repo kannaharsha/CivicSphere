@@ -168,16 +168,23 @@ export default function FeaturesSection() {
     <section
       id="features"
       ref={ref}
-      className="relative pt-2 pb-4 md:pt-4 md:pb-6 bg-slate-50/80 overflow-hidden"
+      className="relative pt-12 pb-12 bg-gradient-to-b from-[#FAFDFB] via-[#F4FBF7] to-[#FAFDFB] overflow-hidden"
       aria-label="Platform features"
     >
       {/* BACKGROUND GRAPHICS & AI NEURAL NETWORK */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Soft Radial Glows */}
-        <div className="absolute top-1/4 left-1/3 w-80 h-80 bg-emerald-100/40 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/3 w-80 h-80 bg-blue-100/40 rounded-full blur-3xl" />
+        {/* Soft Mint & Emerald Ambient Glows */}
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[#10B981]/12 rounded-full filter blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-[550px] h-[550px] bg-[#059669]/10 rounded-full filter blur-3xl" />
 
-        {/* AI Network Dot Grid */}
+        {/* Emerald Blueprint Grid Texture */}
+        <div
+          className="absolute inset-0 opacity-[0.045]"
+          style={{
+            backgroundImage: 'linear-gradient(#059669 1px, transparent 1px), linear-gradient(90deg, #059669 1px, transparent 1px)',
+            backgroundSize: '48px 48px',
+          }}
+        />
         <svg className="w-full h-full opacity-15" xmlns="http://www.w3.org/2000/svg">
           <pattern id="dot-grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
             <circle cx="2" cy="2" r="1" fill="#475569" />

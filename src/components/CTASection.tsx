@@ -30,6 +30,7 @@ const trustChips = [
 ]
 
 const statsData = [
+  { value: '500+', label: 'Government Schemes' },
   { value: 'Central & State', label: 'Welfare Coverage' },
   { value: '28', label: 'States & UTs Covered' },
   { value: '3 Languages', label: 'English • Telugu • Hindi' },
@@ -55,46 +56,142 @@ export default function CTASection() {
     <section
       id="cta"
       ref={ref}
-      className="relative pt-1 pb-8 md:pt-2 md:pb-10 bg-slate-50/90 overflow-hidden flex flex-col justify-center border-t border-slate-200/80"
+      className="relative pt-12 pb-12 bg-gradient-to-b from-[#FAFDFB] via-[#F4FBF7] to-[#FAFDFB] overflow-hidden flex flex-col justify-center border-t border-[#D4A537]/20 dark:border-slate-800"
       aria-label="Get started with CivicSphere"
     >
-      {/* 1. BACKGROUND MESH (Radial Emerald & Blue Glow) */}
+      {/* 1. BACKGROUND MESH & EMERALD BLUEPRINT GRID */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-emerald-200/20 via-sky-200/20 to-blue-200/20 rounded-full blur-[140px]"
-          animate={{ scale: [1, 1.1, 1], rotate: [0, 90, 0] }}
-          transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
+        {/* Soft Mint & Emerald Ambient Radial Glows */}
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[#10B981]/12 rounded-full filter blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-[550px] h-[550px] bg-[#059669]/10 rounded-full filter blur-3xl" />
+
+        {/* Emerald Blueprint Grid Texture */}
+        <div
+          className="absolute inset-0 opacity-[0.045]"
+          style={{
+            backgroundImage: 'linear-gradient(#059669 1px, transparent 1px), linear-gradient(90deg, #059669 1px, transparent 1px)',
+            backgroundSize: '48px 48px',
+          }}
         />
-        <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-40" />
       </div>
 
-      {/* 2. FLOATING AI GOVERNANCE GRAPHICS */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+      {/* 2. MOTION FLOW CONNECTING PATHS */}
+      <svg className="hidden lg:block absolute inset-0 w-full h-full pointer-events-none z-10 opacity-40 overflow-visible" fill="none">
+        <defs>
+          <linearGradient id="flow-line-upper" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#10B981" stopOpacity="0.8" />
+            <stop offset="50%" stopColor="#2563EB" stopOpacity="0.8" />
+            <stop offset="100%" stopColor="#059669" stopOpacity="0.8" />
+          </linearGradient>
+          <linearGradient id="flow-line-lower" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#F59E0B" stopOpacity="0.8" />
+            <stop offset="50%" stopColor="#10B981" stopOpacity="0.8" />
+            <stop offset="100%" stopColor="#2563EB" stopOpacity="0.8" />
+          </linearGradient>
+        </defs>
+
+        {/* Upper Stream: Linking Govt Verified & RAG AI Engine */}
+        <motion.path
+          d="M 50 80 Q 450 -10, 850 70 T 1750 40"
+          stroke="url(#flow-line-upper)"
+          strokeWidth="2"
+          strokeDasharray="8 8"
+          animate={{ strokeDashoffset: [0, -96] }}
+          transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
+        />
+
+        {/* Lower Stream: Linking Multilingual & AI Eligibility */}
+        <motion.path
+          d="M 50 490 Q 550 560, 950 470 T 1750 510"
+          stroke="url(#flow-line-lower)"
+          strokeWidth="2"
+          strokeDasharray="8 8"
+          animate={{ strokeDashoffset: [96, 0] }}
+          transition={{ duration: 14, repeat: Infinity, ease: 'linear' }}
+        />
+      </svg>
+
+      {/* 3. FLOATING AI GOVERNANCE GRAPHICS WITH MOTION FLOW */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-20">
+        
+        {/* Badge 1: Govt Verified */}
         <motion.div
-          className="absolute top-12 left-10 p-2.5 rounded-2xl bg-white/80 backdrop-blur-md border border-slate-200/80 shadow-md text-emerald-600 opacity-20 hidden md:flex items-center gap-2"
-          animate={{ y: [0, -12, 0] }}
+          className="absolute top-10 left-6 sm:left-10 lg:left-14 p-2.5 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md text-emerald-600 hidden md:flex items-center gap-2.5 z-20 pointer-events-auto cursor-pointer"
+          animate={{
+            y: [0, -14, 2, -10, 0],
+            x: [0, 6, -3, 5, 0],
+            rotate: [0, 1.5, -1, 1, 0]
+          }}
           transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+          whileHover={{ scale: 1.08, y: -6, boxShadow: '0 20px 25px -5px rgba(16, 185, 129, 0.2)' }}
         >
-          <ShieldCheck className="w-5 h-5" />
-          <span className="text-xs font-bold text-slate-800">Govt Verified</span>
+          <div className="relative">
+            <div className="p-1.5 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200/80">
+              <ShieldCheck className="w-4 h-4" />
+            </div>
+            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+          </div>
+          <span className="text-xs font-black text-slate-800 tracking-tight">Govt Verified</span>
         </motion.div>
 
+        {/* Badge 2: RAG AI Engine */}
         <motion.div
-          className="absolute top-20 right-12 p-2.5 rounded-2xl bg-white/80 backdrop-blur-md border border-slate-200/80 shadow-md text-blue-600 opacity-20 hidden md:flex items-center gap-2"
-          animate={{ y: [0, 14, 0] }}
-          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+          className="absolute top-12 right-6 sm:right-10 lg:right-14 p-2.5 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md text-blue-600 hidden md:flex items-center gap-2.5 z-20 pointer-events-auto cursor-pointer"
+          animate={{
+            y: [0, 14, -2, 10, 0],
+            x: [0, -5, 4, -6, 0],
+            rotate: [0, -1.8, 1.2, -1, 0]
+          }}
+          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
+          whileHover={{ scale: 1.08, y: -6, boxShadow: '0 20px 25px -5px rgba(37, 99, 235, 0.2)' }}
         >
-          <Cpu className="w-5 h-5" />
-          <span className="text-xs font-bold text-slate-800">RAG AI Engine</span>
+          <div className="relative">
+            <div className="p-1.5 rounded-xl bg-blue-50 text-blue-600 border border-blue-200/80">
+              <Cpu className="w-4 h-4" />
+            </div>
+            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-blue-500 animate-ping" />
+          </div>
+          <span className="text-xs font-black text-slate-800 tracking-tight">RAG AI Engine</span>
         </motion.div>
 
+        {/* Badge 3: Multilingual */}
         <motion.div
-          className="absolute bottom-20 left-16 p-2.5 rounded-2xl bg-white/80 backdrop-blur-md border border-slate-200/80 shadow-md text-amber-500 opacity-20 hidden md:flex items-center gap-2"
-          animate={{ y: [0, -10, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+          className="absolute bottom-24 left-8 sm:left-12 lg:left-20 p-2.5 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md text-amber-500 hidden md:flex items-center gap-2.5 z-20 pointer-events-auto cursor-pointer"
+          animate={{
+            y: [0, -12, 3, -8, 0],
+            x: [0, 5, -4, 4, 0],
+            rotate: [0, -1.5, 1.8, -0.8, 0]
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 1.6 }}
+          whileHover={{ scale: 1.08, y: -6, boxShadow: '0 20px 25px -5px rgba(245, 158, 11, 0.2)' }}
         >
-          <Globe className="w-5 h-5" />
-          <span className="text-xs font-bold text-slate-800">Multilingual</span>
+          <div className="relative">
+            <div className="p-1.5 rounded-xl bg-amber-50 text-amber-500 border border-amber-200/80">
+              <Globe className="w-4 h-4" />
+            </div>
+            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-amber-500 animate-ping" />
+          </div>
+          <span className="text-xs font-black text-slate-800 tracking-tight">Multilingual</span>
+        </motion.div>
+
+        {/* Badge 4: AI Eligibility */}
+        <motion.div
+          className="absolute bottom-24 right-8 sm:right-12 lg:right-20 p-2.5 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-md text-emerald-600 hidden md:flex items-center gap-2.5 z-20 pointer-events-auto cursor-pointer"
+          animate={{
+            y: [0, 12, -3, 8, 0],
+            x: [0, -6, 5, -3, 0],
+            rotate: [0, 1.6, -1.4, 1, 0]
+          }}
+          transition={{ duration: 7.5, repeat: Infinity, ease: 'easeInOut', delay: 2.2 }}
+          whileHover={{ scale: 1.08, y: -6, boxShadow: '0 20px 25px -5px rgba(16, 185, 129, 0.2)' }}
+        >
+          <div className="relative">
+            <div className="p-1.5 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200/80">
+              <Sparkles className="w-4 h-4" />
+            </div>
+            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+          </div>
+          <span className="text-xs font-black text-slate-800 tracking-tight">AI Eligibility</span>
         </motion.div>
       </div>
 
@@ -133,7 +230,7 @@ export default function CTASection() {
             className="text-xs sm:text-sm text-slate-600 font-medium max-w-xl mx-auto leading-relaxed"
             style={{ fontFamily: 'var(--font-body)' }}
           >
-            Join India's AI-powered multilingual platform to discover Central, State, and District Government schemes personalized for your profile.
+            Join India's AI-powered multilingual platform to discover 500+ Central, State, and District Government schemes personalized for your profile.
           </p>
         </motion.div>
 
