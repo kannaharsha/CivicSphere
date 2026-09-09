@@ -15,6 +15,13 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
+if (!firebaseConfig.apiKey) {
+  console.error(
+    '[Firebase Configuration Missing]: VITE_FIREBASE_API_KEY is not defined in the environment. ' +
+    'If you deployed to Vercel/Netlify/GitHub Pages, please add your VITE_FIREBASE_* variables under your project Settings -> Environment Variables.'
+  );
+}
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
