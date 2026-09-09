@@ -163,6 +163,87 @@ export async function googleSyncController(req: Request, res: Response): Promise
   }
 }
 
+export async function phoneSyncController(req: Request, res: Response): Promise<void> {
+  try {
+    const {
+      firebaseUid,
+      phoneNumber,
+      fullName,
+      email,
+    } = req.body || {};
+
+    if (!firebaseUid || typeof firebaseUid !== 'string') {
+      res.status(400).json({
+        success: false,
+        message: 'Firebase UID is required.',
+      });
+      return;
+    }
+
+    if (!phoneNumber || typeof phoneNumber !== 'string') {
+      res.status(400).json({
+        success: false,
+        message: 'Valid phone number is required.',
+      });
+      return;
+    }
+
+    const { phoneSyncUserService } = await import('../services/authService.js');
+    const result = await phoneSyncUserService({
+      firebaseUid,
+      phoneNumber,
+      fullName: fullName || 'Citizen User',
+      email: email || '',
+    });
+
+    res.status(200).json(result);
+  } catch (err: any) {
+    if (err instanceof CustomError) {
+      res.status(err.statusCode).json({
+        success: false,
+        message: err.message,
+      });
+      return;
+    }
+
+    console.error('Unhandled Phone Sync Error:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Phone login synchronization failed.',
+    });
+  }
+}
+
+export async function checkPhoneController(req: Request, res: Response): Promise<void> {
+  try {
+    const phoneNumber = req.body?.phoneNumber || (req.query?.phone as string) || (req.query?.phoneNumber as string);
+    if (!phoneNumber || typeof phoneNumber !== 'string') {
+      res.status(400).json({
+        registered: false,
+        message: 'Valid phone number is required.',
+      });
+      return;
+    }
+
+    const { checkPhoneRegisteredService } = await import('../services/authService.js');
+    const result = await checkPhoneRegisteredService(phoneNumber);
+    res.status(200).json(result);
+  } catch (err: any) {
+    if (err instanceof CustomError) {
+      res.status(err.statusCode).json({
+        registered: false,
+        message: err.message,
+      });
+      return;
+    }
+    console.error('Check Phone Controller Error:', err);
+    res.status(500).json({
+      registered: false,
+      message: 'Failed to verify phone number in database.',
+    });
+  }
+}
+
 export async function getUserProfileController(req: Request, res: Response): Promise<void> {
   try {
     const firebaseUid = req.params.uid || req.body?.firebaseUid || (req.query?.firebaseUid as string);
@@ -232,6 +313,7 @@ export async function getCitizenProfileController(req: Request, res: Response): 
   try {
     const firebaseUid = req.params.uid || req.body?.firebaseUid || (req.query?.firebaseUid as string);
     const email = req.body?.email || (req.query?.email as string) || '';
+    const phone = req.body?.phone || req.body?.phoneNumber || (req.query?.phone as string) || (req.query?.phoneNumber as string) || '';
 
     if (!firebaseUid || typeof firebaseUid !== 'string') {
       res.status(400).json({
@@ -242,7 +324,7 @@ export async function getCitizenProfileController(req: Request, res: Response): 
     }
 
     const { getCitizenProfileByUidService } = await import('../services/authService.js');
-    const result = await getCitizenProfileByUidService(firebaseUid, email);
+    const result = await getCitizenProfileByUidService(firebaseUid, email, phone);
 
     res.status(200).json(result);
   } catch (err: any) {
@@ -266,12 +348,13 @@ export async function saveCitizenProfileController(req: Request, res: Response):
   try {
     const data = req.body || {};
     const firebase_uid = data.firebase_uid || data.firebaseUid || data.uid || req.params.uid;
-    const email = data.email || data.userEmail;
+    const email = data.email || data.userEmail || '';
+    const phoneNumber = data.phone_number || data.phoneNumber || null;
 
-    if (!firebase_uid || !email) {
+    if (!firebase_uid) {
       res.status(400).json({
         success: false,
-        message: 'Firebase UID and Email are required.',
+        message: 'Firebase UID is required.',
       });
       return;
     }
@@ -279,7 +362,8 @@ export async function saveCitizenProfileController(req: Request, res: Response):
     const payload = {
       profile_id: data.profile_id || data.profileId || data.citizen_id || data.citizenId,
       firebase_uid,
-      email: String(email).trim().toLowerCase(),
+      email: email ? String(email).trim().toLowerCase() : '',
+      phone_number: phoneNumber ? String(phoneNumber).trim() : null,
       full_name: data.full_name || data.fullName || 'Citizen',
       date_of_birth: data.date_of_birth || data.dateOfBirth || null,
       age: data.age !== undefined && data.age !== null ? Number(data.age) : null,

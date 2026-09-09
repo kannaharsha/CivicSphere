@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Eye, EyeOff, Cpu, Sparkles, TrendingUp, Check, ShieldCheck
+  Eye, EyeOff, Cpu, Sparkles, TrendingUp, Check, ShieldCheck,
+  Phone, Mail, RefreshCw, KeyRound, Clock
 } from 'lucide-react'
 import AuthNavbar from './AuthNavbar'
 import AuthParticles from './AuthParticles'
@@ -11,14 +13,31 @@ import { useTheme } from '../context/ThemeContext'
 
 export default function LoginPage() {
   const { theme } = useTheme()
-  const { login, googleLogin, resetPassword } = useAuth()
+  const {
+    login,
+    googleLogin,
+    resetPassword,
+    setupRecaptcha,
+    sendPhoneOtp,
+    confirmPhoneOtp
+  } = useAuth()
+  const [authMode, setAuthMode] = useState<'email' | 'phone'>('email')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [rawPhone, setRawPhone] = useState('')
+  const [matchedEmail, setMatchedEmail] = useState<string | null>(null)
+  const [otpCode, setOtpCode] = useState('')
+  const [confirmationResult, setConfirmationResult] = useState<any>(null)
+  const [codeSent, setCodeSent] = useState(false)
+  const [phoneLoading, setPhoneLoading] = useState(false)
+  const [verifyingOtp, setVerifyingOtp] = useState(false)
+  const [countdown, setCountdown] = useState<number>(60)
+  const [isOtpExpired, setIsOtpExpired] = useState<boolean>(false)
   const [showPass, setShowPass] = useState(false)
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
   const [success, setSuccess] = useState(false)
-  const [errors, setErrors] = useState<{ email?: string; password?: string; form?: string }>({})
+  const [errors, setErrors] = useState<{ email?: string; password?: string; phone?: string; otp?: string; form?: string }>({})
   const [showResetModal, setShowResetModal] = useState(false)
   const [resetEmail, setResetEmail] = useState('')
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
@@ -31,6 +50,25 @@ export default function LoginPage() {
     const y = (e.clientY - window.innerHeight / 2) / 50
     setMousePos({ x, y })
   }
+
+  // 60-second OTP countdown timer and auto-expiry
+  useEffect(() => {
+    let interval: any = null
+    if (codeSent && countdown > 0) {
+      interval = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            setIsOtpExpired(true)
+            return 0
+          }
+          return prev - 1
+        })
+      }, 1000)
+    }
+    return () => {
+      if (interval) clearInterval(interval)
+    }
+  }, [codeSent, countdown])
 
   const validate = () => {
     const errs: { email?: string; password?: string } = {}
@@ -55,6 +93,79 @@ export default function LoginPage() {
       setErrors({ form: err.message || 'Failed to authenticate login credentials.' })
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleSendOtp = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+    setErrors({})
+    const cleanDigits = rawPhone.trim().replace(/\D/g, '')
+    if (!cleanDigits || cleanDigits.length !== 10) {
+      setErrors({ phone: 'Please enter a valid 10-digit mobile number (e.g. 9876543210).' })
+      return
+    }
+
+    const fullPhone = `+91${cleanDigits}`
+    setPhoneLoading(true)
+    try {
+      // 1. Verify 10-digit phone number (except +91) exists in PostgreSQL database (users & citizen_profiles)
+      const apiBase = import.meta.env.VITE_API_URL || (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? 'http://localhost:5000' : '')
+      const checkRes = await axios.post(`${apiBase}/api/auth/check-phone`, { phoneNumber: cleanDigits })
+      if (!checkRes.data || !checkRes.data.registered) {
+        setErrors({
+          phone: checkRes.data?.message || `Mobile number (+91 ${cleanDigits}) is not registered in our database. Phone sign-in is not permitted for unregistered numbers. Please sign up or login with your email.`,
+        })
+        setPhoneLoading(false)
+        return
+      }
+
+      // Store matched email if associated with this phone number
+      if (checkRes.data.matchedEmail) {
+        setMatchedEmail(checkRes.data.matchedEmail)
+      }
+
+      // 2. Clear old reCAPTCHA and send Firebase OTP to +91XXXXXXXXXX
+      const verifier = setupRecaptcha('recaptcha-container', false)
+      const result = await sendPhoneOtp(fullPhone, verifier)
+      setConfirmationResult(result)
+      setCodeSent(true)
+      setCountdown(60)
+      setIsOtpExpired(false)
+      setOtpCode('')
+    } catch (err: any) {
+      console.error('Send OTP error:', err)
+      setErrors({ form: err.message || 'Failed to send verification code. Check phone number and reCAPTCHA.' })
+    } finally {
+      setPhoneLoading(false)
+    }
+  }
+
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setErrors({})
+    if (isOtpExpired || countdown === 0) {
+      setErrors({ otp: 'This OTP has expired (60s limit reached). Please click "Regenerate OTP" below to send a fresh code.' })
+      return
+    }
+    const cleanOtp = otpCode.trim()
+    if (!cleanOtp || cleanOtp.length < 6) {
+      setErrors({ otp: 'Please enter the 6-digit verification code.' })
+      return
+    }
+    if (!confirmationResult) {
+      setErrors({ form: 'No active verification session. Please regenerate a new code.' })
+      return
+    }
+    setVerifyingOtp(true)
+    try {
+      await confirmPhoneOtp(confirmationResult, cleanOtp, matchedEmail || undefined)
+      setSuccess(true)
+      setTimeout(() => navigate('/dashboard'), 1000)
+    } catch (err: any) {
+      console.error('Verify OTP error:', err)
+      setErrors({ form: err.message || 'Invalid verification code. Please try again.' })
+    } finally {
+      setVerifyingOtp(false)
     }
   }
 
@@ -387,18 +498,67 @@ export default function LoginPage() {
               </h1>
             </div>
 
+            {/* Auth Method Segmented Tabs: Email vs Phone */}
+            <div className={`p-1 rounded-2xl flex items-center border ${
+              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-slate-200/70 border-slate-300'
+            }`}>
+              <button
+                type="button"
+                onClick={() => { setAuthMode('email'); setErrors({}); }}
+                className={`flex-1 py-2 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                  authMode === 'email'
+                    ? (isDark ? 'bg-emerald-500 text-slate-950 shadow-md' : 'bg-white text-slate-950 shadow-sm')
+                    : (isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-950')
+                }`}
+              >
+                <Mail className="w-3.5 h-3.5" />
+                <span>Email & Password</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => { setAuthMode('phone'); setErrors({}); }}
+                className={`flex-1 py-2 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                  authMode === 'phone'
+                    ? (isDark ? 'bg-emerald-500 text-slate-950 shadow-md' : 'bg-white text-slate-950 shadow-sm')
+                    : (isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-950')
+                }`}
+              >
+                <Phone className="w-3.5 h-3.5" />
+                <span>Phone OTP</span>
+              </button>
+            </div>
+
             {/* Error Banner */}
             {errors.form && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs font-black"
+                className={`p-3.5 rounded-xl border text-xs ${
+                  errors.form.includes('billing') || errors.form.includes('Phone numbers for testing')
+                    ? 'bg-amber-500/10 border-amber-500/30 text-amber-300'
+                    : 'bg-red-500/10 border-red-500/20 text-red-600 dark:text-red-400 font-black'
+                }`}
               >
-                {errors.form}
+                <div className="font-bold leading-relaxed">{errors.form}</div>
+                {(errors.form.includes('billing') || errors.form.includes('Phone numbers for testing')) && (
+                  <div className="mt-2.5 pt-2 border-t border-amber-500/20 text-[11px] space-y-1.5 text-amber-200/90 font-medium">
+                    <p className="font-bold text-amber-300">💡 Free Solution (No Credit Card / Billing Needed):</p>
+                    <ol className="list-decimal list-inside space-y-1 pl-1">
+                      <li>Go to <strong>Firebase Console</strong> → <strong>Authentication</strong>.</li>
+                      <li>Click <strong>Sign-in method</strong> tab → Select <strong>Phone</strong>.</li>
+                      <li>Scroll down and expand <strong>"Phone numbers for testing"</strong>.</li>
+                      <li>Add your phone number (e.g. <code className="bg-black/40 px-1.5 py-0.5 rounded text-amber-200 font-mono">+91 9876543210</code>) and a test OTP code (e.g. <code className="bg-black/40 px-1.5 py-0.5 rounded text-amber-200 font-mono">123456</code>).</li>
+                    </ol>
+                    <p className="text-[10px] text-amber-300/70 pt-0.5">
+                      Alternatively, upgrade your Firebase project to the <strong>Blaze plan</strong> (pay-as-you-go) to send real SMS over carrier networks.
+                    </p>
+                  </div>
+                )}
               </motion.div>
             )}
 
-            {/* Credentials Form */}
+            {/* Email + Password Form */}
+            {authMode === 'email' && (
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* EMAIL FIELD */}
               <div>
@@ -495,6 +655,225 @@ export default function LoginPage() {
                 )}
               </motion.button>
             </form>
+            )}
+
+            {/* Phone Number OTP Authentication Flow */}
+            {authMode === 'phone' && (
+              <div className="space-y-4">
+                {/* Persistent reCAPTCHA Verifier Target Element */}
+                <div id="recaptcha-container" className="flex justify-center my-1 min-h-[1px]" />
+
+                {!codeSent ? (
+                  <form onSubmit={handleSendOtp} className="space-y-4">
+                    <div>
+                      <label
+                        className={`block text-[11px] font-black uppercase tracking-wider mb-1.5 ${
+                          isDark ? 'text-slate-300' : 'text-slate-900'
+                        }`}
+                      >
+                        MOBILE PHONE NUMBER (10 DIGITS)
+                      </label>
+                      <div className="relative flex items-center">
+                        {/* Read-only fixed country code prefix */}
+                        <div
+                          className={`h-12 px-3.5 flex items-center justify-center font-black text-xs select-none rounded-l-xl border-y border-l transition-colors ${
+                            isDark
+                              ? 'bg-slate-800/80 border-slate-800 text-emerald-400'
+                              : 'bg-slate-100 border-slate-300 text-slate-700'
+                          }`}
+                        >
+                          <span className="flex items-center gap-1">
+                            <span>🇮🇳</span>
+                            <span className="font-mono">+91</span>
+                          </span>
+                        </div>
+
+                        {/* 10-digit mobile number input (excluding +91) */}
+                        <input
+                          type="tel"
+                          maxLength={10}
+                          value={rawPhone}
+                          onChange={(e) => setRawPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                          placeholder="9876543210"
+                          required
+                          className={`flex-1 h-12 px-4 rounded-r-xl text-sm font-bold border-y border-r transition-all outline-none tracking-wider ${
+                            isDark
+                              ? 'bg-slate-900 border-slate-800 text-white placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
+                              : 'bg-white border-slate-300 text-slate-950 placeholder:text-slate-400 focus:border-slate-950 focus:ring-2 focus:ring-slate-950/10 shadow-xs'
+                          }`}
+                        />
+                        <Phone className="w-4 h-4 text-slate-400 absolute right-3.5 pointer-events-none" />
+                      </div>
+                      {errors.phone && <p className="mt-1 text-xs text-red-600 dark:text-red-400 font-black">{errors.phone}</p>}
+                      <p className="mt-1.5 text-[11px] text-slate-500 font-medium">
+                        Country code <span className="font-bold text-emerald-500">+91</span> is fixed in read mode. Enter only your 10-digit number. We will check the database (users & citizen_profiles); if registered, you will log in with your matched account.
+                      </p>
+                    </div>
+
+                    {/* Send Code Button */}
+                    <motion.button
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.99 }}
+                      type="submit"
+                      disabled={phoneLoading}
+                      className={`w-full h-12 rounded-xl text-sm font-black flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md ${
+                        isDark
+                          ? 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/20'
+                          : 'bg-[#111111] hover:bg-black text-white'
+                      } disabled:opacity-75`}
+                    >
+                      {phoneLoading ? (
+                        <span className="flex items-center gap-2 font-black">
+                          <Cpu className="w-4 h-4 animate-spin" /> Verifying DB & Sending OTP…
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-2 font-black">
+                          <Phone className="w-4 h-4" /> Send Verification Code
+                        </span>
+                      )}
+                    </motion.button>
+                  </form>
+                ) : (
+                  <form onSubmit={handleVerifyOtp} className="space-y-4">
+                    {/* Sent Destination Header */}
+                    <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-between text-xs">
+                      <div>
+                        <span className="font-bold text-slate-400 block text-[10px]">OTP SENT TO</span>
+                        <span className="font-black text-emerald-500">+91 {rawPhone}</span>
+                        {matchedEmail && (
+                          <div className="text-[11px] font-bold text-slate-400 mt-0.5 flex items-center gap-1">
+                            <span>Account:</span>
+                            <span className="text-cyan-400 font-mono">{matchedEmail}</span>
+                          </div>
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => { setCodeSent(false); setOtpCode(''); setCountdown(60); setIsOtpExpired(false); }}
+                        className={`text-xs font-black underline cursor-pointer ${
+                          isDark ? 'text-slate-300 hover:text-white' : 'text-slate-700 hover:text-black'
+                        }`}
+                      >
+                        Change Number
+                      </button>
+                    </div>
+
+                    {/* Countdown Timer & Expiration Status Banner */}
+                    {!isOtpExpired && countdown > 0 ? (
+                      <div className={`p-2.5 rounded-xl border flex items-center justify-between text-xs transition-all ${
+                        isDark ? 'bg-cyan-500/10 border-cyan-500/20 text-cyan-300' : 'bg-cyan-50 border-cyan-200 text-cyan-900'
+                      }`}>
+                        <div className="flex items-center gap-2 font-bold">
+                          <Clock className="w-4 h-4 text-cyan-400 animate-pulse" />
+                          <span>OTP Valid For:</span>
+                        </div>
+                        <span className="font-mono font-black text-sm tracking-wider text-cyan-400">
+                          00:{countdown < 10 ? `0${countdown}` : countdown}s
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="p-3 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-400 text-xs space-y-1 animate-pulse">
+                        <div className="flex items-center gap-1.5 font-black">
+                          <span>⚠️ OTP Has Expired (60s limit)</span>
+                        </div>
+                        <p className="text-[11px] text-amber-300/80 leading-relaxed font-medium">
+                          This OTP code is no longer valid. Please click <strong>Regenerate & Resend OTP</strong> below to get a fresh code.
+                        </p>
+                      </div>
+                    )}
+
+                    {/* 6-Digit Code Input */}
+                    <div>
+                      <label
+                        className={`block text-[11px] font-black uppercase tracking-wider mb-1.5 ${
+                          isDark ? 'text-slate-300' : 'text-slate-900'
+                        }`}
+                      >
+                        ENTER 6-DIGIT VERIFICATION CODE
+                      </label>
+                      <div className="relative flex items-center">
+                        <input
+                          type="text"
+                          maxLength={6}
+                          value={otpCode}
+                          onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
+                          placeholder="••••••"
+                          required
+                          autoFocus
+                          disabled={isOtpExpired || countdown === 0}
+                          className={`w-full h-12 px-4 rounded-xl text-center tracking-[0.3em] text-lg font-black border transition-all outline-none ${
+                            isOtpExpired || countdown === 0
+                              ? 'opacity-50 cursor-not-allowed bg-slate-800/50 border-slate-700 text-slate-500'
+                              : isDark
+                              ? 'bg-slate-900 border-slate-800 text-white placeholder:text-slate-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
+                              : 'bg-white border-slate-300 text-slate-950 placeholder:text-slate-300 focus:border-slate-950 focus:ring-2 focus:ring-slate-950/10 shadow-xs'
+                          }`}
+                        />
+                        <KeyRound className="w-4 h-4 text-slate-400 absolute right-3.5 pointer-events-none" />
+                      </div>
+                      {errors.otp && <p className="mt-1 text-xs text-red-600 dark:text-red-400 font-black">{errors.otp}</p>}
+                    </div>
+
+                    {/* Verify & Sign In Button */}
+                    <motion.button
+                      whileHover={!(isOtpExpired || countdown === 0) ? { scale: 1.01 } : {}}
+                      whileTap={!(isOtpExpired || countdown === 0) ? { scale: 0.99 } : {}}
+                      type="submit"
+                      disabled={verifyingOtp || success || isOtpExpired || countdown === 0}
+                      className={`w-full h-12 rounded-xl text-sm font-black flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md ${
+                        isOtpExpired || countdown === 0
+                          ? 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
+                          : isDark
+                          ? 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/20'
+                          : 'bg-[#111111] hover:bg-black text-white'
+                      } disabled:opacity-75`}
+                    >
+                      {verifyingOtp ? (
+                        <span className="flex items-center gap-2 font-black">
+                          <Cpu className="w-4 h-4 animate-spin" /> Verifying Code…
+                        </span>
+                      ) : success ? (
+                        <span className="flex items-center gap-2 font-black">
+                          <Check className="w-4 h-4" /> Success
+                        </span>
+                      ) : isOtpExpired || countdown === 0 ? (
+                        <span className="font-black text-xs uppercase tracking-wider text-slate-400">
+                          Code Expired — Regenerate Below
+                        </span>
+                      ) : (
+                        <span className="font-black">Verify & Sign In</span>
+                      )}
+                    </motion.button>
+
+                    {/* Regenerate OTP / Resend Code Section */}
+                    {isOtpExpired || countdown === 0 ? (
+                      <motion.button
+                        whileHover={{ scale: 1.01 }}
+                        whileTap={{ scale: 0.99 }}
+                        type="button"
+                        onClick={handleSendOtp}
+                        disabled={phoneLoading}
+                        className={`w-full py-2.5 px-4 rounded-xl text-xs font-black flex items-center justify-center gap-2 border transition-all cursor-pointer ${
+                          isDark
+                            ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/30 shadow-lg shadow-emerald-500/10'
+                            : 'bg-emerald-50 border-emerald-300 text-emerald-800 hover:bg-emerald-100 shadow-xs'
+                        }`}
+                      >
+                        <RefreshCw className={`w-3.5 h-3.5 ${phoneLoading ? 'animate-spin' : ''}`} />
+                        <span>{phoneLoading ? 'Regenerating & Sending OTP…' : 'Regenerate & Resend New OTP'}</span>
+                      </motion.button>
+                    ) : (
+                      <div className="flex justify-center pt-1">
+                        <span className="text-xs font-bold text-slate-400 flex items-center gap-1.5">
+                          <RefreshCw className="w-3 h-3 text-slate-500" />
+                          <span>Regenerate code available in {countdown}s</span>
+                        </span>
+                      </div>
+                    )}
+                  </form>
+                )}
+              </div>
+            )}
 
             {/* Minimalist Divider */}
             <div className="relative my-6 flex items-center justify-center">

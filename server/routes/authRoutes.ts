@@ -3,6 +3,8 @@ import {
   registerController,
   verifySyncController,
   googleSyncController,
+  phoneSyncController,
+  checkPhoneController,
   getUserProfileController,
   resendVerificationController,
   getCitizenProfileController,
@@ -21,6 +23,15 @@ router.post('/login', verifySyncController);
 // POST /api/auth/google-sync & POST /api/auth/google
 router.post('/google-sync', googleSyncController);
 router.post('/google', googleSyncController);
+
+// POST /api/auth/phone-sync & POST /api/auth/phone
+router.post('/phone-sync', phoneSyncController);
+router.post('/phone', phoneSyncController);
+
+// POST & GET /api/auth/check-phone & /api/auth/verify-phone
+router.post('/check-phone', checkPhoneController);
+router.get('/check-phone', checkPhoneController);
+router.post('/verify-phone', checkPhoneController);
 
 // GET & POST /api/auth/profile
 router.get('/profile/:uid', getUserProfileController);

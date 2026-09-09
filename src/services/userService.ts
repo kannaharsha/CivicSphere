@@ -5,6 +5,7 @@ export interface CitizenProfile {
   firebaseUid?: string;
   email: string;
   fullName: string;
+  phoneNumber?: string | null;
   dateOfBirth?: string | null;
   age?: number | null;
   gender?: string;

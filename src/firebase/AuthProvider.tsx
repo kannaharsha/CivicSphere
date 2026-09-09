@@ -1,21 +1,33 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import type { User as FirebaseUser } from 'firebase/auth';
+import type { User as FirebaseUser, RecaptchaVerifier, ConfirmationResult } from 'firebase/auth';
 import {
   onAuthStateChanged,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signInWithPopup,
   signOut,
-  sendPasswordResetEmail,
   updateProfile,
-  sendEmailVerification,
   GoogleAuthProvider,
   linkWithCredential,
 } from 'firebase/auth';
 import { toast } from 'react-hot-toast';
 import { auth, googleProvider } from './firebase';
 import type { CitizenProfile } from '../services/userService';
+
+// Modular snippets imports
+import {
+  signInUserWithEmailAndPassword,
+  createUserWithEmail,
+  sendUserEmailVerification,
+  sendUserPasswordReset,
+} from './email';
+import {
+  signInWithGooglePopup,
+} from './googlesignin';
+import {
+  setupRecaptchaVerifierSimple,
+  setupRecaptchaVerifierVisible,
+  sendVerificationCodeToPhone,
+  verifyPhoneCodeAndSignIn,
+} from './phone-auth';
 
 const getApiBase = () => {
   if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
@@ -39,6 +51,10 @@ interface AuthContextType {
   resendVerification: (userObj?: FirebaseUser) => Promise<void>;
   saveCitizenProfile: (updatedProfile: Partial<CitizenProfile>) => Promise<CitizenProfile>;
   fetchCitizenProfile: () => Promise<void>;
+  // Phone Authentication Methods
+  setupRecaptcha: (containerId?: string, isVisible?: boolean) => RecaptchaVerifier;
+  sendPhoneOtp: (phoneNumber: string, appVerifier: RecaptchaVerifier) => Promise<ConfirmationResult>;
+  confirmPhoneOtp: (confirmationResult: ConfirmationResult, otp: string, matchedEmail?: string) => Promise<FirebaseUser>;
 }
 
 function mapRowToCitizenProfile(row: any, firebaseUser?: FirebaseUser | null): CitizenProfile {
@@ -48,6 +64,7 @@ function mapRowToCitizenProfile(row: any, firebaseUser?: FirebaseUser | null): C
     citizenId: profileId,
     firebaseUid: row.firebase_uid || firebaseUser?.uid || '',
     email: row.email || firebaseUser?.email || '',
+    phoneNumber: row.phone_number || firebaseUser?.phoneNumber || '',
     fullName: row.full_name || firebaseUser?.displayName || 'Citizen',
     dateOfBirth: row.date_of_birth ? new Date(row.date_of_birth).toISOString().split('T')[0] : null,
     age: row.age !== undefined && row.age !== null ? Number(row.age) : null,
@@ -76,13 +93,15 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [profile, setProfile] = useState<CitizenProfile | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const fetchCitizenProfile = async () => {
-    const firebaseUser = auth.currentUser;
+  // Helper to fetch PostgreSQL citizen profile
+  const fetchCitizenProfile = async (targetUser?: FirebaseUser) => {
+    const firebaseUser = targetUser || auth.currentUser;
     if (!firebaseUser) return;
     try {
-      const res = await axios.get(`${API_BASE}/api/auth/citizen-profile/${firebaseUser.uid}?email=${encodeURIComponent(firebaseUser.email || '')}`);
+      const phoneParam = firebaseUser.phoneNumber ? `&phone=${encodeURIComponent(firebaseUser.phoneNumber)}` : '';
+      const res = await axios.get(`${API_BASE}/api/auth/citizen-profile/${firebaseUser.uid}?email=${encodeURIComponent(firebaseUser.email || '')}${phoneParam}`);
       if (res.data && res.data.profile) {
         setProfile(mapRowToCitizenProfile(res.data.profile, firebaseUser));
       }
@@ -96,7 +115,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
       if (firebaseUser) {
-        axios.get(`${API_BASE}/api/auth/citizen-profile/${firebaseUser.uid}?email=${encodeURIComponent(firebaseUser.email || '')}`)
+        const phoneParam = firebaseUser.phoneNumber ? `&phone=${encodeURIComponent(firebaseUser.phoneNumber)}` : '';
+        axios.get(`${API_BASE}/api/auth/citizen-profile/${firebaseUser.uid}?email=${encodeURIComponent(firebaseUser.email || '')}${phoneParam}`)
           .then(res => {
             if (res.data && res.data.profile) {
               setProfile(mapRowToCitizenProfile(res.data.profile, firebaseUser));
@@ -106,6 +126,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 citizenId: 'Civs1001',
                 firebaseUid: firebaseUser.uid,
                 email: firebaseUser.email || '',
+                phoneNumber: firebaseUser.phoneNumber || '',
                 fullName: firebaseUser.displayName || 'Citizen',
                 dateOfBirth: null,
                 age: null,
@@ -135,6 +156,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               citizenId: 'Civs1001',
               firebaseUid: firebaseUser.uid,
               email: firebaseUser.email || '',
+              phoneNumber: firebaseUser.phoneNumber || '',
               fullName: firebaseUser.displayName || 'Citizen',
               dateOfBirth: null,
               age: null,
@@ -180,6 +202,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       profile_id: profileId,
       firebase_uid: user.uid,
       email: user.email || profile?.email || '',
+      phone_number: updatedData.phoneNumber !== undefined ? updatedData.phoneNumber : profile?.phoneNumber || user.phoneNumber || null,
       full_name: updatedData.fullName || profile?.fullName || user.displayName || 'Citizen',
       date_of_birth: updatedData.dateOfBirth !== undefined ? updatedData.dateOfBirth : profile?.dateOfBirth || null,
       age: updatedData.age !== undefined ? updatedData.age : profile?.age || null,
@@ -217,6 +240,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         citizenId: payload.profile_id,
         firebaseUid: user.uid,
         email: user.email || '',
+        phoneNumber: payload.phone_number,
         fullName: payload.full_name,
         dateOfBirth: payload.date_of_birth,
         age: payload.age,
@@ -244,7 +268,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Email + Password Login with Firebase lookup & PostgreSQL sync
+  // Email + Password Login using modular snippet auth_signin_password
   const login = async (email: string, pass: string) => {
     try {
       const syncRes = await axios.post(`${API_BASE}/api/auth/verify-sync`, {
@@ -259,7 +283,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw err;
       }
 
-      await signInWithEmailAndPassword(auth, email.trim(), pass);
+      await signInUserWithEmailAndPassword(email.trim(), pass, auth);
       toast.success('Logged in successfully!');
     } catch (err: any) {
       const serverMsg = err.response?.data?.message;
@@ -278,13 +302,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Email + Password Signup (Authentication-only flow)
+  // Email + Password Signup using modular snippet auth_signup_password
   const signup = async (email: string, pass: string, fullName: string) => {
     try {
-      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      const cred = await createUserWithEmail(email, pass, auth);
       if (cred.user) {
         await updateProfile(cred.user, { displayName: fullName });
-        await sendEmailVerification(cred.user);
+        await sendUserEmailVerification(cred.user);
       }
       toast.success('Account created successfully. Please verify your email before logging in.');
       await signOut(auth);
@@ -299,23 +323,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Resend verification email helper
+  // Resend verification email helper using modular snippet auth_send_email_verification
   const resendVerification = async (targetUser?: FirebaseUser) => {
     const u = targetUser || auth.currentUser;
     if (u) {
-      await sendEmailVerification(u);
+      await sendUserEmailVerification(u);
       toast.success('Verification email sent! Please check your inbox.');
     } else {
       toast.error('No active session found to resend verification.');
     }
   };
 
-  // Google Sign In with PostgreSQL sync and provider linking
+  // Google Sign In using modular snippet auth_google_signin_popup
   const googleLogin = async () => {
     try {
       let u: FirebaseUser | null = null;
       try {
-        const res = await signInWithPopup(auth, googleProvider);
+        const res = await signInWithGooglePopup(auth, googleProvider);
         u = res.user;
       } catch (err: any) {
         if (err.code === 'auth/account-exists-with-different-credential') {
@@ -354,6 +378,75 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  // Setup reCAPTCHA verifier for Phone Auth
+  const setupRecaptcha = (containerId: string = 'recaptcha-container', isVisible: boolean = false): RecaptchaVerifier => {
+    if (isVisible) {
+      return setupRecaptchaVerifierVisible(containerId, auth);
+    }
+    return setupRecaptchaVerifierSimple(containerId, auth);
+  };
+
+  // Send verification code to user's phone via SMS
+  const sendPhoneOtp = async (phoneNumber: string, appVerifier: RecaptchaVerifier): Promise<ConfirmationResult> => {
+    try {
+      const confirmationResult = await sendVerificationCodeToPhone(phoneNumber.trim(), appVerifier, auth);
+      toast.success(`Verification code sent to ${phoneNumber}`);
+      return confirmationResult;
+    } catch (err: any) {
+      console.error('Phone OTP error:', err);
+      let msg = 'Failed to send verification code.';
+      if (err.code === 'auth/billing-not-enabled') {
+        msg = 'Firebase billing is not enabled for SMS carrier delivery (auth/billing-not-enabled). You can test 100% free by adding your number under Firebase Console -> Authentication -> Sign-in method -> Phone -> "Phone numbers for testing" (e.g. +91 9999999999 with code 123456), or upgrade your Firebase project to the Blaze plan.';
+      } else if (err.code === 'auth/operation-not-allowed') {
+        msg = 'SMS is not enabled for this country region in Firebase. Go to Firebase Console -> Authentication -> Settings -> SMS Region Policy and enable your country (e.g. India +91), or add this number under "Phone numbers for testing".';
+      } else if (err.code === 'auth/invalid-phone-number') {
+        msg = 'Invalid phone number format. Please provide with country code (e.g., +919876543210).';
+      } else if (err.code === 'auth/missing-phone-number') {
+        msg = 'Phone number is required.';
+      } else if (err.code === 'auth/quota-exceeded') {
+        msg = 'SMS quota exceeded for today. Try again later or use test credentials.';
+      } else if (err.code === 'auth/captcha-check-failed') {
+        msg = 'reCAPTCHA check failed. Please refresh and try again.';
+      } else if (err.message) {
+        msg = err.message;
+      }
+      toast.error(msg, { duration: 6000 });
+      throw new Error(msg);
+    }
+  };
+
+  // Sign in the user with the verification code
+  const confirmPhoneOtp = async (confirmationResult: ConfirmationResult, otp: string, matchedEmail?: string): Promise<FirebaseUser> => {
+    try {
+      const cred = await verifyPhoneCodeAndSignIn(confirmationResult, otp.trim());
+      const u = cred.user;
+      setUser(u);
+
+      // Sync phone user to PostgreSQL backend
+      try {
+        await axios.post(`${API_BASE}/api/auth/phone-sync`, {
+          firebaseUid: u.uid,
+          phoneNumber: u.phoneNumber || '',
+          fullName: u.displayName || 'Citizen User',
+          email: matchedEmail || u.email || '',
+        });
+        await fetchCitizenProfile(u);
+      } catch (syncErr) {
+        console.warn('Backend phone-sync notice:', syncErr);
+      }
+
+      toast.success('Phone verified & signed in successfully!');
+      return u;
+    } catch (err: any) {
+      console.error('Phone OTP verification error:', err);
+      let msg = 'Verification failed. Please check the code entered.';
+      if (err.code === 'auth/invalid-verification-code') msg = 'Incorrect OTP entered. Please try again.';
+      if (err.code === 'auth/code-expired') msg = 'Verification code has expired. Please request a new OTP.';
+      toast.error(msg);
+      throw err;
+    }
+  };
+
   // Logout
   const logout = async () => {
     try {
@@ -367,10 +460,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Forgot Password
+  // Forgot Password using modular snippet auth_send_password_reset
   const resetPassword = async (email: string) => {
     try {
-      await sendPasswordResetEmail(auth, email);
+      await sendUserPasswordReset(email, auth);
       toast.success('Password reset link sent to your email.');
     } catch (err: any) {
       toast.error('Failed to send reset link. Check your email address.');
@@ -392,6 +485,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       resendVerification,
       saveCitizenProfile,
       fetchCitizenProfile,
+      setupRecaptcha,
+      sendPhoneOtp,
+      confirmPhoneOtp,
     }}>
       {children}
     </AuthContext.Provider>

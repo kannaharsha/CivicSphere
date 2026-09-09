@@ -13,11 +13,11 @@ const poolConfig: pg.PoolConfig = process.env.DATABASE_URL
       ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
     }
   : {
-      host: process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.DB_PORT || '5432', 10),
-      database: process.env.DB_NAME || 'civicsphere_db',
-      user: process.env.DB_USER || 'postgres',
-      password: process.env.DB_PASSWORD || 'Harshatej9106',
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : undefined,
+      database: process.env.DB_NAME,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
       ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
     };
 
@@ -44,8 +44,9 @@ export async function initDb() {
     CREATE TABLE IF NOT EXISTS citizen_profiles (
       profile_id VARCHAR(100) PRIMARY KEY,
       firebase_uid VARCHAR(255) UNIQUE NOT NULL,
-      email VARCHAR(255) UNIQUE NOT NULL,
+      email VARCHAR(255) DEFAULT NULL,
       full_name VARCHAR(150) NOT NULL,
+      phone_number VARCHAR(50) DEFAULT NULL,
       date_of_birth DATE,
       age INTEGER,
       gender VARCHAR(50),
@@ -75,6 +76,12 @@ export async function initDb() {
     await client.query(createUsersTableQuery);
     await client.query(createCitizenProfilesTableQuery);
 
+    // Migrations ensuring phone_number and relaxing email NOT NULL for phone auth
+    await client.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS phone_number VARCHAR(50) DEFAULT NULL;`).catch(() => {});
+    await client.query(`ALTER TABLE citizen_profiles ADD COLUMN IF NOT EXISTS phone_number VARCHAR(50) DEFAULT NULL;`).catch(() => {});
+    await client.query(`ALTER TABLE users ALTER COLUMN email DROP NOT NULL;`).catch(() => {});
+    await client.query(`ALTER TABLE citizen_profiles ALTER COLUMN email DROP NOT NULL;`).catch(() => {});
+
     // Migration altering profile_id type from UUID to VARCHAR(100) and dropping NOT NULL constraints if pre-existing
     await client.query(`ALTER TABLE citizen_profiles ALTER COLUMN profile_id TYPE VARCHAR(100);`).catch(() => {});
     await client.query(`ALTER TABLE citizen_profiles ALTER COLUMN date_of_birth DROP NOT NULL;`).catch(() => {});
@@ -84,7 +91,7 @@ export async function initDb() {
     await client.query(`ALTER TABLE citizen_profiles ALTER COLUMN district DROP NOT NULL;`).catch(() => {});
 
     client.release();
-    console.log('PostgreSQL users & citizen_profiles tables verified/migrated.');
+    console.log('PostgreSQL users & citizen_profiles tables verified/migrated with phone_number support.');
   } catch (err: any) {
     console.error('PostgreSQL database initialization warning:', err.message);
   }

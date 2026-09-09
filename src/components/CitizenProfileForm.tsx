@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import {
   Lock, User, Mail, Calendar, Hash, Heart, Shield, Briefcase,
   GraduationCap, IndianRupee, MapPin, Building, Home,
-  Languages, Save, Cpu, Sparkles, Image as ImageIcon
+  Languages, Save, Cpu, Sparkles, Image as ImageIcon, Phone
 } from 'lucide-react'
 import { useAuth } from '../firebase/AuthProvider'
 import type { CitizenProfile } from '../services/userService'
@@ -41,6 +41,7 @@ export default function CitizenProfileForm({ onSuccess, isModal = false, isDark:
     citizenId: profile?.citizenId || profile?.profileId || 'Civs1001',
     firebaseUid: user?.uid || profile?.firebaseUid || '',
     email: profile?.email || user?.email || '',
+    phoneNumber: profile?.phoneNumber || user?.phoneNumber || '',
     fullName: profile?.fullName || user?.displayName || '',
     dateOfBirth: profile?.dateOfBirth || '',
     age: profile?.age || null,
@@ -71,6 +72,7 @@ export default function CitizenProfileForm({ onSuccess, isModal = false, isDark:
         citizenId: profile.citizenId || profile.profileId || 'Civs1001',
         firebaseUid: user?.uid || profile.firebaseUid || '',
         email: profile.email || user?.email || '',
+        phoneNumber: profile.phoneNumber || user?.phoneNumber || '',
         fullName: profile.fullName || user?.displayName || '',
         dateOfBirth: profile.dateOfBirth || '',
         age: profile.age || null,
@@ -211,7 +213,7 @@ export default function CitizenProfileForm({ onSuccess, isModal = false, isDark:
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {/* CITIZEN ID / PROFILE ID (Civs{number}) - READ ONLY */}
             <div className="space-y-1.5">
               <label className={labelClass}>
@@ -235,7 +237,7 @@ export default function CitizenProfileForm({ onSuccess, isModal = false, isDark:
             <div className="space-y-1.5">
               <label className={labelClass}>
                 <Mail className={`w-3.5 h-3.5 ${isDark ? 'text-blue-400' : 'text-[#D4A537]'}`} />
-                Email Address <span className="text-amber-500 text-[10px] font-extrabold">(Read-Only)</span>
+                Email Address <span className="text-amber-500 text-[10px] font-extrabold">(Verified)</span>
               </label>
               <div className="relative flex items-center">
                 <input
@@ -243,11 +245,31 @@ export default function CitizenProfileForm({ onSuccess, isModal = false, isDark:
                   value={formData.email || ''}
                   readOnly
                   disabled
+                  placeholder="Not linked"
                   className={readOnlyInputClass}
                 />
                 <Lock className="w-4 h-4 text-amber-500 absolute right-3.5 pointer-events-none" />
               </div>
-              <p className="text-[10px] text-slate-400 font-medium">Verified email from user authentication table</p>
+              <p className="text-[10px] text-slate-400 font-medium">Verified email from user authentication</p>
+            </div>
+
+            {/* PHONE NUMBER - PROFILE & AUTH */}
+            <div className="space-y-1.5">
+              <label className={labelClass}>
+                <Phone className={`w-3.5 h-3.5 ${isDark ? 'text-emerald-400' : 'text-[#D4A537]'}`} />
+                Phone Number <span className="text-emerald-500 text-[10px] font-extrabold">(Auth / Contact)</span>
+              </label>
+              <div className="relative flex items-center">
+                <input
+                  type="tel"
+                  value={formData.phoneNumber || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, phoneNumber: e.target.value }))}
+                  placeholder="+91 9876543210"
+                  className={inputClass}
+                />
+                <Phone className="w-4 h-4 text-slate-400 absolute right-3.5 pointer-events-none" />
+              </div>
+              <p className="text-[10px] text-slate-400 font-medium">Verified phone in users & citizen_profiles tables</p>
             </div>
           </div>
         </div>

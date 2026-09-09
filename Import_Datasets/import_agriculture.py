@@ -2,8 +2,20 @@ import os
 import pandas as pd
 from sqlalchemy import create_engine, text
 
-# Database Connection URL (from .env)
-DB_URI = "postgresql://postgres:Harshatej9106@localhost:5432/civicsphere_db"
+from dotenv import load_dotenv
+
+# Load environment variables from .env
+load_dotenv(os.path.join(os.path.dirname(__file__), "..", ".env"))
+
+# Database Connection URL strictly retrieved from .env
+DB_URI = os.getenv("DATABASE_URL")
+if not DB_URI:
+    user = os.getenv("DB_USER")
+    password = os.getenv("DB_PASSWORD")
+    host = os.getenv("DB_HOST")
+    port = os.getenv("DB_PORT")
+    dbname = os.getenv("DB_NAME")
+    DB_URI = f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
 
 # Dataset File Path
 EXCEL_PATH = os.path.join("Datasets", "Agriculture.xlsx")
@@ -70,7 +82,7 @@ def import_agriculture_data():
     df_to_insert = df[[col for col in valid_columns if col in df.columns]]
 
     # 4. Connect to PostgreSQL Database
-    print(f"Connecting to PostgreSQL database 'civicsphere_db'...")
+    print("Connecting to PostgreSQL database...")
     engine = create_engine(DB_URI)
 
     # Create table if not existing & clear existing rows for a clean update
