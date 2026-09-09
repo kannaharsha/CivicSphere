@@ -6,21 +6,24 @@ import {
   browserLocalPersistence 
 } from 'firebase/auth';
 
-const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+// Client-side public Firebase identifiers used as fallback if environment variables are omitted during CI/CD deployment
+const defaultFirebaseConfig = {
+  apiKey: 'AIzaSyAHxXs2ZJuC_Edalorxth7n6IhAP-HznMk',
+  authDomain: 'civicsphere-ai-platform.firebaseapp.com',
+  projectId: 'civicsphere-ai-platform',
+  storageBucket: 'civicsphere-ai-platform.firebasestorage.app',
+  messagingSenderId: '484905252285',
+  appId: '1:484905252285:web:fc2c7c95b95f8766b58ed4',
 };
 
-if (!firebaseConfig.apiKey) {
-  console.error(
-    '[Firebase Configuration Missing]: VITE_FIREBASE_API_KEY is not defined in the environment. ' +
-    'If you deployed to Vercel/Netlify/GitHub Pages, please add your VITE_FIREBASE_* variables under your project Settings -> Environment Variables.'
-  );
-}
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || defaultFirebaseConfig.apiKey,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || defaultFirebaseConfig.authDomain,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || defaultFirebaseConfig.projectId,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || defaultFirebaseConfig.storageBucket,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || defaultFirebaseConfig.messagingSenderId,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || defaultFirebaseConfig.appId,
+};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
