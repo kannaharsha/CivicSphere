@@ -3,8 +3,10 @@ import { motion } from 'framer-motion'
 import {
   Lock, User, Mail, Calendar, Hash, Heart, Shield, Briefcase,
   GraduationCap, IndianRupee, MapPin, Building, Home,
-  Languages, Save, Cpu, Sparkles, Image as ImageIcon, Phone
+  Languages, Save, Cpu, Sparkles, Image as ImageIcon, Phone,
+  Upload, Trash2, Camera, Link as LinkIcon
 } from 'lucide-react'
+import { toast } from 'react-hot-toast'
 import { useAuth } from '../firebase/AuthProvider'
 import type { CitizenProfile } from '../services/userService'
 
@@ -115,6 +117,25 @@ export default function CitizenProfileForm({ onSuccess, isModal = false, isDark:
       dateOfBirth: dob,
       age: calculatedAge,
     }))
+  }
+
+  // Handle photo upload
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error('Profile image size should be under 2MB')
+        return
+      }
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        if (typeof reader.result === 'string') {
+          setFormData(prev => ({ ...prev, profilePhotoUrl: reader.result as string }))
+          toast.success('Photo selected! Click Save to apply.')
+        }
+      }
+      reader.readAsDataURL(file)
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -632,22 +653,68 @@ export default function CitizenProfileForm({ onSuccess, isModal = false, isDark:
               </select>
             </div>
 
-            {/* PROFILE PHOTO URL - READ ONLY */}
-            <div className="space-y-1.5 sm:col-span-2 lg:col-span-1">
+            {/* PROFILE PHOTO MANAGEMENT */}
+            <div className="space-y-2 sm:col-span-2 lg:col-span-1">
               <label className={labelClass}>
                 <ImageIcon className={`w-3.5 h-3.5 ${labelIconColor}`} />
-                Profile Photo URL <span className="text-amber-500 text-[10px] font-extrabold">(Read-Only)</span>
+                Profile Photo
               </label>
-              <div className="relative flex items-center">
-                <input
-                  type="text"
-                  value={formData.profilePhotoUrl || ''}
-                  readOnly
-                  disabled
-                  placeholder="Auto-synced from user account"
-                  className={readOnlyInputClass}
-                />
-                <Lock className="w-4 h-4 text-amber-500 absolute right-3.5 pointer-events-none" />
+              
+              <div className="flex items-center gap-3 p-2 rounded-2xl border bg-slate-50 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800">
+                {/* Photo Preview Frame */}
+                <div className="w-12 h-12 rounded-xl overflow-hidden bg-slate-200 dark:bg-slate-800 flex items-center justify-center shrink-0 border border-slate-300 dark:border-slate-700">
+                  {formData.profilePhotoUrl ? (
+                    <img
+                      src={formData.profilePhotoUrl}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLElement).style.display = 'none'
+                      }}
+                    />
+                  ) : (
+                    <User className="w-6 h-6 text-slate-400" />
+                  )}
+                </div>
+
+                {/* Upload & Action Buttons */}
+                <div className="flex-1 flex flex-col gap-1 min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <label className={`text-xs font-bold px-2.5 py-1 rounded-lg cursor-pointer transition-all flex items-center gap-1 ${
+                      isDark
+                        ? 'bg-[#00B87C] hover:bg-[#059669] text-white'
+                        : 'bg-[#D4A537] hover:bg-[#B48418] text-white'
+                    }`}>
+                      <Upload className="w-3 h-3" />
+                      <span>Upload</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handlePhotoUpload}
+                        className="hidden"
+                      />
+                    </label>
+
+                    {formData.profilePhotoUrl && (
+                      <button
+                        type="button"
+                        onClick={() => setFormData(prev => ({ ...prev, profilePhotoUrl: '' }))}
+                        className="p-1 rounded-lg text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+                        title="Remove Photo"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+                  
+                  <input
+                    type="text"
+                    value={formData.profilePhotoUrl || ''}
+                    onChange={(e) => setFormData(prev => ({ ...prev, profilePhotoUrl: e.target.value }))}
+                    placeholder="Or paste image URL"
+                    className="text-[11px] bg-transparent border-b border-slate-300 dark:border-slate-750 outline-none px-1 py-0.5 text-slate-700 dark:text-slate-300 truncate"
+                  />
+                </div>
               </div>
             </div>
           </div>

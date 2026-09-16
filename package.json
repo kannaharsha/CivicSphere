@@ -5,19 +5,25 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently -k -n \"CLIENT,SERVER\" -c \"cyan,emerald\" \"vite\" \"tsx watch server/index.ts\"",
+    "dev:all": "concurrently -k -n \"CLIENT,EXPRESS,FASTAPI\" -c \"cyan,emerald,magenta\" \"vite\" \"tsx watch server/index.ts\" \"python backend/app/main.py\"",
     "dev:client": "vite",
     "dev:server": "tsx watch server/index.ts",
+    "dev:civicassist": "python backend/app/main.py",
+    "backend:python": "python backend/app/main.py",
     "server": "tsx watch server/index.ts",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist -r https://github.com/kannaharsha/CivicSphere.git"
+    "deploy": "gh-pages -d dist -r https://github.com/kannaharsha/CivicSphere.git",
+    "db:import-schemes": "tsx Schmes_information/insert_agriculture_schemes.ts",
+    "db:import-agriculture": "tsx Schmes_information/insert_agriculture_schemes.ts"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.23",
     "@radix-ui/react-scroll-area": "^1.2.18",
     "@radix-ui/react-slot": "^1.3.3",
+    "@supabase/supabase-js": "^2.116.0",
     "@tailwindcss/vite": "^4.3.3",
     "axios": "^1.20.0",
     "class-variance-authority": "^0.7.1",

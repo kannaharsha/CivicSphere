@@ -56,6 +56,7 @@ h6 {
   0% {
     transform: translateX(0%);
   }
+
   100% {
     transform: translateX(-50%);
   }
@@ -199,27 +200,52 @@ h6 {
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-6px); }
-  40%, 80% { transform: translateX(6px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20%,
+  60% {
+    transform: translateX(-6px);
+  }
+
+  40%,
+  80% {
+    transform: translateX(6px);
+  }
 }
 
 @keyframes border-flow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 @keyframes light-beam {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(200%); }
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(200%);
+  }
 }
 
 /* =========================================
    Utility Classes
    ========================================= */
 .animate-shake {
-  animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+  animation: shake 0.4s cubic-bezier(.36, .07, .19, .97) both;
 }
 
 .animate-border-flow {
@@ -387,7 +413,8 @@ button:focus-visible {
 /* =========================================
    Glassmorphism & Earth-Tone Theme Cards
    ========================================= */
-.glass-card-light, .frosted-glass-cream {
+.glass-card-light,
+.frosted-glass-cream {
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
@@ -395,7 +422,8 @@ button:focus-visible {
   box-shadow: 0 12px 36px -6px rgba(23, 50, 77, 0.06), 0 4px 16px -2px rgba(0, 184, 124, 0.04);
 }
 
-.glass-card-dark, .frosted-glass-dark {
+.glass-card-dark,
+.frosted-glass-dark {
   background: rgba(15, 23, 42, 0.70);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
@@ -435,7 +463,8 @@ button:focus-visible {
 /* =========================================
    Background Mesh Variants — Strict Midnight Blue #08131F & Warm Cream #F9F7F2
    ========================================= */
-.bg-mesh-light, .bg-mesh-civic-light {
+.bg-mesh-light,
+.bg-mesh-civic-light {
   background-color: #F9F7F2;
   background-image:
     radial-gradient(at 10% 10%, rgba(221, 251, 242, 0.75) 0px, transparent 55%),
@@ -445,7 +474,8 @@ button:focus-visible {
     radial-gradient(at 85% 90%, rgba(0, 184, 124, 0.12) 0px, transparent 50%);
 }
 
-.bg-mesh-dark, .bg-mesh-civic-dark {
+.bg-mesh-dark,
+.bg-mesh-civic-dark {
   background-color: #08131F;
   background-image:
     radial-gradient(at 15% 15%, rgba(0, 184, 124, 0.18) 0px, transparent 55%),
@@ -457,12 +487,14 @@ button:focus-visible {
 .nav-pill-hover {
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
 .nav-pill-hover:hover {
   transform: translateY(-4px);
   background-color: #DDFBF2;
   color: #0F766E;
   box-shadow: 0 0 20px rgba(0, 184, 124, 0.25);
 }
+
 .nav-pill-hover:hover svg {
   transform: rotate(6deg) scale(1.1);
   color: #00B87C;
@@ -481,12 +513,15 @@ button:focus-visible {
     top: 0%;
     opacity: 0;
   }
+
   15% {
     opacity: 1;
   }
+
   85% {
     opacity: 1;
   }
+
   100% {
     top: 100%;
     opacity: 0;
@@ -501,9 +536,11 @@ button:focus-visible {
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
@@ -519,6 +556,7 @@ button:focus-visible {
   position: relative;
   overflow: hidden;
 }
+
 .relative-shine::after {
   content: '';
   position: absolute;
@@ -526,12 +564,10 @@ button:focus-visible {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: linear-gradient(
-    60deg,
-    transparent 30%,
-    rgba(255, 255, 255, 0.25) 50%,
-    transparent 70%
-  );
+  background: linear-gradient(60deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.25) 50%,
+      transparent 70%);
   transform: rotate(30deg);
   animation: light-beam 6s infinite;
 }

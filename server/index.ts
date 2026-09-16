@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
-import { initDb } from './db.js';
+import { initDb, pool } from './db.js';
 import authRoutes from './routes/authRoutes.js';
 import schemeRoutes from './routes/schemeRoutes.js';
 
@@ -29,9 +29,55 @@ initDb().catch(err => {
 app.use('/api/auth', authRoutes);
 app.use('/api/schemes', schemeRoutes);
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+// Health check with PostgreSQL connection status
+app.get('/api/health', async (req, res) => {
+  let dbStatus = 'disconnected';
+  let dbError = null;
+  let userCount = 0;
+  let schemeCount = 0;
+
+  try {
+    const dbRes = await pool.query('SELECT NOW() as current_time');
+    if (dbRes.rows.length > 0) {
+      dbStatus = 'connected';
+      const usersRes = await pool.query('SELECT COUNT(*) FROM users').catch(() => ({ rows: [{ count: 0 }] }));
+      const schemesRes = await pool.query('SELECT COUNT(*) FROM agriculture_schemes').catch(() => ({ rows: [{ count: 0 }] }));
+      userCount = parseInt(usersRes.rows[0].count, 10);
+      schemeCount = parseInt(schemesRes.rows[0].count, 10);
+    }
+  } catch (err: any) {
+    dbStatus = 'error';
+    dbError = err.message;
+  }
+
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    database: {
+      status: dbStatus,
+      users: userCount,
+      schemes: schemeCount,
+      error: dbError,
+    }
+  });
+});
+
+app.get('/api/db-health', async (req, res) => {
+  try {
+    const dbRes = await pool.query('SELECT NOW() as db_time, version() as pg_version');
+    res.json({
+      success: true,
+      status: 'connected',
+      dbTime: dbRes.rows[0].db_time,
+      pgVersion: dbRes.rows[0].pg_version,
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      status: 'disconnected',
+      error: err.message,
+    });
+  }
 });
 
 // Favicon handler

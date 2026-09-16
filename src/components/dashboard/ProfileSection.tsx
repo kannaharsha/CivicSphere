@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   User, Mail, Phone, Hash, Calendar, Heart, Shield, Briefcase, GraduationCap,
@@ -96,6 +96,14 @@ export default function ProfileSection({ isDark = false }: ProfileSectionProps) 
   const userFullName = profile?.fullName || user?.displayName || 'Citizen User'
   const isEmailVerified = user?.emailVerified ?? true
   const userPhone = profile?.phone || '+91 98765 43210'
+
+  const effectivePhotoUrl = (profile as any)?.profile_photo_url || profile?.profilePhotoUrl || (profile as any)?.photo_url || (profile as any)?.avatarUrl || user?.photoURL || ''
+  const [imgError, setImgError] = useState(false)
+
+  // Reset img error if photo changes
+  useEffect(() => {
+    setImgError(false)
+  }, [effectivePhotoUrl])
 
   // Format currency
   const formatIncome = (val?: number | null) => {
@@ -254,10 +262,11 @@ export default function ProfileSection({ isDark = false }: ProfileSectionProps) 
                         ? 'bg-gradient-to-tr from-[#00B87C] via-[#059669] to-[#00B87C]'
                         : 'bg-gradient-to-tr from-[#D4A537] via-[#F59E0B] to-[#D4A537]'
                     }`}>
-                      {profile?.profilePhotoUrl ? (
+                      {effectivePhotoUrl && !imgError ? (
                         <img
-                          src={profile.profilePhotoUrl}
+                          src={effectivePhotoUrl}
                           alt={userFullName}
+                          onError={() => setImgError(true)}
                           className="w-full h-full rounded-full object-cover"
                         />
                       ) : (

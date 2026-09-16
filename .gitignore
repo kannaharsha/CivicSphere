@@ -29,3 +29,15 @@ dist-ssr
 .env.production
 .env.*
 *.sql
+
+# Python & Vector DBs
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+chroma_db/
+*.sqlite3
+*.bin
+*.pickle
+*dataset_after_embeddings.json

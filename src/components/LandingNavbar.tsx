@@ -70,8 +70,8 @@ export const LandingNavbar: React.FC = () => {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.3 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 h-[80px] ${scrolled
-          ? 'bg-white/95 backdrop-blur-xl border-b border-gray-200/60 shadow-sm'
-          : 'bg-white/90 backdrop-blur-xl border-b border-gray-200/40'
+        ? 'bg-white/95 backdrop-blur-xl border-b border-gray-200/60 shadow-sm'
+        : 'bg-white/90 backdrop-blur-xl border-b border-gray-200/40'
         }`}
     >
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 h-full">
@@ -126,8 +126,8 @@ export const LandingNavbar: React.FC = () => {
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.href)}
                   className={`group relative text-sm font-semibold whitespace-nowrap transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-sm py-1 ${isActive
-                      ? 'text-[#16A34A] font-bold'
-                      : 'text-gray-600 hover:text-[#16A34A] hover:-translate-y-0.5'
+                    ? 'text-[#16A34A] font-bold'
+                    : 'text-gray-600 hover:text-[#16A34A] hover:-translate-y-0.5'
                     }`}
                 >
                   {item.label}
@@ -183,8 +183,8 @@ export const LandingNavbar: React.FC = () => {
                           setLangDropdownOpen(false);
                         }}
                         className={`w-full text-left px-3 py-2 text-xs font-semibold rounded-xl flex items-center justify-between transition-colors whitespace-nowrap ${selectedLang === lang.code
-                            ? 'bg-emerald-50 text-[#16A34A]'
-                            : 'text-gray-700 hover:bg-gray-50'
+                          ? 'bg-emerald-50 text-[#16A34A]'
+                          : 'text-gray-700 hover:bg-gray-50'
                           }`}
                       >
                         <span className="flex items-center gap-2">
@@ -261,8 +261,8 @@ export const LandingNavbar: React.FC = () => {
                       href={item.href}
                       onClick={(e) => handleNavClick(e, item.href)}
                       className={`px-4 py-3 text-base font-semibold rounded-xl transition-all ${isActive
-                          ? 'bg-emerald-50 text-[#16A34A]'
-                          : 'text-gray-700 hover:bg-gray-50'
+                        ? 'bg-emerald-50 text-[#16A34A]'
+                        : 'text-gray-700 hover:bg-gray-50'
                         }`}
                     >
                       {item.label}
@@ -282,8 +282,8 @@ export const LandingNavbar: React.FC = () => {
                       key={lang.code}
                       onClick={() => setSelectedLang(lang.code)}
                       className={`py-2 px-3 text-xs font-semibold rounded-xl border transition-all flex items-center justify-center gap-1.5 ${selectedLang === lang.code
-                          ? 'bg-emerald-50 text-[#16A34A] border-emerald-300'
-                          : 'bg-gray-50 text-gray-700 border-gray-200'
+                        ? 'bg-emerald-50 text-[#16A34A] border-emerald-300'
+                        : 'bg-gray-50 text-gray-700 border-gray-200'
                         }`}
                     >
                       <span>{lang.flag}</span>

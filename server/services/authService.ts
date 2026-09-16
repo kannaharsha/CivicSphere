@@ -1,5 +1,11 @@
 import axios from 'axios';
 import { pool } from '../db.js';
+import {
+  syncUserToSupabase,
+  syncCitizenProfileToSupabase,
+  fetchCitizenProfileFromSupabase,
+  fetchUserFromSupabase,
+} from '../supabase.js';
 
 export interface RegisterInput {
   fullName: string;
@@ -164,6 +170,17 @@ export async function registerUserService({ fullName, email, password }: Registe
     };
   }
 
+  // Mirror insert/upsert to Supabase
+  await syncUserToSupabase({
+    firebase_uid: userRecord.firebase_uid,
+    full_name: userRecord.full_name,
+    email: userRecord.email,
+    auth_provider: userRecord.auth_provider,
+    email_verified: userRecord.email_verified,
+    is_active: userRecord.is_active,
+    created_at: userRecord.created_at,
+  });
+
   return {
     success: true,
     message: 'Account created successfully. Please verify your email.',
@@ -326,6 +343,20 @@ export async function verifyAndSyncUserService({ email, password }: LoginSyncInp
     };
   }
 
+  // Mirror insert / update to Supabase
+  if (syncedRecord) {
+    await syncUserToSupabase({
+      firebase_uid: syncedRecord.firebase_uid,
+      full_name: syncedRecord.full_name,
+      email: syncedRecord.email,
+      auth_provider: syncedRecord.auth_provider,
+      email_verified: syncedRecord.email_verified,
+      photo_url: photoUrl,
+      phone_number: phoneNumber,
+      is_active: syncedRecord.is_active,
+    });
+  }
+
   return {
     success: true,
     verified: true,
@@ -461,6 +492,20 @@ export async function googleSyncUserService({
       is_active: true,
       created_at: new Date().toISOString(),
     };
+  }
+
+  // Mirror insert / update to Supabase
+  if (syncedRecord) {
+    await syncUserToSupabase({
+      firebase_uid: syncedRecord.firebase_uid,
+      full_name: syncedRecord.full_name,
+      email: syncedRecord.email,
+      auth_provider: syncedRecord.auth_provider,
+      email_verified: syncedRecord.email_verified,
+      photo_url: photoUrl,
+      phone_number: phoneNumber,
+      is_active: syncedRecord.is_active,
+    });
   }
 
   return {
@@ -603,6 +648,19 @@ export async function phoneSyncUserService({
       is_active: true,
       created_at: new Date().toISOString(),
     };
+  }
+
+  // Mirror insert / update to Supabase
+  if (syncedRecord) {
+    await syncUserToSupabase({
+      firebase_uid: syncedRecord.firebase_uid,
+      full_name: syncedRecord.full_name,
+      email: syncedRecord.email,
+      phone_number: normalizedPhone,
+      auth_provider: syncedRecord.auth_provider,
+      email_verified: syncedRecord.email_verified,
+      is_active: syncedRecord.is_active,
+    });
   }
 
   return {
@@ -1114,6 +1172,45 @@ export async function saveCitizenProfileService(data: SaveCitizenProfileInput) {
     ).catch(err => console.warn('Update users profile_completed flag warning:', err.message));
 
     console.log('[PostgreSQL] Saved citizen profile record successfully:', savedRow?.profile_id, savedRow?.email);
+
+    // Mirror citizen profile insert/update to Supabase
+    const profilePayload = savedRow || {
+      profile_id: profileId,
+      firebase_uid: data.firebase_uid,
+      email: normalizedEmail,
+      full_name: fullName,
+      phone_number: phoneNumber,
+      date_of_birth: data.date_of_birth || null,
+      age: data.age || null,
+      gender: data.gender || null,
+      marital_status: data.marital_status || null,
+      caste_category: data.caste_category || null,
+      occupation: data.occupation || null,
+      employment_status: data.employment_status || null,
+      education_qualification: data.education_qualification || null,
+      annual_family_income: data.annual_family_income || null,
+      state: data.state || null,
+      district: data.district || null,
+      mandal: data.mandal || null,
+      village_city: data.village_city || null,
+      residence_type: data.residence_type || null,
+      pincode: data.pincode || null,
+      disability_percentage: data.disability_percentage || 0,
+      preferred_language: data.preferred_language || 'English',
+      profile_photo_url: data.profile_photo_url || null,
+      profile_completed: true,
+      updated_at: new Date().toISOString(),
+    };
+    await syncCitizenProfileToSupabase(profilePayload);
+
+    // Also update users table in Supabase
+    await syncUserToSupabase({
+      firebase_uid: data.firebase_uid,
+      full_name: fullName,
+      email: normalizedEmail,
+      phone_number: phoneNumber,
+      profile_completed: true,
+    });
 
     return {
       success: true,

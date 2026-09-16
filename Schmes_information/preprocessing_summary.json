@@ -1,0 +1,36 @@
+{
+  "pipeline": "Phase 1: Steps 4, 5 & 6 (Intent Removal + Normalization + Metadata)",
+  "generated_at": "2026-09-15 23:25:21",
+  "total_records_processed": 860,
+  "step4_file": "dataset_after_intent_removal.json",
+  "step5_file": "dataset_after_normalization.json",
+  "step6_file": "dataset_after_metadata.json",
+  "unique_sectors_identified": 10,
+  "unique_ministries_identified": 30,
+  "unique_states_covered": 32,
+  "total_metadata_tags_generated": 9086,
+  "avg_tags_per_scheme": 10.6,
+  "execution_time_seconds": 16.67,
+  "sample_enriched_scheme": {
+    "scheme_id": "AGRI1861",
+    "scheme_name": "Skilled Youth Startup Scheme",
+    "sector": "Credit, Subsidy & Financial Assistance",
+    "sub_sector": "Horticulture & High-Value Crops, Animal Husbandry, Dairy & Fisheries",
+    "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+    "scheme_level": "State Government Scheme",
+    "application_mode": "Hybrid / CSC / Online",
+    "crop_tags": [
+      "Horticulture & Fruits"
+    ],
+    "farmer_tags": [
+      "SC / ST Farmers",
+      "Organic Farmers",
+      "Livestock & Dairy Keepers"
+    ],
+    "benefit_tags": [
+      "Financial Subsidy",
+      "Low-Interest Credit / Loan",
+      "Free Training & Skill Development"
+    ]
+  }
+}

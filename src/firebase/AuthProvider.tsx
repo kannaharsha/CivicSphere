@@ -83,7 +83,7 @@ function mapRowToCitizenProfile(row: any, firebaseUser?: FirebaseUser | null): C
     pincode: row.pincode || '',
     disabilityPercentage: row.disability_percentage !== undefined && row.disability_percentage !== null ? Number(row.disability_percentage) : 0,
     preferredLanguage: row.preferred_language || 'English',
-    profilePhotoUrl: row.profile_photo_url || firebaseUser?.photoURL || '',
+    profilePhotoUrl: row.profile_photo_url || row.photo_url || row.profilePhotoUrl || firebaseUser?.photoURL || '',
     profileCompleted: Boolean(row.profile_completed),
   };
 }

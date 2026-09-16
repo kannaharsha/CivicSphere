@@ -13,6 +13,7 @@ import CitizenProfileForm from '../components/CitizenProfileForm'
 import TopHeroSection from '../components/dashboard/TopHeroSection'
 import ProfileSection from '../components/dashboard/ProfileSection'
 import ExploreSchemesSection from '../components/dashboard/ExploreSchemesSection'
+import AIAssistantWidget from '../components/dashboard/AIAssistantWidget'
 
 interface NavItem {
   label: string;
@@ -39,8 +40,13 @@ export default function DashboardPage() {
   const navigate = useNavigate()
   const mainRef = useRef<HTMLDivElement>(null)
 
-  const photoUrl = profile?.profilePhotoUrl || profile?.avatarUrl || user?.photoURL || ''
+  const photoUrl = (profile as any)?.profile_photo_url || profile?.profilePhotoUrl || (profile as any)?.photo_url || (profile as any)?.avatarUrl || user?.photoURL || ''
   const userInitial = (profile?.fullName || user?.displayName || 'Harsha').charAt(0).toUpperCase()
+  const [imgError, setImgError] = useState(false)
+
+  useEffect(() => {
+    setImgError(false)
+  }, [photoUrl])
 
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
   const [activeTab, setActiveTab] = useState('home')
@@ -230,11 +236,10 @@ export default function DashboardPage() {
                     {active && (
                       <motion.div
                         layoutId="sidebarActivePill"
-                        className={`absolute inset-0 rounded-2xl shadow-md z-0 ${
-                          isDark
+                        className={`absolute inset-0 rounded-2xl shadow-md z-0 ${isDark
                             ? 'bg-gradient-to-r from-[#00B87C] to-[#0F766E] shadow-[#00B87C]/30'
                             : 'bg-gradient-to-r from-[#D4A537] via-[#F59E0B] to-[#D4A537] shadow-[#F59E0B]/30'
-                        }`}
+                          }`}
                         transition={{ type: 'spring', stiffness: 400, damping: 32 }}
                       />
                     )}
@@ -285,14 +290,18 @@ export default function DashboardPage() {
                   className="relative shrink-0 cursor-pointer"
                   title={`${profile?.fullName || 'Harsha'} (Citizen ID: ${profile?.profileId || (profile as any)?.citizenId || 'Civs1001'}) - Click to View Profile`}
                 >
-                  <div className={`w-9 h-9 rounded-full p-[2px] shadow-sm flex items-center justify-center ${
-                    isDark
+                  <div className={`w-9 h-9 rounded-full p-[2px] shadow-sm flex items-center justify-center ${isDark
                       ? 'bg-gradient-to-tr from-[#00B87C] via-[#059669] to-[#00B87C]'
                       : 'bg-gradient-to-tr from-[#D4A537] via-[#F59E0B] to-[#D4A537]'
-                  }`}>
+                    }`}>
                     <div className="w-full h-full rounded-full bg-[#17324D] overflow-hidden flex items-center justify-center font-bold text-xs text-white">
-                      {photoUrl ? (
-                        <img src={photoUrl} alt="User Avatar" className="w-full h-full object-cover" />
+                      {photoUrl && !imgError ? (
+                        <img
+                          src={photoUrl}
+                          alt="User Avatar"
+                          onError={() => setImgError(true)}
+                          className="w-full h-full object-cover"
+                        />
                       ) : (
                         <span>{userInitial}</span>
                       )}
@@ -480,20 +489,24 @@ export default function DashboardPage() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setActiveTab('profile')}
-                className={`relative w-9 h-9 rounded-2xl p-[2px] border transition-all cursor-pointer shadow-xs ${
-                  activeTab === 'profile'
+                className={`relative w-9 h-9 rounded-2xl p-[2px] border transition-all cursor-pointer shadow-xs ${activeTab === 'profile'
                     ? isDark
                       ? 'ring-2 ring-[#00B87C] border-[#00B87C]'
                       : 'ring-2 ring-[#D4A537] border-[#D4A537]'
                     : isDark
                       ? 'bg-slate-900 border-slate-800 hover:border-[#00B87C]/60'
                       : 'bg-[#EEDCAE] border-[#D4A537]/50 hover:border-[#D4A537]'
-                }`}
+                  }`}
                 title="Go to Citizen Profile"
               >
                 <div className="w-full h-full rounded-[13px] bg-[#17324D] overflow-hidden flex items-center justify-center font-black text-xs text-white">
-                  {photoUrl ? (
-                    <img src={photoUrl} alt="User Profile Photo" className="w-full h-full object-cover" />
+                  {photoUrl && !imgError ? (
+                    <img
+                      src={photoUrl}
+                      alt="User Profile Photo"
+                      onError={() => setImgError(true)}
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
                     <span>{userInitial}</span>
                   )}
@@ -571,10 +584,7 @@ export default function DashboardPage() {
                   transition={{ duration: 0.35, ease: [0.25, 1, 0.5, 1] }}
                   className="space-y-6"
                 >
-                  <div>
-                    <h2 className="text-2xl font-black text-[#17324D] dark:text-white">AI Assistant</h2>
-                    <p className="text-xs text-[#0F766E] dark:text-[#E7C66B] font-black">Chatbot powered by RAG</p>
-                  </div>
+                  <AIAssistantWidget />
                 </motion.div>
               )}
 

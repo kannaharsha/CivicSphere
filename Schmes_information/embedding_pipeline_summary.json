@@ -1,0 +1,35 @@
+{
+  "pipeline": "Phase 1: Steps 7, 8 & 9 (Text Chunking + Embedding Generation + Vector Storage)",
+  "generated_at": "2026-09-15 23:57:18",
+  "total_schemes_processed": 860,
+  "total_semantic_chunks_generated": 10089,
+  "total_embedding_vectors_generated": 10089,
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "embedding_dimension": 384,
+  "avg_chunks_per_scheme": 11.7,
+  "chunk_type_breakdown": {
+    "description": 1315,
+    "eligibility": 1263,
+    "benefits": 1432,
+    "documents": 961,
+    "application_process": 1669,
+    "faq": 3449
+  },
+  "execution_time_seconds": 412.55,
+  "sample_chunk": {
+    "chunk_id": "AGRI1861_chk_0",
+    "scheme_id": "AGRI1861",
+    "chunk_type": "description",
+    "chunk_length_chars": 339,
+    "chunk_text_preview": "Skilled Youth Startup Scheme (Description): The issue of employment creation has been a matter of great concern since long in Sikkim. The Government of Sikkim having pro-people attitude and the vision...",
+    "embedding_id": "AGRI1861_chk_0_emb",
+    "embedding_dimension": 384,
+    "sample_vector_head": [
+      -0.01671070232987404,
+      0.020071057602763176,
+      -0.00308777391910553,
+      -0.03659958392381668,
+      0.01024350430816412
+    ]
+  }
+}

@@ -1,21 +1,31 @@
 import axios from 'axios';
 
 export interface AgricultureScheme {
-  id: number;
+  id: string | number;
   scheme_id: string;
   scheme_name: string;
   category: string;
-  ministry_department: string;
-  target_beneficiary: string;
+  state?: string;
+  ministry_department?: string;
+  target_beneficiary?: string;
   description: string;
   benefits: string;
   eligibility: string;
   documents_required: string;
   application_mode: string;
   application_process: string;
-  official_scheme_url: string;
-  official_pdf_url: string;
-  status: string;
+  official_urls?: string[];
+  registration_links?: string[];
+  official_scheme_url?: string;
+  official_pdf_url?: string;
+  status?: string;
+  raw_eligibility?: any;
+  raw_benefits?: any;
+  raw_documents?: any;
+  raw_application_process?: any;
+  raw_faq?: any;
+  raw_state?: string;    // original DB value e.g. "['Kerala', 'Karnataka']"
+  tags?: string[];
   created_at?: string;
   updated_at?: string;
 }
