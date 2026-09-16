@@ -95,7 +95,7 @@ export default function ProfileSection({ isDark = false }: ProfileSectionProps) 
   const userEmail = profile?.email || user?.email || 'citizen@civicsphere.com'
   const userFullName = profile?.fullName || user?.displayName || 'Citizen User'
   const isEmailVerified = user?.emailVerified ?? true
-  const userPhone = profile?.phone || '+91 98765 43210'
+  const userPhone = profile?.phoneNumber || (profile as any)?.phone || user?.phoneNumber || '+91 98765 43210'
 
   const effectivePhotoUrl = (profile as any)?.profile_photo_url || profile?.profilePhotoUrl || (profile as any)?.photo_url || (profile as any)?.avatarUrl || user?.photoURL || ''
   const [imgError, setImgError] = useState(false)

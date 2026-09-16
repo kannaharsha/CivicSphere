@@ -4,7 +4,7 @@ import {
   Lock, User, Mail, Calendar, Hash, Heart, Shield, Briefcase,
   GraduationCap, IndianRupee, MapPin, Building, Home,
   Languages, Save, Cpu, Sparkles, Image as ImageIcon, Phone,
-  Upload, Trash2, Camera, Link as LinkIcon
+  Upload, Trash2
 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { useAuth } from '../firebase/AuthProvider'
@@ -626,7 +626,7 @@ export default function CitizenProfileForm({ onSuccess, isModal = false, isDark:
               </label>
               <input
                 type="number"
-                value={formData.disabilityPercentage !== undefined ? formData.disabilityPercentage : 0}
+                value={formData.disabilityPercentage ?? 0}
                 onChange={e => setFormData({ ...formData, disabilityPercentage: parseFloat(e.target.value) || 0 })}
                 placeholder="0"
                 min="0"

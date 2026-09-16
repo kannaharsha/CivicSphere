@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Sparkles, Send, Mic, MicOff, Bot, User, RefreshCw, Copy, Check,
-  BookOpen, ChevronRight, HelpCircle, ShieldCheck, ArrowUpRight,
-  ExternalLink, FileText, CheckCircle2, AlertCircle, Languages
+  ExternalLink, Languages, ShieldCheck
 } from 'lucide-react'
 import { useAuth } from '../../firebase/AuthProvider'
 import { useTheme } from '../../context/ThemeContext'
