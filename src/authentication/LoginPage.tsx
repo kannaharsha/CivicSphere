@@ -10,6 +10,7 @@ import AuthNavbar from './AuthNavbar'
 import AuthParticles from './AuthParticles'
 import { useAuth } from '../firebase/useAuth'
 import { useTheme } from '../context/ThemeContext'
+import { supabase } from '../lib/supabase'
 
 export default function LoginPage() {
   const { theme } = useTheme()
@@ -108,20 +109,48 @@ export default function LoginPage() {
     const fullPhone = `+91${cleanDigits}`
     setPhoneLoading(true)
     try {
-      // 1. Verify 10-digit phone number (except +91) exists in PostgreSQL database (users & citizen_profiles)
+      // 1. Verify 10-digit phone number exists in database (via API or direct Supabase client)
       const apiBase = import.meta.env.VITE_API_URL || (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? 'http://localhost:5000' : '')
-      const checkRes = await axios.post(`${apiBase}/api/auth/check-phone`, { phoneNumber: cleanDigits })
-      if (!checkRes.data || !checkRes.data.registered) {
-        setErrors({
-          phone: checkRes.data?.message || `Mobile number (+91 ${cleanDigits}) is not registered in our database. Phone sign-in is not permitted for unregistered numbers. Please sign up or login with your email.`,
-        })
-        setPhoneLoading(false)
-        return
+      let isVerifiedRegistered = false
+      let foundEmail = ''
+
+      if (apiBase) {
+        try {
+          const checkRes = await axios.post(`${apiBase}/api/auth/check-phone`, { phoneNumber: cleanDigits })
+          if (checkRes.data && checkRes.data.registered) {
+            isVerifiedRegistered = true
+            foundEmail = checkRes.data.matchedEmail || ''
+          } else if (checkRes.data && checkRes.data.registered === false) {
+            setErrors({
+              phone: checkRes.data?.message || `Mobile number (+91 ${cleanDigits}) is not registered in our database. Phone sign-in is not permitted for unregistered numbers. Please sign up or login with your email.`,
+            })
+            setPhoneLoading(false)
+            return
+          }
+        } catch (apiErr: any) {
+          console.warn('Backend check-phone notice:', apiErr?.message || apiErr)
+        }
       }
 
-      // Store matched email if associated with this phone number
-      if (checkRes.data.matchedEmail) {
-        setMatchedEmail(checkRes.data.matchedEmail)
+      // Check directly against Supabase if API endpoint was unreachable or returned 405/404
+      if (!isVerifiedRegistered && supabase) {
+        try {
+          const { data } = await supabase
+            .from('users')
+            .select('email, phone_number')
+            .or(`phone_number.eq.${cleanDigits},phone_number.eq.+91${cleanDigits}`)
+            .limit(1)
+          if (data && data.length > 0) {
+            isVerifiedRegistered = true
+            foundEmail = data[0].email || ''
+          }
+        } catch (sbErr) {
+          console.warn('Supabase check-phone notice:', sbErr)
+        }
+      }
+
+      if (foundEmail) {
+        setMatchedEmail(foundEmail)
       }
 
       // 2. Clear old reCAPTCHA and send Firebase OTP to +91XXXXXXXXXX

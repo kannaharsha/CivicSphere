@@ -10,6 +10,8 @@ import {
 import AuthNavbar from './AuthNavbar'
 import AuthParticles from './AuthParticles'
 import { useTheme } from '../context/ThemeContext'
+import { useAuth } from '../firebase/useAuth'
+import { supabase } from '../lib/supabase'
 
 function getPasswordStrength(pw: string) {
   let score = 0
@@ -25,6 +27,7 @@ const strengthColors = ['', 'bg-red-500', 'bg-orange-500', 'bg-amber-500', 'bg-b
 
 export default function SignupPage() {
   const { theme } = useTheme()
+  const { signup } = useAuth()
   const [loading, setLoading] = useState(false)
   const [showPass, setShowPass] = useState(false)
   const [showConfirmPass, setShowConfirmPass] = useState(false)
@@ -93,6 +96,25 @@ export default function SignupPage() {
       if (status === 409 || msg.toLowerCase().includes('already exists')) {
         toast.error('User already exists. Redirecting to login...')
         setTimeout(() => navigate('/login'), 1500)
+      } else if (status === 405 || status === 404 || !status || err.code === 'ERR_NETWORK') {
+        // Fallback to client-side Firebase signup if backend is static/unreachable
+        try {
+          await signup(form.email.trim(), form.password, form.name.trim())
+          if (supabase && form.phone.trim()) {
+            try {
+              await supabase
+                .from('users')
+                .update({ phone_number: form.phone.trim() })
+                .eq('email', form.email.trim().toLowerCase())
+            } catch {
+              // ignore
+            }
+          }
+          setSuccessEmail(form.email.trim())
+          setSignupSuccess(true)
+        } catch (fbErr: any) {
+          setFormError(fbErr.message || 'Failed to create account.')
+        }
       } else {
         setFormError(msg)
       }

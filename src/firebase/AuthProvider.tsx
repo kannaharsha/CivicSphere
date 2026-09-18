@@ -11,6 +11,7 @@ import {
 import { toast } from 'react-hot-toast';
 import { auth, googleProvider } from './firebase';
 import type { CitizenProfile } from '../services/userService';
+import { supabase } from '../lib/supabase';
 
 // Modular snippets imports
 import {
@@ -271,34 +272,73 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Email + Password Login using modular snippet auth_signin_password
   const login = async (email: string, pass: string) => {
     try {
-      const syncRes = await axios.post(`${API_BASE}/api/auth/verify-sync`, {
-        email: email.trim(),
-        password: pass,
-      });
+      const normalizedEmail = email.trim();
 
-      if (!syncRes.data || !syncRes.data.verified) {
-        toast.error(syncRes.data?.message || 'Please verify your email before logging in.');
-        const err = new Error(syncRes.data?.message || 'Please verify your email before logging in.');
-        (err as any).code = 'auth/email-not-verified';
-        throw err;
+      // 1. Direct authentication with Firebase Client SDK
+      const userCred = await signInUserWithEmailAndPassword(normalizedEmail, pass, auth);
+      const fbUser = userCred.user;
+
+      // 2. Enforce email verification
+      if (!fbUser.emailVerified) {
+        // Try reload in case user just verified in another tab/window
+        try {
+          await fbUser.reload();
+        } catch {
+          // ignore reload error
+        }
+
+        if (!auth.currentUser?.emailVerified) {
+          await signOut(auth);
+          const err = new Error('Please verify your email before logging in. Check your inbox for the verification link.');
+          (err as any).code = 'auth/email-not-verified';
+          toast.error(err.message);
+          throw err;
+        }
       }
 
-      await signInUserWithEmailAndPassword(email.trim(), pass, auth);
+      // 3. Asynchronously sync to backend/PostgreSQL (non-blocking)
+      if (API_BASE) {
+        axios.post(`${API_BASE}/api/auth/verify-sync`, {
+          email: normalizedEmail,
+          password: pass,
+        }).catch((syncErr) => {
+          console.warn('Backend verify-sync notice (non-blocking):', syncErr?.message || syncErr);
+        });
+      }
+
+      // 4. Update Supabase users table directly if Supabase client is connected
+      if (supabase && fbUser) {
+        try {
+          await supabase
+            .from('users')
+            .update({ email_verified: true })
+            .eq('firebase_uid', fbUser.uid);
+        } catch (sbErr) {
+          console.warn('Supabase sync notice:', sbErr);
+        }
+      }
+
       toast.success('Logged in successfully!');
     } catch (err: any) {
-      const serverMsg = err.response?.data?.message;
-      if (serverMsg) {
-        toast.error(serverMsg);
-        throw new Error(serverMsg);
-      }
       if (err.code === 'auth/email-not-verified') throw err;
       let msg = 'Login failed. Please check your credentials.';
-      if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') msg = 'Incorrect email or password.';
-      if (err.code === 'auth/user-not-found') msg = 'No account found. Please sign up first.';
-      if (err.code === 'auth/invalid-email') msg = 'Invalid email address.';
-      if (err.code === 'auth/too-many-requests') msg = 'Too many attempts. Try again later.';
+      if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential' || err.code === 'auth/invalid-login-credentials') {
+        msg = 'Incorrect email or password.';
+      } else if (err.code === 'auth/user-not-found') {
+        msg = 'No account found with this email. Please sign up first.';
+      } else if (err.code === 'auth/invalid-email') {
+        msg = 'Invalid email address format.';
+      } else if (err.code === 'auth/too-many-requests') {
+        msg = 'Too many failed attempts. Please try again later.';
+      } else if (err.code === 'auth/user-disabled') {
+        msg = 'This account has been disabled.';
+      } else if (err.code === 'auth/network-request-failed') {
+        msg = 'Network connection error. Please check your internet connection.';
+      } else if (err.message && !err.message.includes('405')) {
+        msg = err.message;
+      }
       toast.error(msg);
-      throw err;
+      throw new Error(msg);
     }
   };
 
@@ -358,15 +398,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (u) {
         const providers = u.providerData.map(p => p.providerId).join(',') || 'google.com';
-        await axios.post(`${API_BASE}/api/auth/google-sync`, {
-          firebaseUid: u.uid,
-          fullName: u.displayName || 'Google User',
-          email: u.email || '',
-          authProvider: providers,
-          emailVerified: u.emailVerified,
-          photoUrl: u.photoURL || null,
-          phoneNumber: u.phoneNumber || null,
-        });
+        if (API_BASE) {
+          try {
+            await axios.post(`${API_BASE}/api/auth/google-sync`, {
+              firebaseUid: u.uid,
+              fullName: u.displayName || 'Google User',
+              email: u.email || '',
+              authProvider: providers,
+              emailVerified: u.emailVerified,
+              photoUrl: u.photoURL || null,
+              phoneNumber: u.phoneNumber || null,
+            });
+          } catch (syncErr) {
+            console.warn('Backend Google sync notice (non-blocking):', syncErr);
+          }
+        }
+
+        if (supabase) {
+          try {
+            await supabase
+              .from('users')
+              .upsert({
+                firebase_uid: u.uid,
+                full_name: u.displayName || 'Google User',
+                email: u.email || '',
+                auth_provider: providers,
+                email_verified: u.emailVerified,
+                photo_url: u.photoURL || null,
+                phone_number: u.phoneNumber || null,
+              }, { onConflict: 'firebase_uid' });
+          } catch (sbErr) {
+            console.warn('Supabase Google sync notice:', sbErr);
+          }
+        }
       }
 
       toast.success('Signed in with Google!');
