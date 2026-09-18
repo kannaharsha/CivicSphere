@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BellOff, CheckCircle2, RotateCcw } from 'lucide-react';
+import { BellOff, RotateCcw } from 'lucide-react';
 
 interface EmptyNotificationStateProps {
   isDark?: boolean;

@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Calendar, Clock, Sparkles, History } from 'lucide-react';
 import type { SchemeNotification, TimelineGroup } from './notificationTypes';
 import { NotificationCard } from './NotificationCard';

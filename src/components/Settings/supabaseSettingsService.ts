@@ -1,4 +1,3 @@
-import { supabase } from '../../lib/supabase';
 import type { UserSettings } from './settingsTypes';
 import { DEFAULT_USER_SETTINGS } from './settingsTypes';
 

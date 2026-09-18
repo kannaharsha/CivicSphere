@@ -7,7 +7,7 @@
  */
 
 import { supabase } from '../../lib/supabase';
-import type { SchemeNotification, NotificationType, PriorityLevel, TimelineGroup } from './notificationTypes';
+import type { SchemeNotification, TimelineGroup } from './notificationTypes';
 
 const READ_STORAGE_KEY = 'civic_read_notifications';
 

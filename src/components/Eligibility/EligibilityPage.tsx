@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import {
-  RefreshCw, AlertCircle, Sparkles, ShieldCheck,
-  TrendingUp, Database, Award
+  RefreshCw, AlertCircle, Sparkles, ShieldCheck, Award
 } from 'lucide-react';
 import { useAuth } from '../../firebase/AuthProvider';
 import { useTheme } from '../../context/ThemeContext';

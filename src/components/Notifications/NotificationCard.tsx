@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import {
-  Bell, Flame, AlertTriangle, Clock, Sparkles,
+  Flame, AlertTriangle, Clock, Sparkles,
   CreditCard, FileText, Megaphone, RotateCcw,
   ChevronRight, ShieldCheck
 } from 'lucide-react';
