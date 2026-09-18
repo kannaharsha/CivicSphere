@@ -14,6 +14,10 @@ import TopHeroSection from '../components/dashboard/TopHeroSection'
 import ProfileSection from '../components/dashboard/ProfileSection'
 import ExploreSchemesSection from '../components/dashboard/ExploreSchemesSection'
 import AIAssistantWidget from '../components/dashboard/AIAssistantWidget'
+import EligibilityPage from '../components/Eligibility/EligibilityPage'
+import { MyDocumentsPage } from '../components/Documents/MyDocumentsPage'
+import { NotificationsPage } from '../components/Notifications/NotificationsPage'
+import { SettingsPage } from '../components/Settings/SettingsPage'
 
 interface NavItem {
   label: string;
@@ -567,10 +571,7 @@ export default function DashboardPage() {
                   transition={{ duration: 0.35, ease: [0.25, 1, 0.5, 1] }}
                   className="space-y-6"
                 >
-                  <div>
-                    <h2 className="text-2xl font-black text-[#17324D] dark:text-white">Check Eligibility</h2>
-                    <p className="text-xs text-[#0F766E] dark:text-[#E7C66B] font-black">Eligibility engine</p>
-                  </div>
+                  <EligibilityPage onNavigateProfile={() => setActiveTab('profile')} />
                 </motion.div>
               )}
 
@@ -598,10 +599,7 @@ export default function DashboardPage() {
                   transition={{ duration: 0.35, ease: [0.25, 1, 0.5, 1] }}
                   className="space-y-6"
                 >
-                  <div>
-                    <h2 className="text-2xl font-black text-[#17324D] dark:text-white">My Documents</h2>
-                    <p className="text-xs text-[#0F766E] dark:text-[#E7C66B] font-black">Document explanations</p>
-                  </div>
+                  <MyDocumentsPage isDark={isDark} />
                 </motion.div>
               )}
 
@@ -615,10 +613,7 @@ export default function DashboardPage() {
                   transition={{ duration: 0.35, ease: [0.25, 1, 0.5, 1] }}
                   className="space-y-6"
                 >
-                  <div>
-                    <h2 className="text-2xl font-black text-[#17324D] dark:text-white">Notifications</h2>
-                    <p className="text-xs text-[#0F766E] dark:text-[#E7C66B] font-black">Scheme alerts</p>
-                  </div>
+                  <NotificationsPage isDark={isDark} />
                 </motion.div>
               )}
 
@@ -646,10 +641,7 @@ export default function DashboardPage() {
                   transition={{ duration: 0.35, ease: [0.25, 1, 0.5, 1] }}
                   className="space-y-6"
                 >
-                  <div>
-                    <h2 className="text-2xl font-black text-[#17324D] dark:text-white">Settings</h2>
-                    <p className="text-xs text-[#0F766E] dark:text-[#E7C66B] font-black">Language / preferences</p>
-                  </div>
+                  <SettingsPage isDark={isDark} />
                 </motion.div>
               )}
             </AnimatePresence>

@@ -1,0 +1,2501 @@
+{
+  "phase": "Phase 3 — Retrieval (Hybrid RAG Pipeline)",
+  "timestamp": "2026-09-18T08:23:08.819390+00:00",
+  "original_query": "I belong to the SC category and my annual income is ₹1.8 lakh. Show schemes I qualify for",
+  "clean_query": "I belong to the SC category and my annual income is ₹1.8 lakh. Show schemes I qualify for",
+  "structured_intent": {
+    "intent": "FAQ",
+    "scheme_name": null,
+    "scheme_id": null,
+    "scheme_alias": null,
+    "scheme_keywords": [],
+    "state": null,
+    "district": null,
+    "village": null,
+    "sector": "Social Welfare",
+    "user_requirement_keywords": {
+      "is_farmer": false,
+      "farmer_type": null,
+      "is_student": false,
+      "is_woman": false,
+      "is_senior_citizen": false,
+      "income_limit": 180000.0,
+      "landholding_size": null,
+      "social_category": "SC",
+      "has_disability": false,
+      "occupation": null,
+      "age_group": null
+    },
+    "sql_filter_object": {
+      "state": "All",
+      "sector": "Social Welfare",
+      "scheme_name": null,
+      "target_demographic": [],
+      "beneficiary_category": [],
+      "max_income": 180000.0,
+      "max_landholding": null,
+      "social_category": "SC"
+    },
+    "search_keywords": [
+      "belong",
+      "sc",
+      "category",
+      "annual",
+      "income",
+      "lakh",
+      "show",
+      "schemes",
+      "qualify",
+      "social welfare"
+    ]
+  },
+  "citizen_profile": {
+    "profile_id": "Civs1001",
+    "full_name": "Harsha",
+    "gender": "Male",
+    "age": 20,
+    "caste_category": "General",
+    "occupation": "Farmer",
+    "annual_family_income": "1983000.00",
+    "state": "Andhra Pradesh",
+    "district": "Vizianagaram",
+    "employment_status": "Employed"
+  },
+  "personalized_filters": {
+    "eligible_age_range": {
+      "citizen_age": 20,
+      "is_senior_citizen": false
+    },
+    "eligible_income_category": {
+      "annual_income": 180000.0,
+      "income_bracket": "Lower Middle Income"
+    },
+    "eligible_caste_category": "SC",
+    "eligible_occupation": "Farmer",
+    "eligible_landholding_size": null,
+    "eligible_state": "Andhra Pradesh",
+    "eligible_district": "Vizianagaram",
+    "target_demographic": [
+      "Farmer"
+    ],
+    "priority_matching_score": 1.25
+  },
+  "FilteredCandidates": {
+    "candidates": [
+      {
+        "scheme_id": "AGRI1965",
+        "scheme_name": "Rashtriya Krishi Vigyan Puraskar",
+        "state": "All",
+        "sector": "Animal Husbandry, Dairy & Fisheries",
+        "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Rashtriya Krishi Vigyan Puraskar"
+      },
+      {
+        "scheme_id": "AGRI1966",
+        "scheme_name": "Coffee Development Programme in North Eastern Region: Expansion of Coffee",
+        "state": "All",
+        "sector": "Crop Production & Inputs",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Coffee Development Programme in North Eastern Region: Expansion of Coffee"
+      },
+      {
+        "scheme_id": "AGRI1967",
+        "scheme_name": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: \\Small Cardamom Replanting/New Planting: Karnataka (Ha.) and other States",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: \\Small Cardamom Replanting/New Planting: Karnataka (Ha.) and other States"
+      },
+      {
+        "scheme_id": "AGRI1968",
+        "scheme_name": "RKVY Soil Health and Fertility - Soil Health Card",
+        "state": "All",
+        "sector": "Crop Production & Inputs",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for RKVY Soil Health and Fertility - Soil Health Card"
+      },
+      {
+        "scheme_id": "AGRI1969",
+        "scheme_name": "National Food Security Mission NFSM",
+        "state": "All",
+        "sector": "Crop Production & Inputs",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for National Food Security Mission NFSM"
+      },
+      {
+        "scheme_id": "AGRI1970",
+        "scheme_name": "Kisan Credit Card",
+        "state": "All",
+        "sector": "Crop Production & Inputs",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Age 20 in [None-75]",
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Kisan Credit Card"
+      },
+      {
+        "scheme_id": "AGRI1971",
+        "scheme_name": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom:Small Cardamom Irrigation Land Development : Rain water harvesting structure (nos)",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom:Small Cardamom Irrigation Land Development : Rain water harvesting structure (nos)"
+      },
+      {
+        "scheme_id": "AGRI1972",
+        "scheme_name": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Post-Harvest Improvement: Polisher for Small Cardamom, Large Cardamom, Turmeric, etc (nos)",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Post-Harvest Improvement: Polisher for Small Cardamom, Large Cardamom, Turmeric, etc (nos)"
+      },
+      {
+        "scheme_id": "AGRI1973",
+        "scheme_name": "SVAMITVA Yojana (Survey of Villages and Mapping with Improvised Technology in Village Areas)",
+        "state": "All",
+        "sector": "Agriculture & Allied Sectors",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for SVAMITVA Yojana (Survey of Villages and Mapping with Improvised Technology in Village Areas)"
+      },
+      {
+        "scheme_id": "AGRI1974",
+        "scheme_name": "National Scheme Of Welfare Of Fishermen",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for National Scheme Of Welfare Of Fishermen"
+      },
+      {
+        "scheme_id": "AGRI1990",
+        "scheme_name": "Development Support for Coffee in Traditional Areas: Water Augmentation",
+        "state": "All",
+        "sector": "Irrigation & Water Management",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Development Support for Coffee in Traditional Areas: Water Augmentation"
+      },
+      {
+        "scheme_id": "AGRI1996",
+        "scheme_name": "Coconut Palm Insurance Scheme",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Age 20 in [4-60]",
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Coconut Palm Insurance Scheme"
+      },
+      {
+        "scheme_id": "AGRI2111",
+        "scheme_name": "National Gopal Ratna Award",
+        "state": "All",
+        "sector": "Animal Husbandry, Dairy & Fisheries",
+        "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for National Gopal Ratna Award"
+      },
+      {
+        "scheme_id": "AGRI2112",
+        "scheme_name": "Coffee Development Programme in North Eastern Region: Water Augmentation",
+        "state": "All",
+        "sector": "Irrigation & Water Management",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Coffee Development Programme in North Eastern Region: Water Augmentation"
+      },
+      {
+        "scheme_id": "AGRI2115",
+        "scheme_name": "ICRO Amrit Internship Programme",
+        "state": "All",
+        "sector": "Crop Production & Inputs",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Age 20 in [18-45]",
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for ICRO Amrit Internship Programme"
+      },
+      {
+        "scheme_id": "AGRI2116",
+        "scheme_name": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom:Large cardamom Irrigation Land Development : Irrigation / water storage structures(nos)",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom:Large cardamom Irrigation Land Development : Irrigation / water storage structures(nos)"
+      },
+      {
+        "scheme_id": "AGRI2118",
+        "scheme_name": "Promotion of Exportable surplus of identified spices in NE: Cultivation of Lakadong turmeric (Ha)",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Promotion of Exportable surplus of identified spices in NE: Cultivation of Lakadong turmeric (Ha)"
+      },
+      {
+        "scheme_id": "AGRI2119",
+        "scheme_name": "Agri-Clinics And Agri-Business Centres Scheme",
+        "state": "All",
+        "sector": "Crop Production & Inputs",
+        "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+        "matched_filters": [
+          "Age 20 in [18-60]",
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Agri-Clinics And Agri-Business Centres Scheme"
+      },
+      {
+        "scheme_id": "AGRI2121",
+        "scheme_name": "National Mission on Natural Farming",
+        "state": "All",
+        "sector": "Crop Production & Inputs",
+        "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for National Mission on Natural Farming"
+      },
+      {
+        "scheme_id": "AGRI2122",
+        "scheme_name": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Reintroduced subcomponents:Supply of Silpaulin Sheets (nos)",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Reintroduced subcomponents:Supply of Silpaulin Sheets (nos)"
+      },
+      {
+        "scheme_id": "AGRI2123",
+        "scheme_name": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: New Subcomponents:FRESH-IT (Farmer's Research & Enterprise in Spice Holdings for Innovative Technology)",
+        "state": "All",
+        "sector": "Farm Mechanization & Machinery",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: New Subcomponents:FRESH-IT (Farmer's Research & Enterprise in Spice Holdings for Innovative Technology)"
+      },
+      {
+        "scheme_id": "AGRI2124",
+        "scheme_name": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: New Subcomponents:Weather Based Insurance Scheme for small cardamom",
+        "state": "All",
+        "sector": "Crop Production & Inputs",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: New Subcomponents:Weather Based Insurance Scheme for small cardamom"
+      },
+      {
+        "scheme_id": "AGRI2126",
+        "scheme_name": "Indian Agricultural Research Institute - Scholarship",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Indian Agricultural Research Institute - Scholarship"
+      },
+      {
+        "scheme_id": "AGRI2137",
+        "scheme_name": "Pradhan Mantri Krishi Sinchayee Yojana: Per Drop More Crop",
+        "state": "All",
+        "sector": "Irrigation & Water Management",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Pradhan Mantri Krishi Sinchayee Yojana: Per Drop More Crop"
+      },
+      {
+        "scheme_id": "AGRI2162",
+        "scheme_name": "Establishment of Entrepreneur for Breed Development in Small Ruminant Sector (Sheep and Goat Farming)",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Establishment of Entrepreneur for Breed Development in Small Ruminant Sector (Sheep and Goat Farming)"
+      },
+      {
+        "scheme_id": "AGRI2203",
+        "scheme_name": "Prime Minister's Rural Development Fellows Scheme",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Ministry of Rural Development",
+        "matched_filters": [
+          "Age 20 in [None-32]",
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Prime Minister's Rural Development Fellows Scheme"
+      },
+      {
+        "scheme_id": "AGRI2232",
+        "scheme_name": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Export Oriented Production: Large Cardamom Certified Nursery (Unit)",
+        "state": "All",
+        "sector": "Crop Production & Inputs",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Export Oriented Production: Large Cardamom Certified Nursery (Unit)"
+      },
+      {
+        "scheme_id": "AGRI2237",
+        "scheme_name": "National Agriculture Insurance Scheme",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for National Agriculture Insurance Scheme"
+      },
+      {
+        "scheme_id": "AGRI2238",
+        "scheme_name": "Pradhan Mantri Kisan Maandhan Yojana",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Age 20 in [18-40]",
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Pradhan Mantri Kisan Maandhan Yojana"
+      },
+      {
+        "scheme_id": "AGRI2240",
+        "scheme_name": "Coffee Development Programme in North Eastern Region: Quality Upgradation / Certification: Drying Yards",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Coffee Development Programme in North Eastern Region: Quality Upgradation / Certification: Drying Yards"
+      },
+      {
+        "scheme_id": "AGRI2243",
+        "scheme_name": "Large cardamom Irrigation Land Development : Irrigation equipment (nos)",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Large cardamom Irrigation Land Development : Irrigation equipment (nos)"
+      },
+      {
+        "scheme_id": "AGRI2244",
+        "scheme_name": "Large cardamom Irrigation Land Development : Rainwater harvesting structure(nos)",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Large cardamom Irrigation Land Development : Rainwater harvesting structure(nos)"
+      },
+      {
+        "scheme_id": "AGRI2246",
+        "scheme_name": "RKVY Soil Health and Fertility Village level Soil Testing Lab",
+        "state": "All",
+        "sector": "Crop Production & Inputs",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Age 20 in [18-27]",
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for RKVY Soil Health and Fertility Village level Soil Testing Lab"
+      },
+      {
+        "scheme_id": "AGRI2247",
+        "scheme_name": "Agricultural Extension",
+        "state": "All",
+        "sector": "Farm Mechanization & Machinery",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Age 20 in [18-60]",
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Agricultural Extension"
+      },
+      {
+        "scheme_id": "AGRI2249",
+        "scheme_name": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Organic Farming: Organic Certification Groups",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Organic Farming: Organic Certification Groups"
+      },
+      {
+        "scheme_id": "AGRI2250",
+        "scheme_name": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Post-Harvest Improvement: Seed spice thresher (nos)",
+        "state": "All",
+        "sector": "Crop Production & Inputs",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Post-Harvest Improvement: Seed spice thresher (nos)"
+      },
+      {
+        "scheme_id": "AGRI2251",
+        "scheme_name": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: New Subcomponents: Basic quality testing of spices",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: New Subcomponents: Basic quality testing of spices"
+      },
+      {
+        "scheme_id": "AGRI2269",
+        "scheme_name": "Kera Suraksha Insurance Scheme",
+        "state": "All",
+        "sector": "Farm Mechanization & Machinery",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Age 20 in [18-65]",
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Kera Suraksha Insurance Scheme"
+      },
+      {
+        "scheme_id": "AGRI2290",
+        "scheme_name": "Sub-mission on Breed Development of Livestock and Poultry",
+        "state": "All",
+        "sector": "Crop Production & Inputs",
+        "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Sub-mission on Breed Development of Livestock and Poultry"
+      },
+      {
+        "scheme_id": "AGRI2316",
+        "scheme_name": "Pradhan Mantri Matsya Kisan Samridhi Sah-yojana (PM-MKSSY): COMPONENT 1B: One-Time Incentive for the Adoption of Aquaculture Insurance",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Pradhan Mantri Matsya Kisan Samridhi Sah-yojana (PM-MKSSY): COMPONENT 1B: One-Time Incentive for the Adoption of Aquaculture Insurance"
+      },
+      {
+        "scheme_id": "AGRI2358",
+        "scheme_name": "Pradhan Mantri Vanbandhu Kalyan Yojana",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Income <= ₹250000",
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Pradhan Mantri Vanbandhu Kalyan Yojana"
+      },
+      {
+        "scheme_id": "AGRI2367",
+        "scheme_name": "Coffee Development Programme in North Eastern Region: Consolidation of Coffee",
+        "state": "All",
+        "sector": "Crop Production & Inputs",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Coffee Development Programme in North Eastern Region: Consolidation of Coffee"
+      },
+      {
+        "scheme_id": "AGRI2369",
+        "scheme_name": "Promotion of Exportable surplus of identified spices in NE: Cultivation of NE ginger (Ha)",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Promotion of Exportable surplus of identified spices in NE: Cultivation of NE ginger (Ha)"
+      },
+      {
+        "scheme_id": "AGRI2370",
+        "scheme_name": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Organic Farming: Internal Control System (ICS) (nos)",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Organic Farming: Internal Control System (ICS) (nos)"
+      },
+      {
+        "scheme_id": "AGRI2372",
+        "scheme_name": "Student READY (Rural Entrepreneurship Awareness Development Yojana)",
+        "state": "All",
+        "sector": "Farm Mechanization & Machinery",
+        "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Student READY (Rural Entrepreneurship Awareness Development Yojana)"
+      },
+      {
+        "scheme_id": "AGRI2373",
+        "scheme_name": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Post-Harvest Improvement: Turmeric boiler ( nos)",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Post-Harvest Improvement: Turmeric boiler ( nos)"
+      },
+      {
+        "scheme_id": "AGRI2374",
+        "scheme_name": "Pradhan Mantri Fasal Bima Yojna (PMFBY)",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Pradhan Mantri Fasal Bima Yojna (PMFBY)"
+      },
+      {
+        "scheme_id": "AGRI2425",
+        "scheme_name": "Establishment of Regional Semen Production Laboratory and Semen Bank for sheep and goat",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Establishment of Regional Semen Production Laboratory and Semen Bank for sheep and goat"
+      },
+      {
+        "scheme_id": "AGRI2515",
+        "scheme_name": "National Geoscience Awards",
+        "state": "All",
+        "sector": "Agriculture & Allied Sectors",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for National Geoscience Awards"
+      },
+      {
+        "scheme_id": "AGRI2517",
+        "scheme_name": "Internship Programme Of The Wildlife Crime Control Bureau (MoEFCC)",
+        "state": "All",
+        "sector": "Agriculture & Allied Sectors",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Internship Programme Of The Wildlife Crime Control Bureau (MoEFCC)"
+      },
+      {
+        "scheme_id": "AGRI2518",
+        "scheme_name": "Coffee Development Programme in North Eastern Region: Quality Upgradation / Certification: Supply of Baby Pulpers",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Coffee Development Programme in North Eastern Region: Quality Upgradation / Certification: Supply of Baby Pulpers"
+      },
+      {
+        "scheme_id": "AGRI2520",
+        "scheme_name": "National Agriculture Market",
+        "state": "All",
+        "sector": "Skill Development & Entrepreneurship",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for National Agriculture Market"
+      },
+      {
+        "scheme_id": "AGRI2522",
+        "scheme_name": "Ecomark Scheme of India (ECOMARK)",
+        "state": "All",
+        "sector": "Agriculture & Allied Sectors",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Ecomark Scheme of India (ECOMARK)"
+      },
+      {
+        "scheme_id": "AGRI2524",
+        "scheme_name": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Post-Harvest Improvement: Pepper thresher (nos)",
+        "state": "All",
+        "sector": "Agriculture & Allied Sectors",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Post-Harvest Improvement: Pepper thresher (nos)"
+      },
+      {
+        "scheme_id": "AGRI2534",
+        "scheme_name": "Rainfed Area Development",
+        "state": "All",
+        "sector": "Crop Production & Inputs",
+        "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Rainfed Area Development"
+      },
+      {
+        "scheme_id": "AGRI2535",
+        "scheme_name": "Pradhan Mantri Janjatiya Vikas Mission (PMJVM)",
+        "state": "All",
+        "sector": "Crop Production & Inputs",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Pradhan Mantri Janjatiya Vikas Mission (PMJVM)"
+      },
+      {
+        "scheme_id": "AGRI2544",
+        "scheme_name": "Central Assistance For One Time Settlement Of Displaced Families From PoK And Chhamb Under Prime Minister's Development Package",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Central Assistance For One Time Settlement Of Displaced Families From PoK And Chhamb Under Prime Minister's Development Package"
+      },
+      {
+        "scheme_id": "AGRI2550",
+        "scheme_name": "Pradhan Mantri Adi Adarsh Gram Yojana (PMAAGY)",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Pradhan Mantri Adi Adarsh Gram Yojana (PMAAGY)"
+      },
+      {
+        "scheme_id": "AGRI2556",
+        "scheme_name": "Pradhan Mantri Adarsh Gram Yojana",
+        "state": "All",
+        "sector": "Agriculture & Allied Sectors",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Pradhan Mantri Adarsh Gram Yojana"
+      },
+      {
+        "scheme_id": "AGRI2559",
+        "scheme_name": "Development Support for Coffee in Traditional Areas: Replantation",
+        "state": "All",
+        "sector": "Farm Mechanization & Machinery",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Development Support for Coffee in Traditional Areas: Replantation"
+      },
+      {
+        "scheme_id": "AGRI2562",
+        "scheme_name": "National Water Awards",
+        "state": "All",
+        "sector": "Agriculture & Allied Sectors",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for National Water Awards"
+      },
+      {
+        "scheme_id": "AGRI2587",
+        "scheme_name": "Coffee Development Programme in North Eastern Region: Quality Upgradation / Certification: Support for Eco-Certification / Organic Certification",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Coffee Development Programme in North Eastern Region: Quality Upgradation / Certification: Support for Eco-Certification / Organic Certification"
+      },
+      {
+        "scheme_id": "AGRI2588",
+        "scheme_name": "Nagar Van Yojana",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Nagar Van Yojana"
+      },
+      {
+        "scheme_id": "AGRI2589",
+        "scheme_name": "Paramparagat Krishi Vikas Yojana",
+        "state": "All",
+        "sector": "Crop Production & Inputs",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Paramparagat Krishi Vikas Yojana"
+      },
+      {
+        "scheme_id": "AGRI2592",
+        "scheme_name": "Scheme for Plantation Development (New planting & Replanting) under Medium Term Framework Plan (MTFP) in Traditional Areas (Kerala and Tamil Nadu), Non-Traditional and North Eastern Region",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Scheme for Plantation Development (New planting & Replanting) under Medium Term Framework Plan (MTFP) in Traditional Areas (Kerala and Tamil Nadu), Non-Traditional and North Eastern Region"
+      },
+      {
+        "scheme_id": "AGRI2602",
+        "scheme_name": "National Livestock Mission: Establishment of Entrepreneurship for Breed Development of Rural Poultry",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for National Livestock Mission: Establishment of Entrepreneurship for Breed Development of Rural Poultry"
+      },
+      {
+        "scheme_id": "AGRI2616",
+        "scheme_name": "National Livestock Mission: Genetic Improvement of Pig breeds - Establishment of Pig Semen Collection and Processing Lab",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for National Livestock Mission: Genetic Improvement of Pig breeds - Establishment of Pig Semen Collection and Processing Lab"
+      },
+      {
+        "scheme_id": "AGRI2617",
+        "scheme_name": "Mission on Integrated Development of Horticulture- NHM and HMNEH",
+        "state": "All",
+        "sector": "Crop Production & Inputs",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Mission on Integrated Development of Horticulture- NHM and HMNEH"
+      },
+      {
+        "scheme_id": "AGRI2618",
+        "scheme_name": "Fund of Funds for Startups",
+        "state": "All",
+        "sector": "Skill Development & Entrepreneurship",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Fund of Funds for Startups"
+      },
+      {
+        "scheme_id": "AGRI2620",
+        "scheme_name": "Integrated Scheme on Agriculture Cooperation",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Integrated Scheme on Agriculture Cooperation"
+      },
+      {
+        "scheme_id": "AGRI2631",
+        "scheme_name": "Pradhan Mantri Anusuchit Jaati Abhyuday Yojana (PM-AJAY) - Adarsh Gram",
+        "state": "All",
+        "sector": "Skill Development & Entrepreneurship",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Pradhan Mantri Anusuchit Jaati Abhyuday Yojana (PM-AJAY) - Adarsh Gram"
+      },
+      {
+        "scheme_id": "AGRI2639",
+        "scheme_name": "National Bamboo Mission",
+        "state": "All",
+        "sector": "Horticulture & High-Value Crops",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for National Bamboo Mission"
+      },
+      {
+        "scheme_id": "AGRI2640",
+        "scheme_name": "Development Support for Coffee in Traditional Areas: Eco-certification of Coffee",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Development Support for Coffee in Traditional Areas: Eco-certification of Coffee"
+      },
+      {
+        "scheme_id": "AGRI2641",
+        "scheme_name": "Pradhan Mantri Gram Sadak Yojana",
+        "state": "All",
+        "sector": "Agriculture & Allied Sectors",
+        "ministry": "Ministry of Rural Development",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Pradhan Mantri Gram Sadak Yojana"
+      },
+      {
+        "scheme_id": "AGRI2652",
+        "scheme_name": "National Livestock Mission: Promotion of Piggery Entrepreneur",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for National Livestock Mission: Promotion of Piggery Entrepreneur"
+      },
+      {
+        "scheme_id": "AGRI2666",
+        "scheme_name": "Development Support for Coffee in Traditional Areas: Support to Small Growers' Collectives/ SHGs/ Cooperatives for Coffee Marketing",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Development Support for Coffee in Traditional Areas: Support to Small Growers' Collectives/ SHGs/ Cooperatives for Coffee Marketing"
+      },
+      {
+        "scheme_id": "AGRI2667",
+        "scheme_name": "Galvanizing Organic Bio-Agro Resources Dhan (GOBARdhan)",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Galvanizing Organic Bio-Agro Resources Dhan (GOBARdhan)"
+      },
+      {
+        "scheme_id": "AGRI2669",
+        "scheme_name": "Pradhan Mantri Matsya Sampada Yojana",
+        "state": "All",
+        "sector": "Crop Production & Inputs",
+        "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Pradhan Mantri Matsya Sampada Yojana"
+      },
+      {
+        "scheme_id": "AGRI2670",
+        "scheme_name": "Sub-mission On Agriculture Mechanization",
+        "state": "All",
+        "sector": "Farm Mechanization & Machinery",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Sub-mission On Agriculture Mechanization"
+      },
+      {
+        "scheme_id": "AGRI2675",
+        "scheme_name": "Agriculture And Processed Foods Export Promotion Scheme Of APEDA For The 15th Finance Commission Cycle (2021-22 To 2025-26)",
+        "state": "All",
+        "sector": "Farm Mechanization & Machinery",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Agriculture And Processed Foods Export Promotion Scheme Of APEDA For The 15th Finance Commission Cycle (2021-22 To 2025-26)"
+      },
+      {
+        "scheme_id": "AGRI2676",
+        "scheme_name": "Tea Development and Promotion Scheme (TDPS): Plantation Development for Small Tea Growers (PDSTG): Mechanization for Individual Small Growers",
+        "state": "All",
+        "sector": "Farm Mechanization & Machinery",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Tea Development and Promotion Scheme (TDPS): Plantation Development for Small Tea Growers (PDSTG): Mechanization for Individual Small Growers"
+      },
+      {
+        "scheme_id": "AGRI2680",
+        "scheme_name": "National Livestock Mission: Establishment of State Semen Bank",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for National Livestock Mission: Establishment of State Semen Bank"
+      },
+      {
+        "scheme_id": "AGRI2705",
+        "scheme_name": "Livestock Health and Diseases Control",
+        "state": "All",
+        "sector": "Farm Mechanization & Machinery",
+        "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Livestock Health and Diseases Control"
+      },
+      {
+        "scheme_id": "AGRI2706",
+        "scheme_name": "Coffee Development Programme in North Eastern Region: Support for Group Nurseries",
+        "state": "All",
+        "sector": "Crop Production & Inputs",
+        "ministry": "Department of Agriculture, Government of All",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for Coffee Development Programme in North Eastern Region: Support for Group Nurseries"
+      },
+      {
+        "scheme_id": "AGRI2707",
+        "scheme_name": "National Livestock Mission: Genetic Improvement of Pig Breeds - Import of Exotic Pig Germplasm",
+        "state": "All",
+        "sector": "Animal Husbandry, Dairy & Fisheries",
+        "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+        "matched_filters": [
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for National Livestock Mission: Genetic Improvement of Pig Breeds - Import of Exotic Pig Germplasm"
+      },
+      {
+        "scheme_id": "AGRI2708",
+        "scheme_name": "National Mission on Edible Oils- Oil Palm",
+        "state": "Andhra Pradesh, Telangana, Chhattisgarh, Tamil Nadu, Kerala, Gujarat, Karnataka, Odisha, Mizoram, Nagaland, Assam, Arunachal Pradesh, Manipur, Goa, Tripura",
+        "sector": "Crop Production & Inputs",
+        "ministry": "Ministry of Agriculture & Farmers Welfare",
+        "matched_filters": [
+          "State: Andhra Pradesh",
+          "Caste: SC"
+        ],
+        "eligibility_match_reason": "Passed all eligibility gates for National Mission on Edible Oils- Oil Palm"
+      }
+    ],
+    "total_candidates": 86,
+    "total_evaluated": 89,
+    "eliminated_count": 3,
+    "matched_filters": {
+      "state": "Andhra Pradesh",
+      "sector": "Social Welfare",
+      "target_scheme": null,
+      "demographics": [
+        "Farmer"
+      ]
+    }
+  },
+  "QueryVector": {
+    "embedding_model": "BAAI/bge-small-en-v1.5",
+    "embedding_dimension": 384,
+    "generation_time_seconds": 0.3756
+  },
+  "TopKChunks": {
+    "retrieved_count": 10,
+    "candidate_pool_size": 1396
+  },
+  "RankedContext": {
+    "ranked_chunks": [
+      {
+        "final_rank": 1,
+        "scheme_id": "AGRI2358",
+        "scheme_name": "Pradhan Mantri Vanbandhu Kalyan Yojana",
+        "chunk_id": "AGRI2358_chk_1",
+        "chunk_type": "eligibility",
+        "chunk_text": "Pradhan Mantri Vanbandhu Kalyan Yojana (Eligibility Criteria): State: All. Income: Max: 250000. Priority: SC, ST.",
+        "similarity_score": 0.7366,
+        "cross_encoder_score": 0.0041,
+        "mmr_score": 0.2604,
+        "metadata": {
+          "scheme_id": "AGRI2358",
+          "scheme_name": "Pradhan Mantri Vanbandhu Kalyan Yojana",
+          "state": "All",
+          "sector": "Credit, Subsidy & Financial Assistance",
+          "sub_sector": "Post-Harvest & Storage, Skill Development & Entrepreneurship",
+          "ministry": "Department of Agriculture, Government of All",
+          "category": "Education & Learning, Agriculture,Rural & Environment",
+          "scheme_level": "State Government Scheme",
+          "target_demographic": [
+            "SC / ST Farmers"
+          ],
+          "application_mode": "Online",
+          "eligibility_tags": [
+            "State Domicile / Residential Proof",
+            "SC / ST Priority",
+            "Age Criteria Applicable",
+            "Income Threshold Applicable"
+          ],
+          "benefit_tags": [
+            "Financial Subsidy",
+            "Free Training & Skill Development"
+          ],
+          "crop_tags": [
+            "Paddy / Rice",
+            "Pulses"
+          ],
+          "farmer_tags": [
+            "SC / ST Farmers"
+          ],
+          "government_tags": [
+            "Government Verified"
+          ],
+          "keyword_tags": [
+            "Pulses",
+            "Skill Development & Entrepreneurship",
+            "Financial Subsidy",
+            "Free Training & Skill Development",
+            "Government Verified",
+            "SC / ST Farmers",
+            "Post-Harvest & Storage",
+            "Credit, Subsidy & Financial Assistance",
+            "Training",
+            "Paddy / Rice",
+            "All"
+          ],
+          "official_urls": [
+            "https://www.pib.gov.in/PressNoteDetails.aspx?NoteId=153376&ModuleId=3&reg=3&lang=1",
+            "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1943128&reg=3&lang=2"
+          ],
+          "registration_links": [],
+          "chunk_id": "AGRI2358_chk_1",
+          "chunk_type": "eligibility",
+          "chunk_index": 1
+        }
+      },
+      {
+        "final_rank": 2,
+        "scheme_id": "AGRI2119",
+        "scheme_name": "Agri-Clinics And Agri-Business Centres Scheme",
+        "chunk_id": "AGRI2119_chk_15",
+        "chunk_type": "faq",
+        "chunk_text": "Agri-Clinics And Agri-Business Centres Scheme (FAQs): will be given to the trainees.\", \"question\": \"What is covered in training?\"}; {\"answer\": \"The margin money to be contributed by the entrepreneur will be as per prevailing norms issued by Reserve Bank of India. As per present norms, margin money is not prescribed for loans upto ₹5 lakhs. In case of margin money, concessions would be made in respect of SCs/STs, women and beneficiaries of North-Eastern States, Hill areas.",
+        "similarity_score": 0.7165,
+        "cross_encoder_score": 0.0059,
+        "mmr_score": 0.2546,
+        "metadata": {
+          "scheme_id": "AGRI2119",
+          "scheme_name": "Agri-Clinics And Agri-Business Centres Scheme",
+          "state": "All",
+          "sector": "Crop Production & Inputs",
+          "sub_sector": "Farm Mechanization & Machinery, Irrigation & Water Management",
+          "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+          "category": "Agriculture,Rural & Environment, Business & Entrepreneurship, Skills & Employment",
+          "scheme_level": "State Government Scheme",
+          "target_demographic": [
+            "Women Farmers",
+            "SC / ST Farmers",
+            "Fishermen & Aquaculturists",
+            "Livestock & Dairy Keepers"
+          ],
+          "application_mode": "Online",
+          "eligibility_tags": [
+            "SC / ST Priority",
+            "Age Criteria Applicable"
+          ],
+          "benefit_tags": [
+            "Financial Subsidy",
+            "Low-Interest Credit / Loan",
+            "Crop Insurance Coverage",
+            "Free Training & Skill Development",
+            "Free Agricultural Inputs",
+            "Farm Equipment Assistance"
+          ],
+          "crop_tags": [
+            "Horticulture & Fruits"
+          ],
+          "farmer_tags": [
+            "Women Farmers",
+            "SC / ST Farmers",
+            "Fishermen & Aquaculturists",
+            "Livestock & Dairy Keepers"
+          ],
+          "government_tags": [
+            "NABARD"
+          ],
+          "keyword_tags": [
+            "Women Farmers",
+            "Crop Insurance & Risk Management",
+            "Free Training & Skill Development",
+            "SC / ST Farmers",
+            "Horticulture",
+            "Fisheries",
+            "Poultry",
+            "Livestock",
+            "Training",
+            "Crop Production & Inputs",
+            "Loan",
+            "Farm Mechanization & Machinery",
+            "Fishermen & Aquaculturists",
+            "Skill Development & Entrepreneurship",
+            "Financial Subsidy",
+            "Low-Interest Credit / Loan",
+            "Women",
+            "NABARD",
+            "Horticulture & Fruits",
+            "Farm Equipment Assistance",
+            "Free Agricultural Inputs",
+            "Livestock & Dairy Keepers",
+            "Irrigation",
+            "Irrigation & Water Management",
+            "Farmer",
+            "Subsidy",
+            "Credit, Subsidy & Financial Assistance",
+            "All",
+            "Crop Insurance Coverage",
+            "Animal Husbandry, Dairy & Fisheries",
+            "Dairy",
+            "Entrepreneurship",
+            "Horticulture & High-Value Crops",
+            "Post-Harvest & Storage"
+          ],
+          "official_urls": [
+            "https://acabcmis.gov.in/home.aspx",
+            "https://acabcmis.gov.in/Institute.aspx"
+          ],
+          "registration_links": [
+            "https://acabcmis.gov.in/ApplicantReg.aspx",
+            "https://acabcmis.gov.in/ApplicationStatus_new.aspx",
+            "https://www.jansamarth.in/home"
+          ],
+          "chunk_id": "AGRI2119_chk_15",
+          "chunk_type": "faq",
+          "chunk_index": 15
+        }
+      },
+      {
+        "final_rank": 3,
+        "scheme_id": "AGRI2122",
+        "scheme_name": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Reintroduced subcomponents:Supply of Silpaulin Sheets (nos)",
+        "chunk_id": "AGRI2122_chk_8",
+        "chunk_type": "faq",
+        "chunk_text": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Reintroduced subcomponents:Supply of Silpaulin Sheets (nos) (FAQs): {\"answer\": \"The scheme is available in all spice-growing States and regions of India.\", \"question\": \"In which areas is the scheme available?\"}; {\"answer\": \"General Category applicants are eligible for 50% assistance, subject to a maximum of ₹2,000 per Silpaulin Sheet.\", \"question\": \"What financial assistance is available for General Category applicants?\"}; {\"answer\": \"SC/ST applicants are eligible for 75% assistance, subject to a maximum of ₹3,000 per Silpaulin Sheet.\", \"question\": \"What financial assistance is",
+        "similarity_score": 0.7025,
+        "cross_encoder_score": 0.0175,
+        "mmr_score": 0.2572,
+        "metadata": {
+          "scheme_id": "AGRI2122",
+          "scheme_name": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Reintroduced subcomponents:Supply of Silpaulin Sheets (nos)",
+          "state": "All",
+          "sector": "Credit, Subsidy & Financial Assistance",
+          "sub_sector": "Credit, Subsidy & Financial Assistance",
+          "ministry": "Department of Agriculture, Government of All",
+          "category": "Agriculture,Rural & Environment",
+          "scheme_level": "State Government Scheme",
+          "target_demographic": [
+            "SC / ST Farmers"
+          ],
+          "application_mode": "Online",
+          "eligibility_tags": [
+            "SC / ST Priority",
+            "Age Criteria Applicable"
+          ],
+          "benefit_tags": [
+            "Financial Subsidy"
+          ],
+          "crop_tags": [
+            "Vegetables",
+            "Spices & Plantation"
+          ],
+          "farmer_tags": [
+            "SC / ST Farmers"
+          ],
+          "government_tags": [
+            "Government Verified"
+          ],
+          "keyword_tags": [
+            "Spices & Plantation",
+            "Vegetables",
+            "Financial Subsidy",
+            "Government Verified",
+            "SC / ST Farmers",
+            "Farmer",
+            "Credit, Subsidy & Financial Assistance",
+            "All"
+          ],
+          "official_urls": [
+            "https://serviceonline.gov.in/dbt/login.do"
+          ],
+          "registration_links": [
+            "https://serviceonline.gov.in/dbt/",
+            "https://serviceonline.gov.in/dbt/citizenRegistration.html",
+            "https://serviceonline.gov.in/dbt/loginWindow.do"
+          ],
+          "chunk_id": "AGRI2122_chk_8",
+          "chunk_type": "faq",
+          "chunk_index": 8
+        }
+      },
+      {
+        "final_rank": 4,
+        "scheme_id": "AGRI2203",
+        "scheme_name": "Prime Minister's Rural Development Fellows Scheme",
+        "chunk_id": "AGRI2203_chk_6",
+        "chunk_type": "benefits",
+        "chunk_text": "Prime Minister's Rural Development Fellows Scheme (Benefits & Subsidies): Subsidy: Max Percentage: 10. Min Percentage: 10. Summary: *Stipend Package*, The Fellow shall be entitled to a consolidated stipend package of ₹50,000/- (Rupees Fifty thousand only) per month during the orientation period., The Fellow shall be entitled to ₹75,000/- (Rupees Seventy Five Thousand only) per month during the first year of the Fellowship (post-orientation)., The Fellow shall receive a 10% increment during the second year, subject to satisfactory performance., This package is deemed to cover the Fellow's honorarium, boarding and lodging expenses during orientation, accommodation/house rent during the rest of the Fellowship period, health insurance, life and disability insurance cover, and any other contingency expenses., Travel reimbursement will be based on actual costs and restricted to AC-II tier train fare by the shortest route or equivalent, plus local transport cost.",
+        "similarity_score": 0.6971,
+        "cross_encoder_score": 0.0001,
+        "mmr_score": 0.244,
+        "metadata": {
+          "scheme_id": "AGRI2203",
+          "scheme_name": "Prime Minister's Rural Development Fellows Scheme",
+          "state": "All",
+          "sector": "Credit, Subsidy & Financial Assistance",
+          "sub_sector": "Crop Insurance & Risk Management",
+          "ministry": "Ministry of Rural Development",
+          "category": "Agriculture,Rural & Environment, Skills & Employment",
+          "scheme_level": "State Government Scheme",
+          "target_demographic": [
+            "Women Farmers",
+            "SC / ST Farmers"
+          ],
+          "application_mode": "Offline (Panchayat / Agriculture Office)",
+          "eligibility_tags": [
+            "Small & Marginal Farmer Category",
+            "SC / ST Priority",
+            "Women Farmer Priority",
+            "Age Criteria Applicable"
+          ],
+          "benefit_tags": [
+            "Financial Subsidy",
+            "Direct Benefit Transfer (DBT)",
+            "Crop Insurance Coverage"
+          ],
+          "crop_tags": [
+            "All Crops"
+          ],
+          "farmer_tags": [
+            "Women Farmers",
+            "SC / ST Farmers"
+          ],
+          "government_tags": [
+            "Government Verified"
+          ],
+          "keyword_tags": [
+            "Women Farmers",
+            "Crop Insurance Coverage",
+            "Crop Insurance & Risk Management",
+            "Direct Benefit Transfer (DBT)",
+            "Financial Subsidy",
+            "Government Verified",
+            "Women",
+            "SC / ST Farmers",
+            "Credit, Subsidy & Financial Assistance",
+            "All"
+          ],
+          "official_urls": [
+            "https://cdn.s3waas.gov.in/s330ef30b64204a3088a26bc2e6ecf7602/uploads/2018/11/2018111655-1.pdf"
+          ],
+          "registration_links": [],
+          "chunk_id": "AGRI2203_chk_6",
+          "chunk_type": "benefits",
+          "chunk_index": 6
+        }
+      },
+      {
+        "final_rank": 5,
+        "scheme_id": "AGRI2367",
+        "scheme_name": "Coffee Development Programme in North Eastern Region: Consolidation of Coffee",
+        "chunk_id": "AGRI2367_chk_4",
+        "chunk_type": "documents",
+        "chunk_text": "Coffee Development Programme in North Eastern Region: Consolidation of Coffee (Required Documents): Application and Self Declaration duly filled in and signed by the Applicant/s (in duplicate) in theprescribed format.; Proof of photo identity of the applicant/s, such as a copy of the Driving License, Ration Card, Election Photo Identity Card (EPIC) issued by the Election Commission, Aadhaar Card, Passport, or PAN Card, etc.; Proof of Land Ownership.; Bank Account details, including account number, bank name, branch, and IFSC code.; Application and Self Declaration duly filled in and signed by the Applicant/s (in duplicate) in theprescribed format.",
+        "similarity_score": 0.7092,
+        "cross_encoder_score": 0.0,
+        "mmr_score": 0.2482,
+        "metadata": {
+          "scheme_id": "AGRI2367",
+          "scheme_name": "Coffee Development Programme in North Eastern Region: Consolidation of Coffee",
+          "state": "All",
+          "sector": "Crop Production & Inputs",
+          "sub_sector": "Credit, Subsidy & Financial Assistance",
+          "ministry": "Department of Agriculture, Government of All",
+          "category": "Agriculture,Rural & Environment",
+          "scheme_level": "State Government Scheme",
+          "target_demographic": [
+            "SC / ST Farmers"
+          ],
+          "application_mode": "Hybrid / CSC / Online",
+          "eligibility_tags": [
+            "Agricultural Land Ownership / RoR",
+            "SC / ST Priority",
+            "Age Criteria Applicable"
+          ],
+          "benefit_tags": [
+            "Financial Subsidy",
+            "Direct Benefit Transfer (DBT)",
+            "Crop Insurance Coverage"
+          ],
+          "crop_tags": [
+            "Spices & Plantation"
+          ],
+          "farmer_tags": [
+            "SC / ST Farmers"
+          ],
+          "government_tags": [
+            "Government Verified"
+          ],
+          "keyword_tags": [
+            "Crop Insurance Coverage",
+            "Spices & Plantation",
+            "Direct Benefit Transfer (DBT)",
+            "Financial Subsidy",
+            "Government Verified",
+            "SC / ST Farmers",
+            "Credit, Subsidy & Financial Assistance",
+            "Subsidy",
+            "All",
+            "Crop Production & Inputs"
+          ],
+          "official_urls": [
+            "https://web.umang.gov.in/web_new/department?url=coffee_board%2Fservice%2F1739&dept_id=371&dept_name=Grower%20Registration&transactionId=PFCXMNL5&source=myscheme"
+          ],
+          "registration_links": [
+            "https://coffeeboard.gov.in/Schemes/ICDP_388.pdf"
+          ],
+          "chunk_id": "AGRI2367_chk_4",
+          "chunk_type": "documents",
+          "chunk_index": 4
+        }
+      },
+      {
+        "final_rank": 6,
+        "scheme_id": "AGRI2121",
+        "scheme_name": "National Mission on Natural Farming",
+        "chunk_id": "AGRI2121_chk_2",
+        "chunk_type": "eligibility",
+        "chunk_text": "National Mission on Natural Farming (Eligibility Criteria): State: All. Priority: SC, ST. Conditions: The scheme is applicable to all farmers in India.. Occupation: Farmer",
+        "similarity_score": 0.7013,
+        "cross_encoder_score": 0.0002,
+        "mmr_score": 0.2456,
+        "metadata": {
+          "scheme_id": "AGRI2121",
+          "scheme_name": "National Mission on Natural Farming",
+          "state": "All",
+          "sector": "Crop Production & Inputs",
+          "sub_sector": "Credit, Subsidy & Financial Assistance, Animal Husbandry, Dairy & Fisheries",
+          "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+          "category": "Agriculture,Rural & Environment",
+          "scheme_level": "Centrally Sponsored Scheme",
+          "target_demographic": [
+            "SC / ST Farmers",
+            "Organic Farmers",
+            "Livestock & Dairy Keepers"
+          ],
+          "application_mode": "Offline (Panchayat / Agriculture Office)",
+          "eligibility_tags": [
+            "SC / ST Priority",
+            "Income Threshold Applicable"
+          ],
+          "benefit_tags": [
+            "Free Training & Skill Development"
+          ],
+          "crop_tags": [
+            "All Crops"
+          ],
+          "farmer_tags": [
+            "SC / ST Farmers",
+            "Organic Farmers",
+            "Livestock & Dairy Keepers"
+          ],
+          "government_tags": [
+            "Government Verified"
+          ],
+          "keyword_tags": [
+            "Livestock & Dairy Keepers",
+            "Animal Husbandry, Dairy & Fisheries",
+            "Skill Development & Entrepreneurship",
+            "Government Verified",
+            "Free Training & Skill Development",
+            "SC / ST Farmers",
+            "Farmer",
+            "Credit, Subsidy & Financial Assistance",
+            "Training",
+            "All",
+            "Crop Production & Inputs",
+            "Organic Farmers"
+          ],
+          "official_urls": [
+            "http://agriculture.up.gov.in/nmnf/natural_farming/guid/NMNFGuidelines.pdf"
+          ],
+          "registration_links": [],
+          "chunk_id": "AGRI2121_chk_2",
+          "chunk_type": "eligibility",
+          "chunk_index": 2
+        }
+      },
+      {
+        "final_rank": 7,
+        "scheme_id": "AGRI2316",
+        "scheme_name": "Pradhan Mantri Matsya Kisan Samridhi Sah-yojana (PM-MKSSY): COMPONENT 1B: One-Time Incentive for the Adoption of Aquaculture Insurance",
+        "chunk_id": "AGRI2316_chk_3",
+        "chunk_type": "eligibility",
+        "chunk_text": "Pradhan Mantri Matsya Kisan Samridhi Sah-yojana (PM-MKSSY): COMPONENT 1B: One-Time Incentive for the Adoption of Aquaculture Insurance (Eligibility Criteria): State: All. Priority: SC, ST. Conditions: The applicant must be a fisheries microenterprise or an individual engaged in fisheries or aquaculture-related activities., The applicant must be registered on the National Fisheries Digital Platform (NFDP)., The applicant must have availed institutional credit from a recognised financial institution., The applicant must possess a valid Aadhaar-seeded bank account for DBT purposes., The applicant must submit documentary proof of loan sanction and disbursement., The applicant must consent to the verification and validation process undertaken by the Department of Fisheries.. Occupation: Entrepreneur",
+        "similarity_score": 0.7092,
+        "cross_encoder_score": 0.0,
+        "mmr_score": 0.2482,
+        "metadata": {
+          "scheme_id": "AGRI2316",
+          "scheme_name": "Pradhan Mantri Matsya Kisan Samridhi Sah-yojana (PM-MKSSY): COMPONENT 1B: One-Time Incentive for the Adoption of Aquaculture Insurance",
+          "state": "All",
+          "sector": "Credit, Subsidy & Financial Assistance",
+          "sub_sector": "Crop Insurance & Risk Management, Animal Husbandry, Dairy & Fisheries",
+          "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+          "category": "Agriculture,Rural & Environment, Banking,Financial Services And Insurance",
+          "scheme_level": "State Government Scheme",
+          "target_demographic": [
+            "SC / ST Farmers",
+            "Fishermen & Aquaculturists",
+            "Livestock & Dairy Keepers"
+          ],
+          "application_mode": "Online",
+          "eligibility_tags": [
+            "Aadhaar Card Required",
+            "Active Bank Account",
+            "SC / ST Priority",
+            "Age Criteria Applicable"
+          ],
+          "benefit_tags": [
+            "Direct Benefit Transfer (DBT)",
+            "Low-Interest Credit / Loan",
+            "Crop Insurance Coverage"
+          ],
+          "crop_tags": [
+            "All Crops"
+          ],
+          "farmer_tags": [
+            "SC / ST Farmers",
+            "Fishermen & Aquaculturists",
+            "Livestock & Dairy Keepers"
+          ],
+          "government_tags": [
+            "Government Verified"
+          ],
+          "keyword_tags": [
+            "Fishermen & Aquaculturists",
+            "Livestock & Dairy Keepers",
+            "Crop Insurance Coverage",
+            "Crop Insurance & Risk Management",
+            "Animal Husbandry, Dairy & Fisheries",
+            "Dairy",
+            "Skill Development & Entrepreneurship",
+            "Direct Benefit Transfer (DBT)",
+            "Low-Interest Credit / Loan",
+            "Government Verified",
+            "SC / ST Farmers",
+            "Fisheries",
+            "Credit, Subsidy & Financial Assistance",
+            "All",
+            "Loan"
+          ],
+          "official_urls": [
+            "https://nfdp.dof.gov.in/",
+            "https://nfdp.dof.gov.in/nfdp/#/registration",
+            "https://nfdp.dof.gov.in/nfdp/#/scheme?t=PM_MKSSY"
+          ],
+          "registration_links": [
+            "https://nfdp.dof.gov.in/nfdp/#/"
+          ],
+          "chunk_id": "AGRI2316_chk_3",
+          "chunk_type": "eligibility",
+          "chunk_index": 3
+        }
+      },
+      {
+        "final_rank": 8,
+        "scheme_id": "AGRI2358",
+        "scheme_name": "Pradhan Mantri Vanbandhu Kalyan Yojana",
+        "chunk_id": "AGRI2358_chk_7",
+        "chunk_type": "documents",
+        "chunk_text": "Pradhan Mantri Vanbandhu Kalyan Yojana (Required Documents): Caste Certificate (to prove Scheduled Tribe status).; Income Certificate (to prove parental annual income is up to ₹2,50,000/-).; Mark Sheet of the last qualifying examination.; Student Identity Card or bonafide certificate from the educational institution.; Aadhaar Card or proof of identity.; Bank Account Details (Account Number and IFSC Code for Direct Benefit Transfer).; Passport Size Photograph.; Domicile Certificate or Proof of Residence.",
+        "similarity_score": 0.7036,
+        "cross_encoder_score": 0.0025,
+        "mmr_score": 0.2479,
+        "metadata": {
+          "scheme_id": "AGRI2358",
+          "scheme_name": "Pradhan Mantri Vanbandhu Kalyan Yojana",
+          "state": "All",
+          "sector": "Credit, Subsidy & Financial Assistance",
+          "sub_sector": "Post-Harvest & Storage, Skill Development & Entrepreneurship",
+          "ministry": "Department of Agriculture, Government of All",
+          "category": "Education & Learning, Agriculture,Rural & Environment",
+          "scheme_level": "State Government Scheme",
+          "target_demographic": [
+            "SC / ST Farmers"
+          ],
+          "application_mode": "Online",
+          "eligibility_tags": [
+            "State Domicile / Residential Proof",
+            "SC / ST Priority",
+            "Age Criteria Applicable",
+            "Income Threshold Applicable"
+          ],
+          "benefit_tags": [
+            "Financial Subsidy",
+            "Free Training & Skill Development"
+          ],
+          "crop_tags": [
+            "Paddy / Rice",
+            "Pulses"
+          ],
+          "farmer_tags": [
+            "SC / ST Farmers"
+          ],
+          "government_tags": [
+            "Government Verified"
+          ],
+          "keyword_tags": [
+            "Pulses",
+            "Skill Development & Entrepreneurship",
+            "Financial Subsidy",
+            "Free Training & Skill Development",
+            "Government Verified",
+            "SC / ST Farmers",
+            "Post-Harvest & Storage",
+            "Credit, Subsidy & Financial Assistance",
+            "Training",
+            "Paddy / Rice",
+            "All"
+          ],
+          "official_urls": [
+            "https://www.pib.gov.in/PressNoteDetails.aspx?NoteId=153376&ModuleId=3&reg=3&lang=1",
+            "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1943128&reg=3&lang=2"
+          ],
+          "registration_links": [],
+          "chunk_id": "AGRI2358_chk_7",
+          "chunk_type": "documents",
+          "chunk_index": 7
+        }
+      },
+      {
+        "final_rank": 9,
+        "scheme_id": "AGRI2588",
+        "scheme_name": "Nagar Van Yojana",
+        "chunk_id": "AGRI2588_chk_2",
+        "chunk_type": "eligibility",
+        "chunk_text": "Nagar Van Yojana (Eligibility Criteria): State: All. Priority: SC, ST.",
+        "similarity_score": 0.7061,
+        "cross_encoder_score": 0.0002,
+        "mmr_score": 0.2473,
+        "metadata": {
+          "scheme_id": "AGRI2588",
+          "scheme_name": "Nagar Van Yojana",
+          "state": "All",
+          "sector": "Credit, Subsidy & Financial Assistance",
+          "sub_sector": "Credit, Subsidy & Financial Assistance",
+          "ministry": "Department of Agriculture, Government of All",
+          "category": "Agriculture,Rural & Environment",
+          "scheme_level": "State Government Scheme",
+          "target_demographic": [
+            "SC / ST Farmers"
+          ],
+          "application_mode": "Hybrid / CSC / Online",
+          "eligibility_tags": [
+            "Agricultural Land Ownership / RoR",
+            "SC / ST Priority",
+            "Age Criteria Applicable"
+          ],
+          "benefit_tags": [
+            "Financial Subsidy"
+          ],
+          "crop_tags": [
+            "Horticulture & Fruits"
+          ],
+          "farmer_tags": [
+            "SC / ST Farmers"
+          ],
+          "government_tags": [
+            "Government Verified"
+          ],
+          "keyword_tags": [
+            "Irrigation",
+            "Financial Subsidy",
+            "Government Verified",
+            "SC / ST Farmers",
+            "Credit, Subsidy & Financial Assistance",
+            "Horticulture & Fruits",
+            "All"
+          ],
+          "official_urls": [
+            "https://moef.gov.in/uploads/2017/06/Implementation-Guidlines-Nager-Van-Yojana.pdf"
+          ],
+          "registration_links": [],
+          "chunk_id": "AGRI2588_chk_2",
+          "chunk_type": "eligibility",
+          "chunk_index": 2
+        }
+      },
+      {
+        "final_rank": 10,
+        "scheme_id": "AGRI1966",
+        "scheme_name": "Coffee Development Programme in North Eastern Region: Expansion of Coffee",
+        "chunk_id": "AGRI1966_chk_4",
+        "chunk_type": "documents",
+        "chunk_text": "Coffee Development Programme in North Eastern Region: Expansion of Coffee (Required Documents): Application and Self-Declaration duly filled in and signed by the Applicant/s (in duplicate) in theprescribed format.; Proof of photo identity of the applicant/s such as a copy of Driving License, Ration Card, Election Photo Identity Card (EPIC) issued by the Election Commission, Aadhaar Card, Passport, or PAN Card, etc.; Proof of Land Ownership.; Bank Account details, including account number, bank name, and branch, and IFSC code.; Land records/possession certificate duly certified by the Village Authority/ State Government Authority/ Competent Authority.; Application and Self-Declaration duly filled in and signed by the Applicant/s (in duplicate) in theprescribed format.",
+        "similarity_score": 0.7095,
+        "cross_encoder_score": 0.0,
+        "mmr_score": 0.2483,
+        "metadata": {
+          "scheme_id": "AGRI1966",
+          "scheme_name": "Coffee Development Programme in North Eastern Region: Expansion of Coffee",
+          "state": "All",
+          "sector": "Crop Production & Inputs",
+          "sub_sector": "Credit, Subsidy & Financial Assistance",
+          "ministry": "Department of Agriculture, Government of All",
+          "category": "Agriculture,Rural & Environment",
+          "scheme_level": "State Government Scheme",
+          "target_demographic": [
+            "SC / ST Farmers"
+          ],
+          "application_mode": "Hybrid / CSC / Online",
+          "eligibility_tags": [
+            "Agricultural Land Ownership / RoR",
+            "SC / ST Priority"
+          ],
+          "benefit_tags": [
+            "Financial Subsidy",
+            "Direct Benefit Transfer (DBT)",
+            "Crop Insurance Coverage"
+          ],
+          "crop_tags": [
+            "Spices & Plantation"
+          ],
+          "farmer_tags": [
+            "SC / ST Farmers"
+          ],
+          "government_tags": [
+            "Government Verified"
+          ],
+          "keyword_tags": [
+            "Crop Insurance Coverage",
+            "Spices & Plantation",
+            "Direct Benefit Transfer (DBT)",
+            "Financial Subsidy",
+            "Government Verified",
+            "SC / ST Farmers",
+            "Credit, Subsidy & Financial Assistance",
+            "Subsidy",
+            "All",
+            "Crop Production & Inputs"
+          ],
+          "official_urls": [
+            "https://web.umang.gov.in/web_new/department?url=coffee_board%2Fservice%2F1739&dept_id=371&dept_name=Grower%20Registration&transactionId=PFCXMNL5&source=myscheme"
+          ],
+          "registration_links": [
+            "https://coffeeboard.gov.in/Schemes/ICDP_388.pdf"
+          ],
+          "chunk_id": "AGRI1966_chk_4",
+          "chunk_type": "documents",
+          "chunk_index": 4
+        }
+      }
+    ],
+    "total_ranked": 10,
+    "lambda_mmr": 0.7,
+    "cross_encoder_model": "cross-encoder/ms-marco-MiniLM-L-6-v2"
+  },
+  "RetrievalConfidence": {
+    "final_confidence_score": 0.4622,
+    "confidence_category": "Low",
+    "fallback_triggered": true,
+    "component_scores": {
+      "cross_encoder_mean": 0.0092,
+      "cosine_similarity_mean": 0.7185,
+      "metadata_match_score": 0.65,
+      "eligibility_match_score": 0.6625,
+      "mmr_diversity_score": 1.0
+    },
+    "matching_scheme_ids": [
+      "AGRI2358",
+      "AGRI2119",
+      "AGRI2122",
+      "AGRI2203",
+      "AGRI2367"
+    ],
+    "matching_scheme_names": [
+      "Pradhan Mantri Vanbandhu Kalyan Yojana",
+      "Agri-Clinics And Agri-Business Centres Scheme",
+      "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Reintroduced subcomponents:Supply of Silpaulin Sheets (nos)",
+      "Prime Minister's Rural Development Fellows Scheme",
+      "Coffee Development Programme in North Eastern Region: Consolidation of Coffee"
+    ],
+    "top_ranked_chunk_ids": [
+      "AGRI2358_chk_1",
+      "AGRI2119_chk_15",
+      "AGRI2122_chk_8",
+      "AGRI2203_chk_6",
+      "AGRI2367_chk_4"
+    ],
+    "top_ranked_chunk_types": [
+      "eligibility",
+      "faq",
+      "faq",
+      "benefits",
+      "documents"
+    ],
+    "retrieval_summary": "Retrieval confidence: Low (46.2%). Retrieved 10 diverse chunks across 5 matching schemes. Cross-Encoder relevance: 0.01, Cosine similarity: 0.72. Safety fallback: ACTIVE."
+  },
+  "phase4_ready_context": {
+    "top_chunks": [
+      {
+        "final_rank": 1,
+        "scheme_id": "AGRI2358",
+        "scheme_name": "Pradhan Mantri Vanbandhu Kalyan Yojana",
+        "chunk_id": "AGRI2358_chk_1",
+        "chunk_type": "eligibility",
+        "chunk_text": "Pradhan Mantri Vanbandhu Kalyan Yojana (Eligibility Criteria): State: All. Income: Max: 250000. Priority: SC, ST.",
+        "similarity_score": 0.7366,
+        "cross_encoder_score": 0.0041,
+        "mmr_score": 0.2604,
+        "metadata": {
+          "scheme_id": "AGRI2358",
+          "scheme_name": "Pradhan Mantri Vanbandhu Kalyan Yojana",
+          "state": "All",
+          "sector": "Credit, Subsidy & Financial Assistance",
+          "sub_sector": "Post-Harvest & Storage, Skill Development & Entrepreneurship",
+          "ministry": "Department of Agriculture, Government of All",
+          "category": "Education & Learning, Agriculture,Rural & Environment",
+          "scheme_level": "State Government Scheme",
+          "target_demographic": [
+            "SC / ST Farmers"
+          ],
+          "application_mode": "Online",
+          "eligibility_tags": [
+            "State Domicile / Residential Proof",
+            "SC / ST Priority",
+            "Age Criteria Applicable",
+            "Income Threshold Applicable"
+          ],
+          "benefit_tags": [
+            "Financial Subsidy",
+            "Free Training & Skill Development"
+          ],
+          "crop_tags": [
+            "Paddy / Rice",
+            "Pulses"
+          ],
+          "farmer_tags": [
+            "SC / ST Farmers"
+          ],
+          "government_tags": [
+            "Government Verified"
+          ],
+          "keyword_tags": [
+            "Pulses",
+            "Skill Development & Entrepreneurship",
+            "Financial Subsidy",
+            "Free Training & Skill Development",
+            "Government Verified",
+            "SC / ST Farmers",
+            "Post-Harvest & Storage",
+            "Credit, Subsidy & Financial Assistance",
+            "Training",
+            "Paddy / Rice",
+            "All"
+          ],
+          "official_urls": [
+            "https://www.pib.gov.in/PressNoteDetails.aspx?NoteId=153376&ModuleId=3&reg=3&lang=1",
+            "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1943128&reg=3&lang=2"
+          ],
+          "registration_links": [],
+          "chunk_id": "AGRI2358_chk_1",
+          "chunk_type": "eligibility",
+          "chunk_index": 1
+        }
+      },
+      {
+        "final_rank": 2,
+        "scheme_id": "AGRI2119",
+        "scheme_name": "Agri-Clinics And Agri-Business Centres Scheme",
+        "chunk_id": "AGRI2119_chk_15",
+        "chunk_type": "faq",
+        "chunk_text": "Agri-Clinics And Agri-Business Centres Scheme (FAQs): will be given to the trainees.\", \"question\": \"What is covered in training?\"}; {\"answer\": \"The margin money to be contributed by the entrepreneur will be as per prevailing norms issued by Reserve Bank of India. As per present norms, margin money is not prescribed for loans upto ₹5 lakhs. In case of margin money, concessions would be made in respect of SCs/STs, women and beneficiaries of North-Eastern States, Hill areas.",
+        "similarity_score": 0.7165,
+        "cross_encoder_score": 0.0059,
+        "mmr_score": 0.2546,
+        "metadata": {
+          "scheme_id": "AGRI2119",
+          "scheme_name": "Agri-Clinics And Agri-Business Centres Scheme",
+          "state": "All",
+          "sector": "Crop Production & Inputs",
+          "sub_sector": "Farm Mechanization & Machinery, Irrigation & Water Management",
+          "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+          "category": "Agriculture,Rural & Environment, Business & Entrepreneurship, Skills & Employment",
+          "scheme_level": "State Government Scheme",
+          "target_demographic": [
+            "Women Farmers",
+            "SC / ST Farmers",
+            "Fishermen & Aquaculturists",
+            "Livestock & Dairy Keepers"
+          ],
+          "application_mode": "Online",
+          "eligibility_tags": [
+            "SC / ST Priority",
+            "Age Criteria Applicable"
+          ],
+          "benefit_tags": [
+            "Financial Subsidy",
+            "Low-Interest Credit / Loan",
+            "Crop Insurance Coverage",
+            "Free Training & Skill Development",
+            "Free Agricultural Inputs",
+            "Farm Equipment Assistance"
+          ],
+          "crop_tags": [
+            "Horticulture & Fruits"
+          ],
+          "farmer_tags": [
+            "Women Farmers",
+            "SC / ST Farmers",
+            "Fishermen & Aquaculturists",
+            "Livestock & Dairy Keepers"
+          ],
+          "government_tags": [
+            "NABARD"
+          ],
+          "keyword_tags": [
+            "Women Farmers",
+            "Crop Insurance & Risk Management",
+            "Free Training & Skill Development",
+            "SC / ST Farmers",
+            "Horticulture",
+            "Fisheries",
+            "Poultry",
+            "Livestock",
+            "Training",
+            "Crop Production & Inputs",
+            "Loan",
+            "Farm Mechanization & Machinery",
+            "Fishermen & Aquaculturists",
+            "Skill Development & Entrepreneurship",
+            "Financial Subsidy",
+            "Low-Interest Credit / Loan",
+            "Women",
+            "NABARD",
+            "Horticulture & Fruits",
+            "Farm Equipment Assistance",
+            "Free Agricultural Inputs",
+            "Livestock & Dairy Keepers",
+            "Irrigation",
+            "Irrigation & Water Management",
+            "Farmer",
+            "Subsidy",
+            "Credit, Subsidy & Financial Assistance",
+            "All",
+            "Crop Insurance Coverage",
+            "Animal Husbandry, Dairy & Fisheries",
+            "Dairy",
+            "Entrepreneurship",
+            "Horticulture & High-Value Crops",
+            "Post-Harvest & Storage"
+          ],
+          "official_urls": [
+            "https://acabcmis.gov.in/home.aspx",
+            "https://acabcmis.gov.in/Institute.aspx"
+          ],
+          "registration_links": [
+            "https://acabcmis.gov.in/ApplicantReg.aspx",
+            "https://acabcmis.gov.in/ApplicationStatus_new.aspx",
+            "https://www.jansamarth.in/home"
+          ],
+          "chunk_id": "AGRI2119_chk_15",
+          "chunk_type": "faq",
+          "chunk_index": 15
+        }
+      },
+      {
+        "final_rank": 3,
+        "scheme_id": "AGRI2122",
+        "scheme_name": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Reintroduced subcomponents:Supply of Silpaulin Sheets (nos)",
+        "chunk_id": "AGRI2122_chk_8",
+        "chunk_type": "faq",
+        "chunk_text": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Reintroduced subcomponents:Supply of Silpaulin Sheets (nos) (FAQs): {\"answer\": \"The scheme is available in all spice-growing States and regions of India.\", \"question\": \"In which areas is the scheme available?\"}; {\"answer\": \"General Category applicants are eligible for 50% assistance, subject to a maximum of ₹2,000 per Silpaulin Sheet.\", \"question\": \"What financial assistance is available for General Category applicants?\"}; {\"answer\": \"SC/ST applicants are eligible for 75% assistance, subject to a maximum of ₹3,000 per Silpaulin Sheet.\", \"question\": \"What financial assistance is",
+        "similarity_score": 0.7025,
+        "cross_encoder_score": 0.0175,
+        "mmr_score": 0.2572,
+        "metadata": {
+          "scheme_id": "AGRI2122",
+          "scheme_name": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Reintroduced subcomponents:Supply of Silpaulin Sheets (nos)",
+          "state": "All",
+          "sector": "Credit, Subsidy & Financial Assistance",
+          "sub_sector": "Credit, Subsidy & Financial Assistance",
+          "ministry": "Department of Agriculture, Government of All",
+          "category": "Agriculture,Rural & Environment",
+          "scheme_level": "State Government Scheme",
+          "target_demographic": [
+            "SC / ST Farmers"
+          ],
+          "application_mode": "Online",
+          "eligibility_tags": [
+            "SC / ST Priority",
+            "Age Criteria Applicable"
+          ],
+          "benefit_tags": [
+            "Financial Subsidy"
+          ],
+          "crop_tags": [
+            "Vegetables",
+            "Spices & Plantation"
+          ],
+          "farmer_tags": [
+            "SC / ST Farmers"
+          ],
+          "government_tags": [
+            "Government Verified"
+          ],
+          "keyword_tags": [
+            "Spices & Plantation",
+            "Vegetables",
+            "Financial Subsidy",
+            "Government Verified",
+            "SC / ST Farmers",
+            "Farmer",
+            "Credit, Subsidy & Financial Assistance",
+            "All"
+          ],
+          "official_urls": [
+            "https://serviceonline.gov.in/dbt/login.do"
+          ],
+          "registration_links": [
+            "https://serviceonline.gov.in/dbt/",
+            "https://serviceonline.gov.in/dbt/citizenRegistration.html",
+            "https://serviceonline.gov.in/dbt/loginWindow.do"
+          ],
+          "chunk_id": "AGRI2122_chk_8",
+          "chunk_type": "faq",
+          "chunk_index": 8
+        }
+      },
+      {
+        "final_rank": 4,
+        "scheme_id": "AGRI2203",
+        "scheme_name": "Prime Minister's Rural Development Fellows Scheme",
+        "chunk_id": "AGRI2203_chk_6",
+        "chunk_type": "benefits",
+        "chunk_text": "Prime Minister's Rural Development Fellows Scheme (Benefits & Subsidies): Subsidy: Max Percentage: 10. Min Percentage: 10. Summary: *Stipend Package*, The Fellow shall be entitled to a consolidated stipend package of ₹50,000/- (Rupees Fifty thousand only) per month during the orientation period., The Fellow shall be entitled to ₹75,000/- (Rupees Seventy Five Thousand only) per month during the first year of the Fellowship (post-orientation)., The Fellow shall receive a 10% increment during the second year, subject to satisfactory performance., This package is deemed to cover the Fellow's honorarium, boarding and lodging expenses during orientation, accommodation/house rent during the rest of the Fellowship period, health insurance, life and disability insurance cover, and any other contingency expenses., Travel reimbursement will be based on actual costs and restricted to AC-II tier train fare by the shortest route or equivalent, plus local transport cost.",
+        "similarity_score": 0.6971,
+        "cross_encoder_score": 0.0001,
+        "mmr_score": 0.244,
+        "metadata": {
+          "scheme_id": "AGRI2203",
+          "scheme_name": "Prime Minister's Rural Development Fellows Scheme",
+          "state": "All",
+          "sector": "Credit, Subsidy & Financial Assistance",
+          "sub_sector": "Crop Insurance & Risk Management",
+          "ministry": "Ministry of Rural Development",
+          "category": "Agriculture,Rural & Environment, Skills & Employment",
+          "scheme_level": "State Government Scheme",
+          "target_demographic": [
+            "Women Farmers",
+            "SC / ST Farmers"
+          ],
+          "application_mode": "Offline (Panchayat / Agriculture Office)",
+          "eligibility_tags": [
+            "Small & Marginal Farmer Category",
+            "SC / ST Priority",
+            "Women Farmer Priority",
+            "Age Criteria Applicable"
+          ],
+          "benefit_tags": [
+            "Financial Subsidy",
+            "Direct Benefit Transfer (DBT)",
+            "Crop Insurance Coverage"
+          ],
+          "crop_tags": [
+            "All Crops"
+          ],
+          "farmer_tags": [
+            "Women Farmers",
+            "SC / ST Farmers"
+          ],
+          "government_tags": [
+            "Government Verified"
+          ],
+          "keyword_tags": [
+            "Women Farmers",
+            "Crop Insurance Coverage",
+            "Crop Insurance & Risk Management",
+            "Direct Benefit Transfer (DBT)",
+            "Financial Subsidy",
+            "Government Verified",
+            "Women",
+            "SC / ST Farmers",
+            "Credit, Subsidy & Financial Assistance",
+            "All"
+          ],
+          "official_urls": [
+            "https://cdn.s3waas.gov.in/s330ef30b64204a3088a26bc2e6ecf7602/uploads/2018/11/2018111655-1.pdf"
+          ],
+          "registration_links": [],
+          "chunk_id": "AGRI2203_chk_6",
+          "chunk_type": "benefits",
+          "chunk_index": 6
+        }
+      },
+      {
+        "final_rank": 5,
+        "scheme_id": "AGRI2367",
+        "scheme_name": "Coffee Development Programme in North Eastern Region: Consolidation of Coffee",
+        "chunk_id": "AGRI2367_chk_4",
+        "chunk_type": "documents",
+        "chunk_text": "Coffee Development Programme in North Eastern Region: Consolidation of Coffee (Required Documents): Application and Self Declaration duly filled in and signed by the Applicant/s (in duplicate) in theprescribed format.; Proof of photo identity of the applicant/s, such as a copy of the Driving License, Ration Card, Election Photo Identity Card (EPIC) issued by the Election Commission, Aadhaar Card, Passport, or PAN Card, etc.; Proof of Land Ownership.; Bank Account details, including account number, bank name, branch, and IFSC code.; Application and Self Declaration duly filled in and signed by the Applicant/s (in duplicate) in theprescribed format.",
+        "similarity_score": 0.7092,
+        "cross_encoder_score": 0.0,
+        "mmr_score": 0.2482,
+        "metadata": {
+          "scheme_id": "AGRI2367",
+          "scheme_name": "Coffee Development Programme in North Eastern Region: Consolidation of Coffee",
+          "state": "All",
+          "sector": "Crop Production & Inputs",
+          "sub_sector": "Credit, Subsidy & Financial Assistance",
+          "ministry": "Department of Agriculture, Government of All",
+          "category": "Agriculture,Rural & Environment",
+          "scheme_level": "State Government Scheme",
+          "target_demographic": [
+            "SC / ST Farmers"
+          ],
+          "application_mode": "Hybrid / CSC / Online",
+          "eligibility_tags": [
+            "Agricultural Land Ownership / RoR",
+            "SC / ST Priority",
+            "Age Criteria Applicable"
+          ],
+          "benefit_tags": [
+            "Financial Subsidy",
+            "Direct Benefit Transfer (DBT)",
+            "Crop Insurance Coverage"
+          ],
+          "crop_tags": [
+            "Spices & Plantation"
+          ],
+          "farmer_tags": [
+            "SC / ST Farmers"
+          ],
+          "government_tags": [
+            "Government Verified"
+          ],
+          "keyword_tags": [
+            "Crop Insurance Coverage",
+            "Spices & Plantation",
+            "Direct Benefit Transfer (DBT)",
+            "Financial Subsidy",
+            "Government Verified",
+            "SC / ST Farmers",
+            "Credit, Subsidy & Financial Assistance",
+            "Subsidy",
+            "All",
+            "Crop Production & Inputs"
+          ],
+          "official_urls": [
+            "https://web.umang.gov.in/web_new/department?url=coffee_board%2Fservice%2F1739&dept_id=371&dept_name=Grower%20Registration&transactionId=PFCXMNL5&source=myscheme"
+          ],
+          "registration_links": [
+            "https://coffeeboard.gov.in/Schemes/ICDP_388.pdf"
+          ],
+          "chunk_id": "AGRI2367_chk_4",
+          "chunk_type": "documents",
+          "chunk_index": 4
+        }
+      },
+      {
+        "final_rank": 6,
+        "scheme_id": "AGRI2121",
+        "scheme_name": "National Mission on Natural Farming",
+        "chunk_id": "AGRI2121_chk_2",
+        "chunk_type": "eligibility",
+        "chunk_text": "National Mission on Natural Farming (Eligibility Criteria): State: All. Priority: SC, ST. Conditions: The scheme is applicable to all farmers in India.. Occupation: Farmer",
+        "similarity_score": 0.7013,
+        "cross_encoder_score": 0.0002,
+        "mmr_score": 0.2456,
+        "metadata": {
+          "scheme_id": "AGRI2121",
+          "scheme_name": "National Mission on Natural Farming",
+          "state": "All",
+          "sector": "Crop Production & Inputs",
+          "sub_sector": "Credit, Subsidy & Financial Assistance, Animal Husbandry, Dairy & Fisheries",
+          "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+          "category": "Agriculture,Rural & Environment",
+          "scheme_level": "Centrally Sponsored Scheme",
+          "target_demographic": [
+            "SC / ST Farmers",
+            "Organic Farmers",
+            "Livestock & Dairy Keepers"
+          ],
+          "application_mode": "Offline (Panchayat / Agriculture Office)",
+          "eligibility_tags": [
+            "SC / ST Priority",
+            "Income Threshold Applicable"
+          ],
+          "benefit_tags": [
+            "Free Training & Skill Development"
+          ],
+          "crop_tags": [
+            "All Crops"
+          ],
+          "farmer_tags": [
+            "SC / ST Farmers",
+            "Organic Farmers",
+            "Livestock & Dairy Keepers"
+          ],
+          "government_tags": [
+            "Government Verified"
+          ],
+          "keyword_tags": [
+            "Livestock & Dairy Keepers",
+            "Animal Husbandry, Dairy & Fisheries",
+            "Skill Development & Entrepreneurship",
+            "Government Verified",
+            "Free Training & Skill Development",
+            "SC / ST Farmers",
+            "Farmer",
+            "Credit, Subsidy & Financial Assistance",
+            "Training",
+            "All",
+            "Crop Production & Inputs",
+            "Organic Farmers"
+          ],
+          "official_urls": [
+            "http://agriculture.up.gov.in/nmnf/natural_farming/guid/NMNFGuidelines.pdf"
+          ],
+          "registration_links": [],
+          "chunk_id": "AGRI2121_chk_2",
+          "chunk_type": "eligibility",
+          "chunk_index": 2
+        }
+      },
+      {
+        "final_rank": 7,
+        "scheme_id": "AGRI2316",
+        "scheme_name": "Pradhan Mantri Matsya Kisan Samridhi Sah-yojana (PM-MKSSY): COMPONENT 1B: One-Time Incentive for the Adoption of Aquaculture Insurance",
+        "chunk_id": "AGRI2316_chk_3",
+        "chunk_type": "eligibility",
+        "chunk_text": "Pradhan Mantri Matsya Kisan Samridhi Sah-yojana (PM-MKSSY): COMPONENT 1B: One-Time Incentive for the Adoption of Aquaculture Insurance (Eligibility Criteria): State: All. Priority: SC, ST. Conditions: The applicant must be a fisheries microenterprise or an individual engaged in fisheries or aquaculture-related activities., The applicant must be registered on the National Fisheries Digital Platform (NFDP)., The applicant must have availed institutional credit from a recognised financial institution., The applicant must possess a valid Aadhaar-seeded bank account for DBT purposes., The applicant must submit documentary proof of loan sanction and disbursement., The applicant must consent to the verification and validation process undertaken by the Department of Fisheries.. Occupation: Entrepreneur",
+        "similarity_score": 0.7092,
+        "cross_encoder_score": 0.0,
+        "mmr_score": 0.2482,
+        "metadata": {
+          "scheme_id": "AGRI2316",
+          "scheme_name": "Pradhan Mantri Matsya Kisan Samridhi Sah-yojana (PM-MKSSY): COMPONENT 1B: One-Time Incentive for the Adoption of Aquaculture Insurance",
+          "state": "All",
+          "sector": "Credit, Subsidy & Financial Assistance",
+          "sub_sector": "Crop Insurance & Risk Management, Animal Husbandry, Dairy & Fisheries",
+          "ministry": "Ministry of Fisheries, Animal Husbandry and Dairying",
+          "category": "Agriculture,Rural & Environment, Banking,Financial Services And Insurance",
+          "scheme_level": "State Government Scheme",
+          "target_demographic": [
+            "SC / ST Farmers",
+            "Fishermen & Aquaculturists",
+            "Livestock & Dairy Keepers"
+          ],
+          "application_mode": "Online",
+          "eligibility_tags": [
+            "Aadhaar Card Required",
+            "Active Bank Account",
+            "SC / ST Priority",
+            "Age Criteria Applicable"
+          ],
+          "benefit_tags": [
+            "Direct Benefit Transfer (DBT)",
+            "Low-Interest Credit / Loan",
+            "Crop Insurance Coverage"
+          ],
+          "crop_tags": [
+            "All Crops"
+          ],
+          "farmer_tags": [
+            "SC / ST Farmers",
+            "Fishermen & Aquaculturists",
+            "Livestock & Dairy Keepers"
+          ],
+          "government_tags": [
+            "Government Verified"
+          ],
+          "keyword_tags": [
+            "Fishermen & Aquaculturists",
+            "Livestock & Dairy Keepers",
+            "Crop Insurance Coverage",
+            "Crop Insurance & Risk Management",
+            "Animal Husbandry, Dairy & Fisheries",
+            "Dairy",
+            "Skill Development & Entrepreneurship",
+            "Direct Benefit Transfer (DBT)",
+            "Low-Interest Credit / Loan",
+            "Government Verified",
+            "SC / ST Farmers",
+            "Fisheries",
+            "Credit, Subsidy & Financial Assistance",
+            "All",
+            "Loan"
+          ],
+          "official_urls": [
+            "https://nfdp.dof.gov.in/",
+            "https://nfdp.dof.gov.in/nfdp/#/registration",
+            "https://nfdp.dof.gov.in/nfdp/#/scheme?t=PM_MKSSY"
+          ],
+          "registration_links": [
+            "https://nfdp.dof.gov.in/nfdp/#/"
+          ],
+          "chunk_id": "AGRI2316_chk_3",
+          "chunk_type": "eligibility",
+          "chunk_index": 3
+        }
+      },
+      {
+        "final_rank": 8,
+        "scheme_id": "AGRI2358",
+        "scheme_name": "Pradhan Mantri Vanbandhu Kalyan Yojana",
+        "chunk_id": "AGRI2358_chk_7",
+        "chunk_type": "documents",
+        "chunk_text": "Pradhan Mantri Vanbandhu Kalyan Yojana (Required Documents): Caste Certificate (to prove Scheduled Tribe status).; Income Certificate (to prove parental annual income is up to ₹2,50,000/-).; Mark Sheet of the last qualifying examination.; Student Identity Card or bonafide certificate from the educational institution.; Aadhaar Card or proof of identity.; Bank Account Details (Account Number and IFSC Code for Direct Benefit Transfer).; Passport Size Photograph.; Domicile Certificate or Proof of Residence.",
+        "similarity_score": 0.7036,
+        "cross_encoder_score": 0.0025,
+        "mmr_score": 0.2479,
+        "metadata": {
+          "scheme_id": "AGRI2358",
+          "scheme_name": "Pradhan Mantri Vanbandhu Kalyan Yojana",
+          "state": "All",
+          "sector": "Credit, Subsidy & Financial Assistance",
+          "sub_sector": "Post-Harvest & Storage, Skill Development & Entrepreneurship",
+          "ministry": "Department of Agriculture, Government of All",
+          "category": "Education & Learning, Agriculture,Rural & Environment",
+          "scheme_level": "State Government Scheme",
+          "target_demographic": [
+            "SC / ST Farmers"
+          ],
+          "application_mode": "Online",
+          "eligibility_tags": [
+            "State Domicile / Residential Proof",
+            "SC / ST Priority",
+            "Age Criteria Applicable",
+            "Income Threshold Applicable"
+          ],
+          "benefit_tags": [
+            "Financial Subsidy",
+            "Free Training & Skill Development"
+          ],
+          "crop_tags": [
+            "Paddy / Rice",
+            "Pulses"
+          ],
+          "farmer_tags": [
+            "SC / ST Farmers"
+          ],
+          "government_tags": [
+            "Government Verified"
+          ],
+          "keyword_tags": [
+            "Pulses",
+            "Skill Development & Entrepreneurship",
+            "Financial Subsidy",
+            "Free Training & Skill Development",
+            "Government Verified",
+            "SC / ST Farmers",
+            "Post-Harvest & Storage",
+            "Credit, Subsidy & Financial Assistance",
+            "Training",
+            "Paddy / Rice",
+            "All"
+          ],
+          "official_urls": [
+            "https://www.pib.gov.in/PressNoteDetails.aspx?NoteId=153376&ModuleId=3&reg=3&lang=1",
+            "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1943128&reg=3&lang=2"
+          ],
+          "registration_links": [],
+          "chunk_id": "AGRI2358_chk_7",
+          "chunk_type": "documents",
+          "chunk_index": 7
+        }
+      },
+      {
+        "final_rank": 9,
+        "scheme_id": "AGRI2588",
+        "scheme_name": "Nagar Van Yojana",
+        "chunk_id": "AGRI2588_chk_2",
+        "chunk_type": "eligibility",
+        "chunk_text": "Nagar Van Yojana (Eligibility Criteria): State: All. Priority: SC, ST.",
+        "similarity_score": 0.7061,
+        "cross_encoder_score": 0.0002,
+        "mmr_score": 0.2473,
+        "metadata": {
+          "scheme_id": "AGRI2588",
+          "scheme_name": "Nagar Van Yojana",
+          "state": "All",
+          "sector": "Credit, Subsidy & Financial Assistance",
+          "sub_sector": "Credit, Subsidy & Financial Assistance",
+          "ministry": "Department of Agriculture, Government of All",
+          "category": "Agriculture,Rural & Environment",
+          "scheme_level": "State Government Scheme",
+          "target_demographic": [
+            "SC / ST Farmers"
+          ],
+          "application_mode": "Hybrid / CSC / Online",
+          "eligibility_tags": [
+            "Agricultural Land Ownership / RoR",
+            "SC / ST Priority",
+            "Age Criteria Applicable"
+          ],
+          "benefit_tags": [
+            "Financial Subsidy"
+          ],
+          "crop_tags": [
+            "Horticulture & Fruits"
+          ],
+          "farmer_tags": [
+            "SC / ST Farmers"
+          ],
+          "government_tags": [
+            "Government Verified"
+          ],
+          "keyword_tags": [
+            "Irrigation",
+            "Financial Subsidy",
+            "Government Verified",
+            "SC / ST Farmers",
+            "Credit, Subsidy & Financial Assistance",
+            "Horticulture & Fruits",
+            "All"
+          ],
+          "official_urls": [
+            "https://moef.gov.in/uploads/2017/06/Implementation-Guidlines-Nager-Van-Yojana.pdf"
+          ],
+          "registration_links": [],
+          "chunk_id": "AGRI2588_chk_2",
+          "chunk_type": "eligibility",
+          "chunk_index": 2
+        }
+      },
+      {
+        "final_rank": 10,
+        "scheme_id": "AGRI1966",
+        "scheme_name": "Coffee Development Programme in North Eastern Region: Expansion of Coffee",
+        "chunk_id": "AGRI1966_chk_4",
+        "chunk_type": "documents",
+        "chunk_text": "Coffee Development Programme in North Eastern Region: Expansion of Coffee (Required Documents): Application and Self-Declaration duly filled in and signed by the Applicant/s (in duplicate) in theprescribed format.; Proof of photo identity of the applicant/s such as a copy of Driving License, Ration Card, Election Photo Identity Card (EPIC) issued by the Election Commission, Aadhaar Card, Passport, or PAN Card, etc.; Proof of Land Ownership.; Bank Account details, including account number, bank name, and branch, and IFSC code.; Land records/possession certificate duly certified by the Village Authority/ State Government Authority/ Competent Authority.; Application and Self-Declaration duly filled in and signed by the Applicant/s (in duplicate) in theprescribed format.",
+        "similarity_score": 0.7095,
+        "cross_encoder_score": 0.0,
+        "mmr_score": 0.2483,
+        "metadata": {
+          "scheme_id": "AGRI1966",
+          "scheme_name": "Coffee Development Programme in North Eastern Region: Expansion of Coffee",
+          "state": "All",
+          "sector": "Crop Production & Inputs",
+          "sub_sector": "Credit, Subsidy & Financial Assistance",
+          "ministry": "Department of Agriculture, Government of All",
+          "category": "Agriculture,Rural & Environment",
+          "scheme_level": "State Government Scheme",
+          "target_demographic": [
+            "SC / ST Farmers"
+          ],
+          "application_mode": "Hybrid / CSC / Online",
+          "eligibility_tags": [
+            "Agricultural Land Ownership / RoR",
+            "SC / ST Priority"
+          ],
+          "benefit_tags": [
+            "Financial Subsidy",
+            "Direct Benefit Transfer (DBT)",
+            "Crop Insurance Coverage"
+          ],
+          "crop_tags": [
+            "Spices & Plantation"
+          ],
+          "farmer_tags": [
+            "SC / ST Farmers"
+          ],
+          "government_tags": [
+            "Government Verified"
+          ],
+          "keyword_tags": [
+            "Crop Insurance Coverage",
+            "Spices & Plantation",
+            "Direct Benefit Transfer (DBT)",
+            "Financial Subsidy",
+            "Government Verified",
+            "SC / ST Farmers",
+            "Credit, Subsidy & Financial Assistance",
+            "Subsidy",
+            "All",
+            "Crop Production & Inputs"
+          ],
+          "official_urls": [
+            "https://web.umang.gov.in/web_new/department?url=coffee_board%2Fservice%2F1739&dept_id=371&dept_name=Grower%20Registration&transactionId=PFCXMNL5&source=myscheme"
+          ],
+          "registration_links": [
+            "https://coffeeboard.gov.in/Schemes/ICDP_388.pdf"
+          ],
+          "chunk_id": "AGRI1966_chk_4",
+          "chunk_type": "documents",
+          "chunk_index": 4
+        }
+      }
+    ],
+    "confidence_score": 0.4622,
+    "confidence_category": "Low",
+    "fallback_triggered": true
+  }
+}

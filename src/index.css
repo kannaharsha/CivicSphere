@@ -352,23 +352,33 @@ h6 {
 }
 
 /* =========================================
-   Custom Scrollbar
+   Custom Scrollbar & Utilities
    ========================================= */
 ::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #16A34A;
-  border-radius: 3px;
+  background: rgba(100, 116, 139, 0.25);
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #15803D;
+  background: rgba(100, 116, 139, 0.45);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }
 
 /* =========================================

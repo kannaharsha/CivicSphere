@@ -1,0 +1,103 @@
+{
+  "phase": "Phase 5 — Grounded LLM Generation",
+  "timestamp": "2026-09-18T08:23:09.581500+00:00",
+  "DraftResponse": {
+    "recommended_scheme": "Pradhan Mantri Vanbandhu Kalyan Yojana",
+    "draft_answer": "### 🏛️ Scheme Reference\n**Pradhan Mantri Vanbandhu Kalyan Yojana**\n- **Scheme ID**: `AGRI2358` · **Ministry**: Department of Agriculture, Government of All · **Jurisdiction**: All\n\n### 🎯 Verified Eligibility Evaluation\n**Overall Status: Likely Eligible**\n\n**Why You Are Eligible:**\n- ✅ **Resident of India (Citizen State: Andhra Pradesh)**\n- ✅ **Citizen is classified as an active Farmer**\n- ✅ **Annual household income within permissible limits (₹180000.0)**\n- ✅ **Age criterion satisfied (20 years)**\n\n*Mandatory Verification Rules:*\n- ⚠️ Landholding size details not fully specified in profile",
+    "model_used": "llama-3.3-70b-versatile",
+    "inference_source": "Verified Grounded Database Engine (Zero-Hallucination Fallback)",
+    "target_intent": "FAQ"
+  },
+  "VerifiedResponse": {
+    "user_query": "I belong to the SC category and my annual income is ₹1.8 lakh. Show schemes I qualify for",
+    "recommended_scheme": "Pradhan Mantri Vanbandhu Kalyan Yojana",
+    "scheme_id": "AGRI2358",
+    "verified_ai_response": "### 🏛️ Scheme Reference\n**Pradhan Mantri Vanbandhu Kalyan Yojana**\n- **Scheme ID**: `AGRI2358` · **Ministry**: Department of Agriculture, Government of All · **Jurisdiction**: All\n\n### 🎯 Verified Eligibility Evaluation\n**Overall Status: Likely Eligible**\n\n**Why You Are Eligible:**\n- ✅ **Resident of India (Citizen State: Andhra Pradesh)**\n- ✅ **Citizen is classified as an active Farmer**\n- ✅ **Annual household income within permissible limits (₹180000.0)**\n- ✅ **Age criterion satisfied (20 years)**\n\n*Mandatory Verification Rules:*\n- ⚠️ Landholding size details not fully specified in profile",
+    "structured_sections": {
+      "section_1_recommended_scheme": {
+        "title": "Recommended Scheme",
+        "scheme_name": "Pradhan Mantri Vanbandhu Kalyan Yojana",
+        "scheme_id": "AGRI2358",
+        "ministry": "Department of Agriculture, Government of All",
+        "state": "All",
+        "confidence_score": 0.4622,
+        "confidence_category": "Low",
+        "confidence_badge": "Low Match (46.2%)"
+      },
+      "section_2_eligibility_result": {
+        "title": "Eligibility Result",
+        "status": "Likely Eligible",
+        "why_eligible": [
+          "Resident of India (Citizen State: Andhra Pradesh)",
+          "Citizen is classified as an active Farmer",
+          "Annual household income within permissible limits (₹180000.0)",
+          "Age criterion satisfied (20 years)"
+        ],
+        "mandatory_rules": [
+          "National / All India Scheme (Applicable to all Indian states)",
+          "Beneficiary must be an active farmer or landholding cultivator",
+          "Institutional landowners and income-tax paying individuals are excluded",
+          "Minimum age 18 years with valid identity proof"
+        ],
+        "missing_conditions": [
+          "Landholding size details not fully specified in profile"
+        ],
+        "failed_conditions": []
+      }
+    },
+    "eligibility_status": "Likely Eligible",
+    "confidence_score": 0.4622,
+    "confidence_category": "Low",
+    "confidence_percentage": "46.2%",
+    "official_urls": [
+      "https://www.pib.gov.in/PressNoteDetails.aspx?NoteId=153376&ModuleId=3&reg=3&lang=1",
+      "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1943128&reg=3&lang=2",
+      "https://acabcmis.gov.in/home.aspx",
+      "https://acabcmis.gov.in/Institute.aspx",
+      "https://serviceonline.gov.in/dbt/login.do",
+      "https://cdn.s3waas.gov.in/s330ef30b64204a3088a26bc2e6ecf7602/uploads/2018/11/2018111655-1.pdf",
+      "https://web.umang.gov.in/web_new/department?url=coffee_board%2Fservice%2F1739&dept_id=371&dept_name=Grower%20Registration&transactionId=PFCXMNL5&source=myscheme",
+      "http://agriculture.up.gov.in/nmnf/natural_farming/guid/NMNFGuidelines.pdf",
+      "https://nfdp.dof.gov.in/",
+      "https://nfdp.dof.gov.in/nfdp/#/registration",
+      "https://nfdp.dof.gov.in/nfdp/#/scheme?t=PM_MKSSY",
+      "https://moef.gov.in/uploads/2017/06/Implementation-Guidlines-Nager-Van-Yojana.pdf",
+      "https://acabcmis.gov.in/ApplicantReg.aspx",
+      "https://acabcmis.gov.in/ApplicationStatus_new.aspx",
+      "https://www.jansamarth.in/home",
+      "https://serviceonline.gov.in/dbt/",
+      "https://serviceonline.gov.in/dbt/citizenRegistration.html",
+      "https://serviceonline.gov.in/dbt/loginWindow.do",
+      "https://coffeeboard.gov.in/Schemes/ICDP_388.pdf",
+      "https://nfdp.dof.gov.in/nfdp/#/"
+    ],
+    "primary_registration_link": "https://acabcmis.gov.in/ApplicantReg.aspx",
+    "ministry": "Department of Agriculture, Government of All",
+    "state": "All",
+    "citation_sources": [
+      {
+        "source_type": "Official Government Portal",
+        "name": "Pradhan Mantri Vanbandhu Kalyan Yojana Portal",
+        "url": "https://acabcmis.gov.in/ApplicantReg.aspx"
+      },
+      {
+        "source_type": "Implementing Ministry",
+        "name": "Department of Agriculture, Government of All",
+        "url": "https://agricoop.gov.in/"
+      },
+      {
+        "source_type": "Verified CivicSphere Database",
+        "name": "Scheme ID: AGRI2358",
+        "url": "https://civicsphere.gov.in"
+      }
+    ],
+    "retrieval_status": "Low Confidence Verified Context",
+    "generation_metadata": {
+      "timestamp": "2026-09-18T08:23:09.581500+00:00",
+      "model": "llama-3.3-70b-versatile",
+      "inference_engine": "Verified Grounded Database Engine (Zero-Hallucination Fallback)",
+      "anti_hallucination_verified": true
+    }
+  },
+  "ready_for_chat_display": true
+}

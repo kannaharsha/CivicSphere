@@ -5,6 +5,7 @@ import path from 'path';
 import { initDb, pool } from './db.js';
 import authRoutes from './routes/authRoutes.js';
 import schemeRoutes from './routes/schemeRoutes.js';
+import aiRoutes from './routes/aiRoutes.js';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
@@ -28,6 +29,7 @@ initDb().catch(err => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/schemes', schemeRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Health check with PostgreSQL connection status
 app.get('/api/health', async (req, res) => {

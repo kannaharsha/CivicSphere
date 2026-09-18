@@ -1,0 +1,128 @@
+{
+  "phase": "Phase 2 — User Query Understanding",
+  "generated_at": "2026-09-17T11:53:59.970806+00:00",
+  "single_query_execution": {
+    "step": "step_14",
+    "original_query": "how to apply for PM-KISAN",
+    "user_id": "Civs1001",
+    "session_id": "sess_66c0cae3dac4",
+    "conversation_id": "conv_24f6d9f6d0",
+    "timestamp": "2026-09-17T11:53:59.888318+00:00",
+    "input_type": "text",
+    "language_code": "en",
+    "language_name": "English",
+    "language_confidence": 0.9,
+    "is_supported": true,
+    "language_status": "verified_english",
+    "clean_query": "how to apply for PM-KISAN",
+    "structured_intent": {
+      "intent": "Application Process",
+      "scheme_name": "Pradhan Mantri Kisan Samman Nidhi",
+      "scheme_alias": "PM-KISAN",
+      "scheme_keywords": [
+        "pm-kisan",
+        "pm kisan",
+        "pmkisan",
+        "kisan samman",
+        "samman nidhi"
+      ],
+      "state": null,
+      "district": null,
+      "village": null,
+      "sector": "Agriculture",
+      "user_requirement_keywords": {
+        "is_farmer": true,
+        "farmer_type": null,
+        "is_student": false,
+        "is_woman": false,
+        "is_senior_citizen": false,
+        "income_limit": null,
+        "landholding_size": null,
+        "social_category": null,
+        "has_disability": false,
+        "occupation": "Farmer",
+        "age_group": null
+      },
+      "sql_filter_object": {
+        "state": "All",
+        "sector": "Agriculture",
+        "scheme_name": "Pradhan Mantri Kisan Samman Nidhi",
+        "target_demographic": [
+          "Farmer"
+        ],
+        "beneficiary_category": [],
+        "max_income": null,
+        "max_landholding": null,
+        "social_category": null
+      },
+      "search_keywords": [
+        "apply",
+        "pm-kisan",
+        "agriculture",
+        "pradhan",
+        "mantri",
+        "kisan",
+        "samman",
+        "nidhi"
+      ]
+    },
+    "citizen_profile_summary": {
+      "profile_id": "Civs1001",
+      "full_name": "Citizen",
+      "gender": "Male",
+      "age": null,
+      "caste_category": "General",
+      "occupation": null,
+      "annual_family_income": null,
+      "state": null,
+      "district": null,
+      "employment_status": "Employed"
+    },
+    "personalized_eligibility_filters": {
+      "eligible_age_range": {
+        "citizen_age": null,
+        "is_senior_citizen": false
+      },
+      "eligible_income_category": {
+        "annual_income": null,
+        "income_bracket": "Unknown"
+      },
+      "eligible_caste_category": "General",
+      "eligible_occupation": "Farmer",
+      "eligible_landholding_size": null,
+      "eligible_state": "All",
+      "eligible_district": null,
+      "target_demographic": [
+        "Farmer"
+      ],
+      "priority_matching_score": 1.5
+    },
+    "final_retrieval_payload": {
+      "query_text": "how to apply for PM-KISAN",
+      "intent": "Application Process",
+      "target_scheme": "Pradhan Mantri Kisan Samman Nidhi",
+      "target_sector": "Agriculture",
+      "sql_filters": {
+        "state": "All",
+        "sector": "Agriculture",
+        "target_demographics": [
+          "Farmer"
+        ],
+        "social_category": "General",
+        "max_income": null,
+        "max_land": null
+      },
+      "vector_search_tokens": [
+        "apply",
+        "pm-kisan",
+        "agriculture",
+        "pradhan",
+        "mantri",
+        "kisan",
+        "samman",
+        "nidhi"
+      ],
+      "priority_score": 1.5
+    }
+  }
+}

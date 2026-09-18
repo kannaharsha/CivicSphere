@@ -1,0 +1,423 @@
+{
+  "phase": "Phase 4 — Context Assembly",
+  "timestamp": "2026-09-18T08:23:08.840582+00:00",
+  "VerifiedContextPackage": {
+    "user_query": "I belong to the SC category and my annual income is ₹1.8 lakh. Show schemes I qualify for",
+    "clean_query": "I belong to the SC category and my annual income is ₹1.8 lakh. Show schemes I qualify for",
+    "structured_intent": {
+      "intent": "FAQ",
+      "target_scheme": null,
+      "sector": "Social Welfare",
+      "state": null
+    },
+    "citizen_profile_summary": {
+      "age": 20,
+      "gender": "Male",
+      "occupation": "Farmer",
+      "annual_income": 180000.0,
+      "social_category": "SC",
+      "landholding_size": null,
+      "state": "Andhra Pradesh",
+      "district": "Vizianagaram"
+    },
+    "matching_scheme_information": {
+      "scheme_id": "AGRI2358",
+      "scheme_name": "Pradhan Mantri Vanbandhu Kalyan Yojana",
+      "state": "All",
+      "sector": "Credit, Subsidy & Financial Assistance",
+      "ministry": "Department of Agriculture, Government of All",
+      "category": "Education & Learning, Agriculture,Rural & Environment",
+      "target_demographic": [
+        "SC / ST Farmers"
+      ]
+    },
+    "eligibility_checklist": {
+      "overall_status": "Likely Eligible",
+      "eligible_conditions": [
+        "National / All India Scheme (Applicable to all Indian states)",
+        "Beneficiary must be an active farmer or landholding cultivator",
+        "Institutional landowners and income-tax paying individuals are excluded",
+        "Minimum age 18 years with valid identity proof"
+      ],
+      "matched_conditions": [
+        "Resident of India (Citizen State: Andhra Pradesh)",
+        "Citizen is classified as an active Farmer",
+        "Annual household income within permissible limits (₹180000.0)",
+        "Age criterion satisfied (20 years)"
+      ],
+      "missing_conditions": [
+        "Landholding size details not fully specified in profile"
+      ],
+      "failed_conditions": []
+    },
+    "benefits_summary": {
+      "assistance_amounts": [],
+      "financial_benefits": [],
+      "subsidies": [
+        "Prime Minister's Rural Development Fellows Scheme (Benefits & Subsidies): Subsidy: Max Percentage: 10"
+      ],
+      "insurance_benefits": [
+        "Pradhan Mantri Matsya Kisan Samridhi Sah-yojana (PM-MKSSY): COMPONENT 1B: One-Time Incentive for the Adoption of Aquaculture Insurance (Eligibility Criteria): State: All"
+      ],
+      "other_benefits": [
+        "Financial Subsidy",
+        "Free Training & Skill Development",
+        "Low-Interest Credit / Loan",
+        "Crop Insurance Coverage",
+        "Free Agricultural Inputs",
+        "Farm Equipment Assistance",
+        "Direct Benefit Transfer (DBT)"
+      ]
+    },
+    "required_documents_checklist": [
+      "Aadhaar Card (linked with active mobile number)",
+      "Bank Account Passbook (with IFSC code & Aadhaar seed)",
+      "Land Ownership Proof / Records of Rights (RoR / Pattadar Passbook / Khatian / 7/12 Extract)",
+      "Passport Size Photographs",
+      "Government-issued Identity Proof (Voter ID / Driving License)",
+      "Income Certificate / Self-declaration of non-taxpayer status",
+      "Caste / Social Category Certificate (for SC/ST/OBC category applicants)"
+    ],
+    "application_information": {
+      "application_steps": [
+        "Visit the official portal or nearest Common Service Centre (CSC) / Village Agriculture Office.",
+        "Click on 'New Farmer Registration' under the Farmers Corner section.",
+        "Enter Aadhaar Number, select State, and verify captcha to generate OTP.",
+        "Fill in Land Record details (Survey/Khata Number, Khasra Number, Sub-division, and Area).",
+        "Upload mandatory documents (Aadhaar Card, Land Records, Bank Passbook).",
+        "Submit the application and save the Registration Number for future tracking."
+      ],
+      "registration_procedure": "Online registration via official government portal or offline submission via Common Service Centres (CSC) / Panchayat Secretary.",
+      "primary_registration_url": "https://acabcmis.gov.in/ApplicantReg.aspx",
+      "all_official_urls": [
+        "https://www.pib.gov.in/PressNoteDetails.aspx?NoteId=153376&ModuleId=3&reg=3&lang=1",
+        "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1943128&reg=3&lang=2",
+        "https://acabcmis.gov.in/home.aspx",
+        "https://acabcmis.gov.in/Institute.aspx",
+        "https://serviceonline.gov.in/dbt/login.do",
+        "https://cdn.s3waas.gov.in/s330ef30b64204a3088a26bc2e6ecf7602/uploads/2018/11/2018111655-1.pdf",
+        "https://web.umang.gov.in/web_new/department?url=coffee_board%2Fservice%2F1739&dept_id=371&dept_name=Grower%20Registration&transactionId=PFCXMNL5&source=myscheme",
+        "http://agriculture.up.gov.in/nmnf/natural_farming/guid/NMNFGuidelines.pdf",
+        "https://nfdp.dof.gov.in/",
+        "https://nfdp.dof.gov.in/nfdp/#/registration",
+        "https://nfdp.dof.gov.in/nfdp/#/scheme?t=PM_MKSSY",
+        "https://moef.gov.in/uploads/2017/06/Implementation-Guidlines-Nager-Van-Yojana.pdf",
+        "https://acabcmis.gov.in/ApplicantReg.aspx",
+        "https://acabcmis.gov.in/ApplicationStatus_new.aspx",
+        "https://www.jansamarth.in/home",
+        "https://serviceonline.gov.in/dbt/",
+        "https://serviceonline.gov.in/dbt/citizenRegistration.html",
+        "https://serviceonline.gov.in/dbt/loginWindow.do",
+        "https://coffeeboard.gov.in/Schemes/ICDP_388.pdf",
+        "https://nfdp.dof.gov.in/nfdp/#/"
+      ]
+    },
+    "official_urls": [
+      "https://www.pib.gov.in/PressNoteDetails.aspx?NoteId=153376&ModuleId=3&reg=3&lang=1",
+      "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1943128&reg=3&lang=2",
+      "https://acabcmis.gov.in/home.aspx",
+      "https://acabcmis.gov.in/Institute.aspx",
+      "https://serviceonline.gov.in/dbt/login.do",
+      "https://cdn.s3waas.gov.in/s330ef30b64204a3088a26bc2e6ecf7602/uploads/2018/11/2018111655-1.pdf",
+      "https://web.umang.gov.in/web_new/department?url=coffee_board%2Fservice%2F1739&dept_id=371&dept_name=Grower%20Registration&transactionId=PFCXMNL5&source=myscheme",
+      "http://agriculture.up.gov.in/nmnf/natural_farming/guid/NMNFGuidelines.pdf",
+      "https://nfdp.dof.gov.in/",
+      "https://nfdp.dof.gov.in/nfdp/#/registration",
+      "https://nfdp.dof.gov.in/nfdp/#/scheme?t=PM_MKSSY",
+      "https://moef.gov.in/uploads/2017/06/Implementation-Guidlines-Nager-Van-Yojana.pdf",
+      "https://acabcmis.gov.in/ApplicantReg.aspx",
+      "https://acabcmis.gov.in/ApplicationStatus_new.aspx",
+      "https://www.jansamarth.in/home",
+      "https://serviceonline.gov.in/dbt/",
+      "https://serviceonline.gov.in/dbt/citizenRegistration.html",
+      "https://serviceonline.gov.in/dbt/loginWindow.do",
+      "https://coffeeboard.gov.in/Schemes/ICDP_388.pdf",
+      "https://nfdp.dof.gov.in/nfdp/#/"
+    ],
+    "relevant_faqs": [
+      {
+        "question": "Are all landholding farmers eligible irrespective of land size?",
+        "answer": "Yes. The ambit of PM-KISAN was revised in 2019 to cover all landholding farmer families in the country, subject to exclusion criteria (e.g. institutional landholders, income tax payers)."
+      }
+    ],
+    "retrieval_evidence_chunks": [
+      {
+        "chunk_id": "AGRI2358_chk_1",
+        "chunk_type": "eligibility",
+        "scheme_name": "Pradhan Mantri Vanbandhu Kalyan Yojana",
+        "similarity_score": 0.7366,
+        "cross_encoder_score": 0.0041,
+        "text": "Pradhan Mantri Vanbandhu Kalyan Yojana (Eligibility Criteria): State: All. Income: Max: 250000. Priority: SC, ST."
+      },
+      {
+        "chunk_id": "AGRI2119_chk_15",
+        "chunk_type": "faq",
+        "scheme_name": "Agri-Clinics And Agri-Business Centres Scheme",
+        "similarity_score": 0.7165,
+        "cross_encoder_score": 0.0059,
+        "text": "Agri-Clinics And Agri-Business Centres Scheme (FAQs): will be given to the trainees.\", \"question\": \"What is covered in training?\"}; {\"answer\": \"The margin money to be contributed by the entrepreneur will be as per prevailing norms issued by Reserve Bank of India. As per present norms, margin money is not prescribed for loans upto ₹5 lakhs. In case of margin money, concessions would be made in respect of SCs/STs, women and beneficiaries of North-Eastern States, Hill areas."
+      },
+      {
+        "chunk_id": "AGRI2122_chk_8",
+        "chunk_type": "faq",
+        "scheme_name": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Reintroduced subcomponents:Supply of Silpaulin Sheets (nos)",
+        "similarity_score": 0.7025,
+        "cross_encoder_score": 0.0175,
+        "text": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Reintroduced subcomponents:Supply of Silpaulin Sheets (nos) (FAQs): {\"answer\": \"The scheme is available in all spice-growing States and regions of India.\", \"question\": \"In which areas is the scheme available?\"}; {\"answer\": \"General Category applicants are eligible for 50% assistance, subject to a maximum of ₹2,000 per Silpaulin Sheet.\", \"question\": \"What financial assistance is available for General Category applicants?\"}; {\"answer\": \"SC/ST applicants are eligible for 75% assistance, subject to a maximum of ₹3,000 per Silpaulin Sheet.\", \"question\": \"What financial assistance is"
+      },
+      {
+        "chunk_id": "AGRI2203_chk_6",
+        "chunk_type": "benefits",
+        "scheme_name": "Prime Minister's Rural Development Fellows Scheme",
+        "similarity_score": 0.6971,
+        "cross_encoder_score": 0.0001,
+        "text": "Prime Minister's Rural Development Fellows Scheme (Benefits & Subsidies): Subsidy: Max Percentage: 10. Min Percentage: 10. Summary: *Stipend Package*, The Fellow shall be entitled to a consolidated stipend package of ₹50,000/- (Rupees Fifty thousand only) per month during the orientation period., The Fellow shall be entitled to ₹75,000/- (Rupees Seventy Five Thousand only) per month during the first year of the Fellowship (post-orientation)., The Fellow shall receive a 10% increment during the second year, subject to satisfactory performance., This package is deemed to cover the Fellow's honorarium, boarding and lodging expenses during orientation, accommodation/house rent during the rest of the Fellowship period, health insurance, life and disability insurance cover, and any other contingency expenses., Travel reimbursement will be based on actual costs and restricted to AC-II tier train fare by the shortest route or equivalent, plus local transport cost."
+      },
+      {
+        "chunk_id": "AGRI2367_chk_4",
+        "chunk_type": "documents",
+        "scheme_name": "Coffee Development Programme in North Eastern Region: Consolidation of Coffee",
+        "similarity_score": 0.7092,
+        "cross_encoder_score": 0.0,
+        "text": "Coffee Development Programme in North Eastern Region: Consolidation of Coffee (Required Documents): Application and Self Declaration duly filled in and signed by the Applicant/s (in duplicate) in theprescribed format.; Proof of photo identity of the applicant/s, such as a copy of the Driving License, Ration Card, Election Photo Identity Card (EPIC) issued by the Election Commission, Aadhaar Card, Passport, or PAN Card, etc.; Proof of Land Ownership.; Bank Account details, including account number, bank name, branch, and IFSC code.; Application and Self Declaration duly filled in and signed by the Applicant/s (in duplicate) in theprescribed format."
+      }
+    ],
+    "retrieval_confidence_summary": {
+      "final_confidence_score": 0.4622,
+      "confidence_category": "Low",
+      "fallback_triggered": true
+    }
+  },
+  "StrictLLMPrompt": {
+    "system_prompt": "You are CivicSphere AI Assist, an authoritative government scheme advisor for Indian citizens.\nYour sole mission is to provide accurate, helpful, and citizen-friendly scheme guidance based EXCLUSIVELY on the verified CivicSphere database context provided below.\n\n================================================================================\nCRITICAL ANTI-HALLUCINATION & GROUNDING DIRECTIVES (STRICT ZERO TOLERANCE)\n================================================================================\n1. STRICT GROUNDING:\n   - Answer ONLY using the facts, rules, benefit numbers, documents, and URLs provided in the [VERIFIED CIVICSPHERE CONTEXT] block.\n   - NEVER invent, assume, extrapolate, or guess any information.\n   - DO NOT rely on external training knowledge, rumors, or outdated policies.\n\n2. MISSING INFORMATION PROTOCOL:\n   - If any requested information (e.g. a specific district quota, unlisted benefit, or document) is NOT found in the verified context:\n     You MUST state verbatim:\n     \"Information is not available in the CivicSphere Government Schemes database.\"\n   - Do NOT guess or provide approximate numbers.\n\n3. OFFICIAL GOVERNMENT URLS:\n   - Use ONLY the exact official URLs provided in the context (e.g. https://pmkisan.gov.in/).\n   - NEVER invent or alter web addresses.\n\n4. CITIZEN ELIGIBILITY REASONING:\n   - Clearly explain why the citizen is eligible or what conditions they satisfy based on their profile attributes (e.g. landholding, state, occupation).\n   - If any condition requires self-declaration or land passbook, state it clearly as verified in the context.\n\n5. SAFETY & CONFIDENCE NOTICE:\n   - NOTICE: Retrieval confidence is Low. Emphasize that details are based only on verified database records.\n\n================================================================================\nMANDATORY CIVICSPHERE RESPONSE STRUCTURE (TAILORED STRICTLY TO USER INTENT)\n================================================================================\nDo NOT dump all sections. Tailor your output specifically to what the citizen asked:\n- Always start with:\n  ### 🏛️ Scheme Recommendation\n  [State the exact official name of the scheme, implementing ministry, and state scope.]\n\n- Then include ONLY the specific information the citizen requested (at most 3 sections):\n  • If the user asked about ELIGIBILITY: include \"### 🎯 Eligibility Result\" and \"### 🔍 Why You Are Eligible\".\n  • If the user asked about BENEFITS / SCHEME AMOUNT: include \"### 💰 Benefits Available\".\n  • If the user asked about REQUIRED DOCUMENTS: include \"### 📑 Required Documents Checklist\".\n  • If the user asked about HOW TO APPLY / REGISTRATION: include \"### 📝 How to Apply & Registration Steps\" and the official link.\n  • If the user asked multiple questions or broad general inquiry: select at most the TOP 3 most relevant sections.\n  • NEVER dump unrequested sections. Keep answers focused, clear, and grounded.\n\nDO NOT wrap the whole answer in triple backticks.\n================================================================================\n",
+    "user_query": "I belong to the SC category and my annual income is ₹1.8 lakh. Show schemes I qualify for",
+    "user_prompt_content": "[CITIZEN QUERY]\nI belong to the SC category and my annual income is ₹1.8 lakh. Show schemes I qualify for\n\n[VERIFIED CIVICSPHERE CONTEXT]\n### 🏛️ OFFICIAL SCHEME METADATA\n- **Scheme Name**: Pradhan Mantri Vanbandhu Kalyan Yojana\n- **Scheme ID**: AGRI2358\n- **State Jurisdiction**: All (Applicable in Andhra Pradesh)\n- **Sector**: Credit, Subsidy & Financial Assistance\n- **Ministry**: Department of Agriculture, Government of All\n- **Target Beneficiaries**: SC / ST Farmers\n\n### 👤 CITIZEN VERIFIED ATTRIBUTES\n- **Occupation**: Farmer\n- **Landholding Size**: Not provided in query\n- **State / Territory**: Andhra Pradesh\n- **Social Category**: SC\n\n### ✅ VERIFIED ELIGIBILITY CHECKLIST\n- **Overall Status**: Likely Eligible\n- **Mandatory Eligibility Rules**:\n  • National / All India Scheme (Applicable to all Indian states)\n  • Beneficiary must be an active farmer or landholding cultivator\n  • Institutional landowners and income-tax paying individuals are excluded\n  • Minimum age 18 years with valid identity proof\n- **Matched Conditions for this Citizen**:\n  • [MATCHED] Resident of India (Citizen State: Andhra Pradesh)\n  • [MATCHED] Citizen is classified as an active Farmer\n  • [MATCHED] Annual household income within permissible limits (₹180000.0)\n  • [MATCHED] Age criterion satisfied (20 years)\n- **Information Pending / Requires Verification**:\n  • [PENDING] Landholding size details not fully specified in profile\n\n### 💰 VERIFIED BENEFITS SUMMARY\n- **Direct Financial Assistance**:\n- **Subsidies & Credit Support**:\n  • Prime Minister's Rural Development Fellows Scheme (Benefits & Subsidies): Subsidy: Max Percentage: 10\n- **Insurance Coverage**:\n  • Pradhan Mantri Matsya Kisan Samridhi Sah-yojana (PM-MKSSY): COMPONENT 1B: One-Time Incentive for the Adoption of Aquaculture Insurance (Eligibility Criteria): State: All\n\n### 📑 REQUIRED DOCUMENTS CHECKLIST\n- [ ] Aadhaar Card (linked with active mobile number)\n- [ ] Bank Account Passbook (with IFSC code & Aadhaar seed)\n- [ ] Land Ownership Proof / Records of Rights (RoR / Pattadar Passbook / Khatian / 7/12 Extract)\n- [ ] Passport Size Photographs\n- [ ] Government-issued Identity Proof (Voter ID / Driving License)\n- [ ] Income Certificate / Self-declaration of non-taxpayer status\n- [ ] Caste / Social Category Certificate (for SC/ST/OBC category applicants)\n\n### 📝 HOW TO APPLY & REGISTRATION PROCEDURE\n- **Official Registration Link**: https://acabcmis.gov.in/ApplicantReg.aspx\n- **Procedure Overview**: Online registration via official government portal or offline submission via Common Service Centres (CSC) / Panchayat Secretary.\n- **Step-by-Step Instructions**:\n  Visit the official portal or nearest Common Service Centre (CSC) / Village Agriculture Office.\n  Click on 'New Farmer Registration' under the Farmers Corner section.\n  Enter Aadhaar Number, select State, and verify captcha to generate OTP.\n  Fill in Land Record details (Survey/Khata Number, Khasra Number, Sub-division, and Area).\n  Upload mandatory documents (Aadhaar Card, Land Records, Bank Passbook).\n  Submit the application and save the Registration Number for future tracking.\n\n### ❓ RELEVANT FREQUENTLY ASKED QUESTIONS\n- **Q: Are all landholding farmers eligible irrespective of land size?**\n  A: Yes. The ambit of PM-KISAN was revised in 2019 to cover all landholding farmer families in the country, subject to exclusion criteria (e.g. institutional landholders, income tax payers).\n\nPlease provide your verified guidance following the mandatory 8-section CivicSphere response structure.",
+    "verified_context_package": {
+      "user_query": "I belong to the SC category and my annual income is ₹1.8 lakh. Show schemes I qualify for",
+      "clean_query": "I belong to the SC category and my annual income is ₹1.8 lakh. Show schemes I qualify for",
+      "structured_intent": {
+        "intent": "FAQ",
+        "target_scheme": null,
+        "sector": "Social Welfare",
+        "state": null
+      },
+      "citizen_profile_summary": {
+        "age": 20,
+        "gender": "Male",
+        "occupation": "Farmer",
+        "annual_income": 180000.0,
+        "social_category": "SC",
+        "landholding_size": null,
+        "state": "Andhra Pradesh",
+        "district": "Vizianagaram"
+      },
+      "matching_scheme_information": {
+        "scheme_id": "AGRI2358",
+        "scheme_name": "Pradhan Mantri Vanbandhu Kalyan Yojana",
+        "state": "All",
+        "sector": "Credit, Subsidy & Financial Assistance",
+        "ministry": "Department of Agriculture, Government of All",
+        "category": "Education & Learning, Agriculture,Rural & Environment",
+        "target_demographic": [
+          "SC / ST Farmers"
+        ]
+      },
+      "eligibility_checklist": {
+        "overall_status": "Likely Eligible",
+        "eligible_conditions": [
+          "National / All India Scheme (Applicable to all Indian states)",
+          "Beneficiary must be an active farmer or landholding cultivator",
+          "Institutional landowners and income-tax paying individuals are excluded",
+          "Minimum age 18 years with valid identity proof"
+        ],
+        "matched_conditions": [
+          "Resident of India (Citizen State: Andhra Pradesh)",
+          "Citizen is classified as an active Farmer",
+          "Annual household income within permissible limits (₹180000.0)",
+          "Age criterion satisfied (20 years)"
+        ],
+        "missing_conditions": [
+          "Landholding size details not fully specified in profile"
+        ],
+        "failed_conditions": []
+      },
+      "benefits_summary": {
+        "assistance_amounts": [],
+        "financial_benefits": [],
+        "subsidies": [
+          "Prime Minister's Rural Development Fellows Scheme (Benefits & Subsidies): Subsidy: Max Percentage: 10"
+        ],
+        "insurance_benefits": [
+          "Pradhan Mantri Matsya Kisan Samridhi Sah-yojana (PM-MKSSY): COMPONENT 1B: One-Time Incentive for the Adoption of Aquaculture Insurance (Eligibility Criteria): State: All"
+        ],
+        "other_benefits": [
+          "Financial Subsidy",
+          "Free Training & Skill Development",
+          "Low-Interest Credit / Loan",
+          "Crop Insurance Coverage",
+          "Free Agricultural Inputs",
+          "Farm Equipment Assistance",
+          "Direct Benefit Transfer (DBT)"
+        ]
+      },
+      "required_documents_checklist": [
+        "Aadhaar Card (linked with active mobile number)",
+        "Bank Account Passbook (with IFSC code & Aadhaar seed)",
+        "Land Ownership Proof / Records of Rights (RoR / Pattadar Passbook / Khatian / 7/12 Extract)",
+        "Passport Size Photographs",
+        "Government-issued Identity Proof (Voter ID / Driving License)",
+        "Income Certificate / Self-declaration of non-taxpayer status",
+        "Caste / Social Category Certificate (for SC/ST/OBC category applicants)"
+      ],
+      "application_information": {
+        "application_steps": [
+          "Visit the official portal or nearest Common Service Centre (CSC) / Village Agriculture Office.",
+          "Click on 'New Farmer Registration' under the Farmers Corner section.",
+          "Enter Aadhaar Number, select State, and verify captcha to generate OTP.",
+          "Fill in Land Record details (Survey/Khata Number, Khasra Number, Sub-division, and Area).",
+          "Upload mandatory documents (Aadhaar Card, Land Records, Bank Passbook).",
+          "Submit the application and save the Registration Number for future tracking."
+        ],
+        "registration_procedure": "Online registration via official government portal or offline submission via Common Service Centres (CSC) / Panchayat Secretary.",
+        "primary_registration_url": "https://acabcmis.gov.in/ApplicantReg.aspx",
+        "all_official_urls": [
+          "https://www.pib.gov.in/PressNoteDetails.aspx?NoteId=153376&ModuleId=3&reg=3&lang=1",
+          "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1943128&reg=3&lang=2",
+          "https://acabcmis.gov.in/home.aspx",
+          "https://acabcmis.gov.in/Institute.aspx",
+          "https://serviceonline.gov.in/dbt/login.do",
+          "https://cdn.s3waas.gov.in/s330ef30b64204a3088a26bc2e6ecf7602/uploads/2018/11/2018111655-1.pdf",
+          "https://web.umang.gov.in/web_new/department?url=coffee_board%2Fservice%2F1739&dept_id=371&dept_name=Grower%20Registration&transactionId=PFCXMNL5&source=myscheme",
+          "http://agriculture.up.gov.in/nmnf/natural_farming/guid/NMNFGuidelines.pdf",
+          "https://nfdp.dof.gov.in/",
+          "https://nfdp.dof.gov.in/nfdp/#/registration",
+          "https://nfdp.dof.gov.in/nfdp/#/scheme?t=PM_MKSSY",
+          "https://moef.gov.in/uploads/2017/06/Implementation-Guidlines-Nager-Van-Yojana.pdf",
+          "https://acabcmis.gov.in/ApplicantReg.aspx",
+          "https://acabcmis.gov.in/ApplicationStatus_new.aspx",
+          "https://www.jansamarth.in/home",
+          "https://serviceonline.gov.in/dbt/",
+          "https://serviceonline.gov.in/dbt/citizenRegistration.html",
+          "https://serviceonline.gov.in/dbt/loginWindow.do",
+          "https://coffeeboard.gov.in/Schemes/ICDP_388.pdf",
+          "https://nfdp.dof.gov.in/nfdp/#/"
+        ]
+      },
+      "official_urls": [
+        "https://www.pib.gov.in/PressNoteDetails.aspx?NoteId=153376&ModuleId=3&reg=3&lang=1",
+        "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1943128&reg=3&lang=2",
+        "https://acabcmis.gov.in/home.aspx",
+        "https://acabcmis.gov.in/Institute.aspx",
+        "https://serviceonline.gov.in/dbt/login.do",
+        "https://cdn.s3waas.gov.in/s330ef30b64204a3088a26bc2e6ecf7602/uploads/2018/11/2018111655-1.pdf",
+        "https://web.umang.gov.in/web_new/department?url=coffee_board%2Fservice%2F1739&dept_id=371&dept_name=Grower%20Registration&transactionId=PFCXMNL5&source=myscheme",
+        "http://agriculture.up.gov.in/nmnf/natural_farming/guid/NMNFGuidelines.pdf",
+        "https://nfdp.dof.gov.in/",
+        "https://nfdp.dof.gov.in/nfdp/#/registration",
+        "https://nfdp.dof.gov.in/nfdp/#/scheme?t=PM_MKSSY",
+        "https://moef.gov.in/uploads/2017/06/Implementation-Guidlines-Nager-Van-Yojana.pdf",
+        "https://acabcmis.gov.in/ApplicantReg.aspx",
+        "https://acabcmis.gov.in/ApplicationStatus_new.aspx",
+        "https://www.jansamarth.in/home",
+        "https://serviceonline.gov.in/dbt/",
+        "https://serviceonline.gov.in/dbt/citizenRegistration.html",
+        "https://serviceonline.gov.in/dbt/loginWindow.do",
+        "https://coffeeboard.gov.in/Schemes/ICDP_388.pdf",
+        "https://nfdp.dof.gov.in/nfdp/#/"
+      ],
+      "relevant_faqs": [
+        {
+          "question": "Are all landholding farmers eligible irrespective of land size?",
+          "answer": "Yes. The ambit of PM-KISAN was revised in 2019 to cover all landholding farmer families in the country, subject to exclusion criteria (e.g. institutional landholders, income tax payers)."
+        }
+      ],
+      "retrieval_evidence_chunks": [
+        {
+          "chunk_id": "AGRI2358_chk_1",
+          "chunk_type": "eligibility",
+          "scheme_name": "Pradhan Mantri Vanbandhu Kalyan Yojana",
+          "similarity_score": 0.7366,
+          "cross_encoder_score": 0.0041,
+          "text": "Pradhan Mantri Vanbandhu Kalyan Yojana (Eligibility Criteria): State: All. Income: Max: 250000. Priority: SC, ST."
+        },
+        {
+          "chunk_id": "AGRI2119_chk_15",
+          "chunk_type": "faq",
+          "scheme_name": "Agri-Clinics And Agri-Business Centres Scheme",
+          "similarity_score": 0.7165,
+          "cross_encoder_score": 0.0059,
+          "text": "Agri-Clinics And Agri-Business Centres Scheme (FAQs): will be given to the trainees.\", \"question\": \"What is covered in training?\"}; {\"answer\": \"The margin money to be contributed by the entrepreneur will be as per prevailing norms issued by Reserve Bank of India. As per present norms, margin money is not prescribed for loans upto ₹5 lakhs. In case of margin money, concessions would be made in respect of SCs/STs, women and beneficiaries of North-Eastern States, Hill areas."
+        },
+        {
+          "chunk_id": "AGRI2122_chk_8",
+          "chunk_type": "faq",
+          "scheme_name": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Reintroduced subcomponents:Supply of Silpaulin Sheets (nos)",
+          "similarity_score": 0.7025,
+          "cross_encoder_score": 0.0175,
+          "text": "Integrated Scheme for Export Promotion & Quality Improvement in Spices and Research and Development of Cardamom: Reintroduced subcomponents:Supply of Silpaulin Sheets (nos) (FAQs): {\"answer\": \"The scheme is available in all spice-growing States and regions of India.\", \"question\": \"In which areas is the scheme available?\"}; {\"answer\": \"General Category applicants are eligible for 50% assistance, subject to a maximum of ₹2,000 per Silpaulin Sheet.\", \"question\": \"What financial assistance is available for General Category applicants?\"}; {\"answer\": \"SC/ST applicants are eligible for 75% assistance, subject to a maximum of ₹3,000 per Silpaulin Sheet.\", \"question\": \"What financial assistance is"
+        },
+        {
+          "chunk_id": "AGRI2203_chk_6",
+          "chunk_type": "benefits",
+          "scheme_name": "Prime Minister's Rural Development Fellows Scheme",
+          "similarity_score": 0.6971,
+          "cross_encoder_score": 0.0001,
+          "text": "Prime Minister's Rural Development Fellows Scheme (Benefits & Subsidies): Subsidy: Max Percentage: 10. Min Percentage: 10. Summary: *Stipend Package*, The Fellow shall be entitled to a consolidated stipend package of ₹50,000/- (Rupees Fifty thousand only) per month during the orientation period., The Fellow shall be entitled to ₹75,000/- (Rupees Seventy Five Thousand only) per month during the first year of the Fellowship (post-orientation)., The Fellow shall receive a 10% increment during the second year, subject to satisfactory performance., This package is deemed to cover the Fellow's honorarium, boarding and lodging expenses during orientation, accommodation/house rent during the rest of the Fellowship period, health insurance, life and disability insurance cover, and any other contingency expenses., Travel reimbursement will be based on actual costs and restricted to AC-II tier train fare by the shortest route or equivalent, plus local transport cost."
+        },
+        {
+          "chunk_id": "AGRI2367_chk_4",
+          "chunk_type": "documents",
+          "scheme_name": "Coffee Development Programme in North Eastern Region: Consolidation of Coffee",
+          "similarity_score": 0.7092,
+          "cross_encoder_score": 0.0,
+          "text": "Coffee Development Programme in North Eastern Region: Consolidation of Coffee (Required Documents): Application and Self Declaration duly filled in and signed by the Applicant/s (in duplicate) in theprescribed format.; Proof of photo identity of the applicant/s, such as a copy of the Driving License, Ration Card, Election Photo Identity Card (EPIC) issued by the Election Commission, Aadhaar Card, Passport, or PAN Card, etc.; Proof of Land Ownership.; Bank Account details, including account number, bank name, branch, and IFSC code.; Application and Self Declaration duly filled in and signed by the Applicant/s (in duplicate) in theprescribed format."
+        }
+      ],
+      "retrieval_confidence_summary": {
+        "final_confidence_score": 0.4622,
+        "confidence_category": "Low",
+        "fallback_triggered": true
+      }
+    },
+    "prompt_rules": [
+      "Answer exclusively from the provided Verified Context Package.",
+      "Zero external assumptions or hallucinated facts permitted.",
+      "If information is missing, output 'Information is not available in the CivicSphere Government Schemes database.'",
+      "Preserve official government URLs exactly as provided.",
+      "Strictly tailor response to citizen intent, generating at most top 3 sections."
+    ],
+    "response_format_instructions": [
+      "1. Scheme Recommendation",
+      "2. Eligibility Result",
+      "3. Why You Are Eligible",
+      "4. Benefits Available",
+      "5. Required Documents",
+      "6. How to Apply",
+      "7. Official Registration Link",
+      "8. Important Notes"
+    ],
+    "retrieval_confidence": {
+      "final_confidence_score": 0.4622,
+      "confidence_category": "Low",
+      "fallback_triggered": true
+    },
+    "target_model": "llama-3.3-70b-versatile",
+    "groq_chat_payload": {
+      "model": "llama-3.3-70b-versatile",
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are CivicSphere AI Assist, an authoritative government scheme advisor for Indian citizens.\nYour sole mission is to provide accurate, helpful, and citizen-friendly scheme guidance based EXCLUSIVELY on the verified CivicSphere database context provided below.\n\n================================================================================\nCRITICAL ANTI-HALLUCINATION & GROUNDING DIRECTIVES (STRICT ZERO TOLERANCE)\n================================================================================\n1. STRICT GROUNDING:\n   - Answer ONLY using the facts, rules, benefit numbers, documents, and URLs provided in the [VERIFIED CIVICSPHERE CONTEXT] block.\n   - NEVER invent, assume, extrapolate, or guess any information.\n   - DO NOT rely on external training knowledge, rumors, or outdated policies.\n\n2. MISSING INFORMATION PROTOCOL:\n   - If any requested information (e.g. a specific district quota, unlisted benefit, or document) is NOT found in the verified context:\n     You MUST state verbatim:\n     \"Information is not available in the CivicSphere Government Schemes database.\"\n   - Do NOT guess or provide approximate numbers.\n\n3. OFFICIAL GOVERNMENT URLS:\n   - Use ONLY the exact official URLs provided in the context (e.g. https://pmkisan.gov.in/).\n   - NEVER invent or alter web addresses.\n\n4. CITIZEN ELIGIBILITY REASONING:\n   - Clearly explain why the citizen is eligible or what conditions they satisfy based on their profile attributes (e.g. landholding, state, occupation).\n   - If any condition requires self-declaration or land passbook, state it clearly as verified in the context.\n\n5. SAFETY & CONFIDENCE NOTICE:\n   - NOTICE: Retrieval confidence is Low. Emphasize that details are based only on verified database records.\n\n================================================================================\nMANDATORY CIVICSPHERE RESPONSE STRUCTURE (TAILORED STRICTLY TO USER INTENT)\n================================================================================\nDo NOT dump all sections. Tailor your output specifically to what the citizen asked:\n- Always start with:\n  ### 🏛️ Scheme Recommendation\n  [State the exact official name of the scheme, implementing ministry, and state scope.]\n\n- Then include ONLY the specific information the citizen requested (at most 3 sections):\n  • If the user asked about ELIGIBILITY: include \"### 🎯 Eligibility Result\" and \"### 🔍 Why You Are Eligible\".\n  • If the user asked about BENEFITS / SCHEME AMOUNT: include \"### 💰 Benefits Available\".\n  • If the user asked about REQUIRED DOCUMENTS: include \"### 📑 Required Documents Checklist\".\n  • If the user asked about HOW TO APPLY / REGISTRATION: include \"### 📝 How to Apply & Registration Steps\" and the official link.\n  • If the user asked multiple questions or broad general inquiry: select at most the TOP 3 most relevant sections.\n  • NEVER dump unrequested sections. Keep answers focused, clear, and grounded.\n\nDO NOT wrap the whole answer in triple backticks.\n================================================================================\n"
+        },
+        {
+          "role": "user",
+          "content": "[CITIZEN QUERY]\nI belong to the SC category and my annual income is ₹1.8 lakh. Show schemes I qualify for\n\n[VERIFIED CIVICSPHERE CONTEXT]\n### 🏛️ OFFICIAL SCHEME METADATA\n- **Scheme Name**: Pradhan Mantri Vanbandhu Kalyan Yojana\n- **Scheme ID**: AGRI2358\n- **State Jurisdiction**: All (Applicable in Andhra Pradesh)\n- **Sector**: Credit, Subsidy & Financial Assistance\n- **Ministry**: Department of Agriculture, Government of All\n- **Target Beneficiaries**: SC / ST Farmers\n\n### 👤 CITIZEN VERIFIED ATTRIBUTES\n- **Occupation**: Farmer\n- **Landholding Size**: Not provided in query\n- **State / Territory**: Andhra Pradesh\n- **Social Category**: SC\n\n### ✅ VERIFIED ELIGIBILITY CHECKLIST\n- **Overall Status**: Likely Eligible\n- **Mandatory Eligibility Rules**:\n  • National / All India Scheme (Applicable to all Indian states)\n  • Beneficiary must be an active farmer or landholding cultivator\n  • Institutional landowners and income-tax paying individuals are excluded\n  • Minimum age 18 years with valid identity proof\n- **Matched Conditions for this Citizen**:\n  • [MATCHED] Resident of India (Citizen State: Andhra Pradesh)\n  • [MATCHED] Citizen is classified as an active Farmer\n  • [MATCHED] Annual household income within permissible limits (₹180000.0)\n  • [MATCHED] Age criterion satisfied (20 years)\n- **Information Pending / Requires Verification**:\n  • [PENDING] Landholding size details not fully specified in profile\n\n### 💰 VERIFIED BENEFITS SUMMARY\n- **Direct Financial Assistance**:\n- **Subsidies & Credit Support**:\n  • Prime Minister's Rural Development Fellows Scheme (Benefits & Subsidies): Subsidy: Max Percentage: 10\n- **Insurance Coverage**:\n  • Pradhan Mantri Matsya Kisan Samridhi Sah-yojana (PM-MKSSY): COMPONENT 1B: One-Time Incentive for the Adoption of Aquaculture Insurance (Eligibility Criteria): State: All\n\n### 📑 REQUIRED DOCUMENTS CHECKLIST\n- [ ] Aadhaar Card (linked with active mobile number)\n- [ ] Bank Account Passbook (with IFSC code & Aadhaar seed)\n- [ ] Land Ownership Proof / Records of Rights (RoR / Pattadar Passbook / Khatian / 7/12 Extract)\n- [ ] Passport Size Photographs\n- [ ] Government-issued Identity Proof (Voter ID / Driving License)\n- [ ] Income Certificate / Self-declaration of non-taxpayer status\n- [ ] Caste / Social Category Certificate (for SC/ST/OBC category applicants)\n\n### 📝 HOW TO APPLY & REGISTRATION PROCEDURE\n- **Official Registration Link**: https://acabcmis.gov.in/ApplicantReg.aspx\n- **Procedure Overview**: Online registration via official government portal or offline submission via Common Service Centres (CSC) / Panchayat Secretary.\n- **Step-by-Step Instructions**:\n  Visit the official portal or nearest Common Service Centre (CSC) / Village Agriculture Office.\n  Click on 'New Farmer Registration' under the Farmers Corner section.\n  Enter Aadhaar Number, select State, and verify captcha to generate OTP.\n  Fill in Land Record details (Survey/Khata Number, Khasra Number, Sub-division, and Area).\n  Upload mandatory documents (Aadhaar Card, Land Records, Bank Passbook).\n  Submit the application and save the Registration Number for future tracking.\n\n### ❓ RELEVANT FREQUENTLY ASKED QUESTIONS\n- **Q: Are all landholding farmers eligible irrespective of land size?**\n  A: Yes. The ambit of PM-KISAN was revised in 2019 to cover all landholding farmer families in the country, subject to exclusion criteria (e.g. institutional landholders, income tax payers).\n\nPlease provide your verified guidance following the mandatory 8-section CivicSphere response structure."
+        }
+      ],
+      "temperature": 0.1,
+      "max_tokens": 1500,
+      "top_p": 0.95
+    }
+  },
+  "ready_for_phase5_generation": true
+}
