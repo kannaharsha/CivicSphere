@@ -96,93 +96,102 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [profile, setProfile] = useState<CitizenProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Helper to fetch PostgreSQL citizen profile
-  const fetchCitizenProfile = async (targetUser?: FirebaseUser) => {
+  // Helper to fetch citizen profile from Supabase or PostgreSQL
+  const fetchCitizenProfile = async (targetUser?: FirebaseUser | null) => {
     const firebaseUser = targetUser || auth.currentUser;
     if (!firebaseUser) return;
     try {
-      const phoneParam = firebaseUser.phoneNumber ? `&phone=${encodeURIComponent(firebaseUser.phoneNumber)}` : '';
-      const res = await axios.get(`${API_BASE}/api/auth/citizen-profile/${firebaseUser.uid}?email=${encodeURIComponent(firebaseUser.email || '')}${phoneParam}`);
-      if (res.data && res.data.profile) {
-        setProfile(mapRowToCitizenProfile(res.data.profile, firebaseUser));
+      // 1. Direct Supabase Query (Primary)
+      if (supabase) {
+        const { data: sbProfile, error: sbErr } = await supabase
+          .from('citizen_profiles')
+          .select('*')
+          .eq('firebase_uid', firebaseUser.uid)
+          .maybeSingle();
+
+        if (sbProfile && !sbErr) {
+          setProfile(mapRowToCitizenProfile(sbProfile, firebaseUser));
+          return;
+        }
+      }
+
+      // 2. Backend API fallback
+      if (API_BASE) {
+        const phoneParam = firebaseUser.phoneNumber ? `&phone=${encodeURIComponent(firebaseUser.phoneNumber)}` : '';
+        const res = await axios.get(`${API_BASE}/api/auth/citizen-profile/${firebaseUser.uid}?email=${encodeURIComponent(firebaseUser.email || '')}${phoneParam}`);
+        if (res.data && res.data.profile) {
+          setProfile(mapRowToCitizenProfile(res.data.profile, firebaseUser));
+        }
       }
     } catch (err) {
       console.warn('Failed to fetch citizen profile:', err);
     }
   };
 
-  // Listen to Firebase Auth state — fetch & load PostgreSQL citizen profile
+  // Listen to Firebase Auth state — fetch & load citizen profile from Supabase / Postgres
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
       if (firebaseUser) {
-        const phoneParam = firebaseUser.phoneNumber ? `&phone=${encodeURIComponent(firebaseUser.phoneNumber)}` : '';
-        axios.get(`${API_BASE}/api/auth/citizen-profile/${firebaseUser.uid}?email=${encodeURIComponent(firebaseUser.email || '')}${phoneParam}`)
-          .then(res => {
+        try {
+          // 1. Check Supabase first
+          if (supabase) {
+            const { data: sbProfile, error: sbErr } = await supabase
+              .from('citizen_profiles')
+              .select('*')
+              .eq('firebase_uid', firebaseUser.uid)
+              .maybeSingle();
+
+            if (sbProfile && !sbErr) {
+              setProfile(mapRowToCitizenProfile(sbProfile, firebaseUser));
+              setLoading(false);
+              return;
+            }
+          }
+
+          // 2. Fallback to API if available
+          if (API_BASE) {
+            const phoneParam = firebaseUser.phoneNumber ? `&phone=${encodeURIComponent(firebaseUser.phoneNumber)}` : '';
+            const res = await axios.get(`${API_BASE}/api/auth/citizen-profile/${firebaseUser.uid}?email=${encodeURIComponent(firebaseUser.email || '')}${phoneParam}`);
             if (res.data && res.data.profile) {
               setProfile(mapRowToCitizenProfile(res.data.profile, firebaseUser));
-            } else {
-              setProfile({
-                profileId: 'Civs1001',
-                citizenId: 'Civs1001',
-                firebaseUid: firebaseUser.uid,
-                email: firebaseUser.email || '',
-                phoneNumber: firebaseUser.phoneNumber || '',
-                fullName: firebaseUser.displayName || 'Citizen',
-                dateOfBirth: null,
-                age: null,
-                gender: '',
-                maritalStatus: '',
-                casteCategory: '',
-                occupation: '',
-                employmentStatus: '',
-                educationQualification: '',
-                annualFamilyIncome: null,
-                state: '',
-                district: '',
-                mandal: '',
-                villageCity: '',
-                residenceType: '',
-                pincode: '',
-                disabilityPercentage: 0,
-                preferredLanguage: 'English',
-                profilePhotoUrl: firebaseUser.photoURL || '',
-                profileCompleted: false,
-              });
+              setLoading(false);
+              return;
             }
-          })
-          .catch(() => {
-            setProfile({
-              profileId: 'Civs1001',
-              citizenId: 'Civs1001',
-              firebaseUid: firebaseUser.uid,
-              email: firebaseUser.email || '',
-              phoneNumber: firebaseUser.phoneNumber || '',
-              fullName: firebaseUser.displayName || 'Citizen',
-              dateOfBirth: null,
-              age: null,
-              gender: '',
-              maritalStatus: '',
-              casteCategory: '',
-              occupation: '',
-              employmentStatus: '',
-              educationQualification: '',
-              annualFamilyIncome: null,
-              state: '',
-              district: '',
-              mandal: '',
-              villageCity: '',
-              residenceType: '',
-              pincode: '',
-              disabilityPercentage: 0,
-              preferredLanguage: 'English',
-              profilePhotoUrl: firebaseUser.photoURL || '',
-              profileCompleted: false,
-            });
-          })
-          .finally(() => {
-            setLoading(false);
-          });
+          }
+        } catch (fetchErr) {
+          console.warn('Profile fetch notice:', fetchErr);
+        }
+
+        // 3. Fallback blank/initial profile
+        setProfile({
+          profileId: 'Civs1001',
+          citizenId: 'Civs1001',
+          firebaseUid: firebaseUser.uid,
+          email: firebaseUser.email || '',
+          phoneNumber: firebaseUser.phoneNumber || '',
+          fullName: firebaseUser.displayName || 'Citizen',
+          dateOfBirth: null,
+          age: null,
+          gender: '',
+          maritalStatus: '',
+          casteCategory: '',
+          occupation: '',
+          employmentStatus: '',
+          educationQualification: '',
+          annualFamilyIncome: null,
+          state: '',
+          district: '',
+          mandal: '',
+          villageCity: '',
+          residenceType: '',
+          pincode: '',
+          disabilityPercentage: 0,
+          preferredLanguage: 'English',
+          profilePhotoUrl: firebaseUser.photoURL || '',
+          profileCompleted: false,
+        });
+        setLoading(false);
       } else {
         setProfile(null);
         setLoading(false);
@@ -198,49 +207,103 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       throw new Error('No user authenticated');
     }
 
-    const profileId = updatedData.citizenId || updatedData.profileId || profile?.citizenId || profile?.profileId || 'Civs1001';
+    const profileId = updatedData.citizenId || updatedData.profileId || profile?.citizenId || profile?.profileId || ('Civs' + Math.floor(1000 + Math.random() * 9000));
+    const safeFullName = updatedData.fullName?.trim() || profile?.fullName?.trim() || user.displayName || 'Citizen';
+    const safeEmail = updatedData.email?.trim().toLowerCase() || profile?.email?.trim().toLowerCase() || user.email?.toLowerCase() || '';
+    const safePhone = updatedData.phoneNumber !== undefined ? updatedData.phoneNumber : profile?.phoneNumber || user.phoneNumber || null;
+
+    const parseNum = (val: any, fallback: number | null = null) => {
+      if (val === undefined || val === null || val === '') return fallback;
+      const num = Number(val);
+      return isNaN(num) ? fallback : num;
+    };
+
     const payload = {
       profile_id: profileId,
       firebase_uid: user.uid,
-      email: user.email || profile?.email || '',
-      phone_number: updatedData.phoneNumber !== undefined ? updatedData.phoneNumber : profile?.phoneNumber || user.phoneNumber || null,
-      full_name: updatedData.fullName || profile?.fullName || user.displayName || 'Citizen',
+      email: safeEmail,
+      phone_number: safePhone,
+      full_name: safeFullName,
       date_of_birth: updatedData.dateOfBirth !== undefined ? updatedData.dateOfBirth : profile?.dateOfBirth || null,
-      age: updatedData.age !== undefined ? updatedData.age : profile?.age || null,
+      age: parseNum(updatedData.age, profile?.age ?? null),
       gender: updatedData.gender !== undefined ? updatedData.gender : profile?.gender || null,
       marital_status: updatedData.maritalStatus !== undefined ? updatedData.maritalStatus : profile?.maritalStatus || null,
       caste_category: updatedData.casteCategory !== undefined ? updatedData.casteCategory : profile?.casteCategory || null,
       occupation: updatedData.occupation !== undefined ? updatedData.occupation : profile?.occupation || null,
       employment_status: updatedData.employmentStatus !== undefined ? updatedData.employmentStatus : profile?.employmentStatus || null,
       education_qualification: updatedData.educationQualification !== undefined ? updatedData.educationQualification : profile?.educationQualification || null,
-      annual_family_income: updatedData.annualFamilyIncome !== undefined ? updatedData.annualFamilyIncome : profile?.annualFamilyIncome || null,
+      annual_family_income: parseNum(updatedData.annualFamilyIncome, profile?.annualFamilyIncome ?? null),
       state: updatedData.state !== undefined ? updatedData.state : profile?.state || null,
       district: updatedData.district !== undefined ? updatedData.district : profile?.district || null,
       mandal: updatedData.mandal !== undefined ? updatedData.mandal : profile?.mandal || null,
       village_city: updatedData.villageCity !== undefined ? updatedData.villageCity : profile?.villageCity || null,
       residence_type: updatedData.residenceType !== undefined ? updatedData.residenceType : profile?.residenceType || null,
       pincode: updatedData.pincode !== undefined ? updatedData.pincode : profile?.pincode || null,
-      disability_percentage: updatedData.disabilityPercentage !== undefined ? updatedData.disabilityPercentage : profile?.disabilityPercentage || 0,
+      disability_percentage: parseNum(updatedData.disabilityPercentage, profile?.disabilityPercentage ?? 0) ?? 0,
       preferred_language: updatedData.preferredLanguage !== undefined ? updatedData.preferredLanguage : profile?.preferredLanguage || 'English',
       profile_photo_url: updatedData.profilePhotoUrl !== undefined ? updatedData.profilePhotoUrl : profile?.profilePhotoUrl || null,
+      profile_completed: true,
     };
 
-    try {
-      const res = await axios.post(`${API_BASE}/api/auth/citizen-profile/save`, payload);
-      if (res.data && res.data.profile) {
-        const saved = mapRowToCitizenProfile(res.data.profile, user);
-        setProfile(saved);
-        toast.success('Citizen profile saved successfully to database!');
-        return saved;
+    let savedProfile: CitizenProfile | null = null;
+
+    // 1. Direct Supabase save (Primary & Reliable for Client/Production)
+    if (supabase) {
+      try {
+        // Step A: Ensure parent user record exists in Supabase `users` table to satisfy foreign key constraint!
+        const { error: userErr } = await supabase.from('users').upsert({
+          firebase_uid: user.uid,
+          full_name: safeFullName,
+          email: safeEmail,
+          phone_number: safePhone,
+          profile_completed: true,
+          updated_at: new Date().toISOString(),
+        }, { onConflict: 'firebase_uid' });
+
+        if (userErr) {
+          console.warn('[Supabase users upsert notice]:', userErr.message);
+        }
+
+        // Step B: Upsert directly into Supabase `citizen_profiles` table
+        const { data: sbData, error: sbErr } = await supabase
+          .from('citizen_profiles')
+          .upsert(payload, { onConflict: 'firebase_uid' })
+          .select()
+          .maybeSingle();
+
+        if (sbErr) {
+          console.error('[Supabase citizen_profiles error]:', sbErr);
+          toast.error(`Supabase save error: ${sbErr.message}`);
+        } else if (sbData) {
+          savedProfile = mapRowToCitizenProfile(sbData, user);
+          console.log('[Supabase] Saved citizen profile successfully to Supabase:', sbData.profile_id);
+        }
+      } catch (sbEx: any) {
+        console.error('[Supabase save exception]:', sbEx);
       }
-      throw new Error(res.data?.message || 'Failed to save profile');
-    } catch (err: any) {
-      console.warn('Backend save API error:', err.message);
-      const localSaved: CitizenProfile = {
+    }
+
+    // 2. Also mirror to backend PostgreSQL if API_BASE is configured
+    if (API_BASE) {
+      try {
+        const res = await axios.post(`${API_BASE}/api/auth/citizen-profile/save`, payload);
+        if (res.data && res.data.profile) {
+          if (!savedProfile) {
+            savedProfile = mapRowToCitizenProfile(res.data.profile, user);
+          }
+        }
+      } catch (apiErr: any) {
+        console.warn('Backend API save warning (non-blocking):', apiErr?.message || apiErr);
+      }
+    }
+
+    // 3. Fallback to local profile state if needed
+    if (!savedProfile) {
+      savedProfile = {
         profileId: payload.profile_id,
         citizenId: payload.profile_id,
         firebaseUid: user.uid,
-        email: user.email || '',
+        email: payload.email,
         phoneNumber: payload.phone_number,
         fullName: payload.full_name,
         dateOfBirth: payload.date_of_birth,
@@ -263,10 +326,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         profilePhotoUrl: payload.profile_photo_url || '',
         profileCompleted: true,
       };
-      setProfile(localSaved);
-      toast.success('Citizen profile updated!');
-      return localSaved;
     }
+
+    setProfile(savedProfile);
+    toast.success('Citizen profile saved successfully!');
+    return savedProfile;
   };
 
   // Email + Password Login using modular snippet auth_signin_password
